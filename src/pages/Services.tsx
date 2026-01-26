@@ -184,15 +184,15 @@ export default function Services() {
                 >
                   {breakfastItems.slice(0, 4).map((item) => (
                     <motion.div key={item.name} variants={itemVariants}>
-                      <Card className="h-full hover:shadow-card-hover transition-shadow">
+                      <Card className="h-full hover:shadow-card-hover transition-shadow overflow-hidden">
                         <CardHeader className="pb-2">
-                          <CardTitle className="text-base flex justify-between items-start">
-                            <span>{item.name}</span>
-                            <span className="text-primary font-semibold text-xs">{item.price}</span>
+                          <CardTitle className="text-base flex justify-between items-start gap-2">
+                            <span className="break-words">{item.name}</span>
+                            <span className="text-primary font-semibold text-xs whitespace-nowrap">{item.price}</span>
                           </CardTitle>
                         </CardHeader>
                         <CardContent>
-                          <p className="text-muted-foreground text-xs">{item.description}</p>
+                          <p className="text-muted-foreground text-xs break-words">{item.description}</p>
                         </CardContent>
                       </Card>
                     </motion.div>
@@ -207,15 +207,15 @@ export default function Services() {
               >
                 {breakfastItems.slice(4).map((item) => (
                   <motion.div key={item.name} variants={itemVariants}>
-                    <Card className="h-full hover:shadow-card-hover transition-shadow">
+                    <Card className="h-full hover:shadow-card-hover transition-shadow overflow-hidden">
                       <CardHeader className="pb-2">
-                        <CardTitle className="text-lg flex justify-between items-start">
-                          <span>{item.name}</span>
-                          <span className="text-primary font-semibold text-sm">{item.price}</span>
+                        <CardTitle className="text-lg flex justify-between items-start gap-2">
+                          <span className="break-words">{item.name}</span>
+                          <span className="text-primary font-semibold text-sm whitespace-nowrap">{item.price}</span>
                         </CardTitle>
                       </CardHeader>
                       <CardContent>
-                        <p className="text-muted-foreground text-sm">{item.description}</p>
+                        <p className="text-muted-foreground text-sm break-words">{item.description}</p>
                       </CardContent>
                     </Card>
                   </motion.div>
@@ -249,15 +249,15 @@ export default function Services() {
                 >
                   {lunchItems.slice(0, 4).map((item) => (
                     <motion.div key={item.name} variants={itemVariants}>
-                      <Card className="h-full hover:shadow-card-hover transition-shadow">
+                      <Card className="h-full hover:shadow-card-hover transition-shadow overflow-hidden">
                         <CardHeader className="pb-2">
-                          <CardTitle className="text-base flex justify-between items-start">
-                            <span>{item.name}</span>
-                            <span className="text-primary font-semibold text-xs">{item.price}</span>
+                          <CardTitle className="text-base flex justify-between items-start gap-2">
+                            <span className="break-words">{item.name}</span>
+                            <span className="text-primary font-semibold text-xs whitespace-nowrap">{item.price}</span>
                           </CardTitle>
                         </CardHeader>
                         <CardContent>
-                          <p className="text-muted-foreground text-xs">{item.description}</p>
+                          <p className="text-muted-foreground text-xs break-words">{item.description}</p>
                         </CardContent>
                       </Card>
                     </motion.div>
@@ -272,15 +272,15 @@ export default function Services() {
               >
                 {lunchItems.slice(4).map((item) => (
                   <motion.div key={item.name} variants={itemVariants}>
-                    <Card className="h-full hover:shadow-card-hover transition-shadow">
+                    <Card className="h-full hover:shadow-card-hover transition-shadow overflow-hidden">
                       <CardHeader className="pb-2">
-                        <CardTitle className="text-lg flex justify-between items-start">
-                          <span>{item.name}</span>
-                          <span className="text-primary font-semibold text-sm">{item.price}</span>
+                        <CardTitle className="text-lg flex justify-between items-start gap-2">
+                          <span className="break-words">{item.name}</span>
+                          <span className="text-primary font-semibold text-sm whitespace-nowrap">{item.price}</span>
                         </CardTitle>
                       </CardHeader>
                       <CardContent>
-                        <p className="text-muted-foreground text-sm">{item.description}</p>
+                        <p className="text-muted-foreground text-sm break-words">{item.description}</p>
                       </CardContent>
                     </Card>
                   </motion.div>
@@ -314,15 +314,15 @@ export default function Services() {
                 >
                   {dinnerItems.slice(0, 4).map((item) => (
                     <motion.div key={item.name} variants={itemVariants}>
-                      <Card className="h-full hover:shadow-card-hover transition-shadow">
+                      <Card className="h-full hover:shadow-card-hover transition-shadow overflow-hidden">
                         <CardHeader className="pb-2">
-                          <CardTitle className="text-base flex justify-between items-start">
-                            <span>{item.name}</span>
-                            <span className="text-primary font-semibold text-xs">{item.price}</span>
+                          <CardTitle className="text-base flex justify-between items-start gap-2">
+                            <span className="break-words">{item.name}</span>
+                            <span className="text-primary font-semibold text-xs whitespace-nowrap">{item.price}</span>
                           </CardTitle>
                         </CardHeader>
                         <CardContent>
-                          <p className="text-muted-foreground text-xs">{item.description}</p>
+                          <p className="text-muted-foreground text-xs break-words">{item.description}</p>
                         </CardContent>
                       </Card>
                     </motion.div>
@@ -337,15 +337,15 @@ export default function Services() {
               >
                 {dinnerItems.slice(4).map((item) => (
                   <motion.div key={item.name} variants={itemVariants}>
-                    <Card className="h-full hover:shadow-card-hover transition-shadow">
+                    <Card className="h-full hover:shadow-card-hover transition-shadow overflow-hidden">
                       <CardHeader className="pb-2">
-                        <CardTitle className="text-lg flex justify-between items-start">
-                          <span>{item.name}</span>
-                          <span className="text-primary font-semibold text-sm">{item.price}</span>
+                        <CardTitle className="text-lg flex justify-between items-start gap-2">
+                          <span className="break-words">{item.name}</span>
+                          <span className="text-primary font-semibold text-sm whitespace-nowrap">{item.price}</span>
                         </CardTitle>
                       </CardHeader>
                       <CardContent>
-                        <p className="text-muted-foreground text-sm">{item.description}</p>
+                        <p className="text-muted-foreground text-sm break-words">{item.description}</p>
                       </CardContent>
                     </Card>
                   </motion.div>
@@ -412,16 +412,16 @@ export default function Services() {
               >
                 {drinks.map((drink) => (
                   <motion.div key={drink.name} variants={itemVariants}>
-                    <div className="flex items-start gap-3 p-3 rounded-lg bg-background hover:shadow-md transition-shadow">
+                    <div className="flex items-start gap-3 p-3 rounded-lg bg-background hover:shadow-md transition-shadow overflow-hidden">
                       <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center flex-shrink-0">
                         <Coffee className="h-5 w-5 text-primary" />
                       </div>
                       <div className="flex-1 min-w-0">
                         <div className="flex justify-between items-start gap-2">
-                          <p className="font-medium text-sm truncate">{drink.name}</p>
+                          <p className="font-medium text-sm break-words">{drink.name}</p>
                           <span className="text-primary font-semibold text-xs whitespace-nowrap">{drink.price}</span>
                         </div>
-                        <p className="text-muted-foreground text-xs mt-0.5">{drink.description}</p>
+                        <p className="text-muted-foreground text-xs mt-0.5 break-words">{drink.description}</p>
                       </div>
                     </div>
                   </motion.div>
@@ -473,27 +473,27 @@ export default function Services() {
           >
             {gameDrives.map((drive, index) => (
               <motion.div key={drive.name} variants={itemVariants}>
-                <Card className="h-full hover:shadow-card-hover transition-all hover:-translate-y-1 border-2 border-transparent hover:border-primary/20">
+                <Card className="h-full hover:shadow-card-hover transition-all hover:-translate-y-1 border-2 border-transparent hover:border-primary/20 overflow-hidden">
                   <CardHeader>
                     <div className="flex items-center gap-2 text-sm text-muted-foreground mb-2">
-                      <Car className="h-4 w-4" />
-                      <span>{drive.duration}</span>
+                      <Car className="h-4 w-4 flex-shrink-0" />
+                      <span className="break-words">{drive.duration}</span>
                     </div>
-                    <CardTitle className="text-xl">{drive.name}</CardTitle>
-                    <p className="text-primary font-bold text-lg">{drive.price}</p>
+                    <CardTitle className="text-xl break-words">{drive.name}</CardTitle>
+                    <p className="text-primary font-bold text-lg break-words">{drive.price}</p>
                   </CardHeader>
                   <CardContent className="space-y-4">
-                    <p className="text-muted-foreground">{drive.description}</p>
+                    <p className="text-muted-foreground break-words">{drive.description}</p>
                     <div className="text-sm">
-                      <p className="font-medium text-foreground mb-1">Time: {drive.time}</p>
+                      <p className="font-medium text-foreground mb-1 break-words">Time: {drive.time}</p>
                     </div>
                     <div>
                       <p className="font-medium text-foreground text-sm mb-2">Includes:</p>
                       <ul className="space-y-1">
                         {drive.includes.map((item, i) => (
                           <li key={i} className="text-sm text-muted-foreground flex items-center gap-2">
-                            <div className="w-1.5 h-1.5 rounded-full bg-primary" />
-                            {item}
+                            <div className="w-1.5 h-1.5 rounded-full bg-primary flex-shrink-0" />
+                            <span className="break-words">{item}</span>
                           </li>
                         ))}
                       </ul>
