@@ -192,7 +192,7 @@ export default function Stays() {
   return (
     <Layout>
       {/* Header */}
-      <section className="bg-muted/50 py-8 border-b border-border">
+      <section className="relative py-12 bg-gradient-to-br from-primary/10 via-background to-accent/10">
         <div className="container mx-auto px-4">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
