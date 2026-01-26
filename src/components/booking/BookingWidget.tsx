@@ -1,7 +1,7 @@
 import { useState, useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { motion } from 'framer-motion';
-import { Calendar, Users, Star, Info } from 'lucide-react';
+import { motion, AnimatePresence } from 'framer-motion';
+import { Calendar, Users, Star, Info, CreditCard } from 'lucide-react';
 import { format, differenceInDays } from 'date-fns';
 import { Button } from '@/components/ui/button';
 import { Calendar as CalendarComponent } from '@/components/ui/calendar';
@@ -10,10 +10,18 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from '@/components/ui/popover';
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogDescription,
+} from '@/components/ui/dialog';
 import { useAuth } from '@/contexts/AuthContext';
 import { useCreateBooking } from '@/hooks/useBookings';
 import { Property } from '@/types';
 import { toast } from '@/hooks/use-toast';
+import { PaymentForm } from './PaymentForm';
 
 interface BookingWidgetProps {
   property: Property;
@@ -27,6 +35,7 @@ export function BookingWidget({ property }: BookingWidgetProps) {
   const [checkIn, setCheckIn] = useState<Date | undefined>();
   const [checkOut, setCheckOut] = useState<Date | undefined>();
   const [guests, setGuests] = useState(2);
+  const [showPaymentDialog, setShowPaymentDialog] = useState(false);
 
   const nights = useMemo(() => {
     if (!checkIn || !checkOut) return 0;
@@ -45,10 +54,10 @@ export function BookingWidget({ property }: BookingWidgetProps) {
     }).format(price);
   };
 
-  const handleBooking = async () => {
+  const validateBooking = () => {
     if (!user) {
       navigate('/login', { state: { from: `/stays/${property.slug}` } });
-      return;
+      return false;
     }
 
     if (!checkIn || !checkOut) {
@@ -57,7 +66,7 @@ export function BookingWidget({ property }: BookingWidgetProps) {
         description: 'Choose your check-in and check-out dates to continue.',
         variant: 'destructive',
       });
-      return;
+      return false;
     }
 
     if (nights <= 0) {
@@ -66,7 +75,7 @@ export function BookingWidget({ property }: BookingWidgetProps) {
         description: 'Check-out must be after check-in.',
         variant: 'destructive',
       });
-      return;
+      return false;
     }
 
     if (guests > property.maxGuests) {
@@ -75,8 +84,20 @@ export function BookingWidget({ property }: BookingWidgetProps) {
         description: `This property accommodates up to ${property.maxGuests} guests.`,
         variant: 'destructive',
       });
-      return;
+      return false;
     }
+
+    return true;
+  };
+
+  const handleProceedToPayment = () => {
+    if (validateBooking()) {
+      setShowPaymentDialog(true);
+    }
+  };
+
+  const handlePaymentSuccess = async () => {
+    if (!checkIn || !checkOut) return;
 
     try {
       await createBooking.mutateAsync({
@@ -88,16 +109,18 @@ export function BookingWidget({ property }: BookingWidgetProps) {
         total_price: totalPrice,
       });
 
+      setShowPaymentDialog(false);
+
       toast({
-        title: 'Booking request submitted!',
-        description: "We'll confirm your reservation shortly.",
+        title: 'Payment successful!',
+        description: 'Your booking has been confirmed. Check your email for details.',
       });
 
       navigate('/bookings');
     } catch (error) {
       toast({
         title: 'Booking failed',
-        description: 'Please try again later.',
+        description: 'Payment was processed but booking failed. Please contact support.',
         variant: 'destructive',
       });
     }
@@ -217,12 +240,13 @@ export function BookingWidget({ property }: BookingWidgetProps) {
 
       {/* Book Button */}
       <Button
-        onClick={handleBooking}
+        onClick={handleProceedToPayment}
         disabled={createBooking.isPending}
-        className="w-full"
+        className="w-full gap-2"
         size="lg"
       >
-        {createBooking.isPending ? 'Processing...' : user ? 'Request to Book' : 'Sign in to Book'}
+        <CreditCard className="h-4 w-4" />
+        {createBooking.isPending ? 'Processing...' : user ? 'Proceed to Payment' : 'Sign in to Book'}
       </Button>
 
       {/* Price Breakdown */}
@@ -249,8 +273,29 @@ export function BookingWidget({ property }: BookingWidgetProps) {
       {/* Info */}
       <p className="text-xs text-muted-foreground text-center mt-4 flex items-center justify-center gap-1">
         <Info className="h-3 w-3" />
-        You won't be charged yet
+        Secure payment with Visa/Mastercard
       </p>
+
+      {/* Payment Dialog */}
+      <Dialog open={showPaymentDialog} onOpenChange={setShowPaymentDialog}>
+        <DialogContent className="sm:max-w-md">
+          <DialogHeader>
+            <DialogTitle className="flex items-center gap-2">
+              <CreditCard className="h-5 w-5" />
+              Complete Payment
+            </DialogTitle>
+            <DialogDescription>
+              Enter your card details to complete the booking for {property.name}
+            </DialogDescription>
+          </DialogHeader>
+          <PaymentForm
+            totalAmount={totalPrice}
+            onPaymentSuccess={handlePaymentSuccess}
+            onCancel={() => setShowPaymentDialog(false)}
+            isProcessing={createBooking.isPending}
+          />
+        </DialogContent>
+      </Dialog>
     </motion.div>
   );
 }
