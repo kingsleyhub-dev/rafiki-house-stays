@@ -21,6 +21,7 @@ import { useAuth } from '@/contexts/AuthContext';
 import logo from '@/assets/rafiki-house-logo.png';
 
 const navLinks = [
+  { href: '/', label: 'Home' },
   { href: '/stays', label: 'Stays' },
   { href: '/services', label: 'Services' },
   { href: '/about', label: 'About' },
