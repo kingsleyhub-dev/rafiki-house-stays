@@ -4,6 +4,13 @@ import { Utensils, Coffee, Wine, Car, Sun, Moon, Sunset } from 'lucide-react';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 
+// Import images
+import breakfastImg from '@/assets/services-breakfast.jpg';
+import lunchImg from '@/assets/services-lunch.jpg';
+import dinnerImg from '@/assets/services-dinner.jpg';
+import drinksImg from '@/assets/services-drinks.jpg';
+import gamedriveImg from '@/assets/services-gamedrive.jpg';
+
 const breakfastItems = [
   { name: 'Full English Breakfast', description: 'Eggs, bacon, sausages, beans, toast & grilled tomatoes', price: 'KES 1,200' },
   { name: 'Kenyan Breakfast', description: 'Mandazi, chai, fresh fruits & scrambled eggs', price: 'KES 900' },
@@ -68,6 +75,12 @@ const gameDrives = [
     includes: ['Professional guide', 'Bush breakfast', 'Picnic lunch', 'All refreshments', 'Park fees'],
   },
 ];
+
+const mealImages = {
+  breakfast: breakfastImg,
+  lunch: lunchImg,
+  dinner: dinnerImg,
+};
 
 const containerVariants = {
   hidden: { opacity: 0 },
@@ -146,13 +159,53 @@ export default function Services() {
             </TabsList>
 
             <TabsContent value="breakfast">
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">
+                <motion.div
+                  initial={{ opacity: 0, x: -20 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  className="relative rounded-2xl overflow-hidden shadow-lg"
+                >
+                  <img 
+                    src={breakfastImg} 
+                    alt="Breakfast at Rafiki House" 
+                    className="w-full h-64 lg:h-80 object-cover"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
+                  <div className="absolute bottom-4 left-4 right-4 text-white">
+                    <h3 className="font-display text-2xl font-bold mb-1">Morning Delights</h3>
+                    <p className="text-white/80 text-sm">Start your day with a view of Mount Kenya</p>
+                  </div>
+                </motion.div>
+                <motion.div
+                  variants={containerVariants}
+                  initial="hidden"
+                  animate="visible"
+                  className="grid grid-cols-1 sm:grid-cols-2 gap-4"
+                >
+                  {breakfastItems.slice(0, 4).map((item) => (
+                    <motion.div key={item.name} variants={itemVariants}>
+                      <Card className="h-full hover:shadow-card-hover transition-shadow">
+                        <CardHeader className="pb-2">
+                          <CardTitle className="text-base flex justify-between items-start">
+                            <span>{item.name}</span>
+                            <span className="text-primary font-semibold text-xs">{item.price}</span>
+                          </CardTitle>
+                        </CardHeader>
+                        <CardContent>
+                          <p className="text-muted-foreground text-xs">{item.description}</p>
+                        </CardContent>
+                      </Card>
+                    </motion.div>
+                  ))}
+                </motion.div>
+              </div>
               <motion.div
                 variants={containerVariants}
                 initial="hidden"
                 animate="visible"
-                className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"
+                className="grid grid-cols-1 md:grid-cols-3 gap-4"
               >
-                {breakfastItems.map((item, index) => (
+                {breakfastItems.slice(4).map((item) => (
                   <motion.div key={item.name} variants={itemVariants}>
                     <Card className="h-full hover:shadow-card-hover transition-shadow">
                       <CardHeader className="pb-2">
@@ -171,13 +224,53 @@ export default function Services() {
             </TabsContent>
 
             <TabsContent value="lunch">
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">
+                <motion.div
+                  initial={{ opacity: 0, x: -20 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  className="relative rounded-2xl overflow-hidden shadow-lg"
+                >
+                  <img 
+                    src={lunchImg} 
+                    alt="Lunch at Rafiki House" 
+                    className="w-full h-64 lg:h-80 object-cover"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
+                  <div className="absolute bottom-4 left-4 right-4 text-white">
+                    <h3 className="font-display text-2xl font-bold mb-1">Midday Feast</h3>
+                    <p className="text-white/80 text-sm">Fresh local ingredients prepared with care</p>
+                  </div>
+                </motion.div>
+                <motion.div
+                  variants={containerVariants}
+                  initial="hidden"
+                  animate="visible"
+                  className="grid grid-cols-1 sm:grid-cols-2 gap-4"
+                >
+                  {lunchItems.slice(0, 4).map((item) => (
+                    <motion.div key={item.name} variants={itemVariants}>
+                      <Card className="h-full hover:shadow-card-hover transition-shadow">
+                        <CardHeader className="pb-2">
+                          <CardTitle className="text-base flex justify-between items-start">
+                            <span>{item.name}</span>
+                            <span className="text-primary font-semibold text-xs">{item.price}</span>
+                          </CardTitle>
+                        </CardHeader>
+                        <CardContent>
+                          <p className="text-muted-foreground text-xs">{item.description}</p>
+                        </CardContent>
+                      </Card>
+                    </motion.div>
+                  ))}
+                </motion.div>
+              </div>
               <motion.div
                 variants={containerVariants}
                 initial="hidden"
                 animate="visible"
-                className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"
+                className="grid grid-cols-1 md:grid-cols-3 gap-4"
               >
-                {lunchItems.map((item, index) => (
+                {lunchItems.slice(4).map((item) => (
                   <motion.div key={item.name} variants={itemVariants}>
                     <Card className="h-full hover:shadow-card-hover transition-shadow">
                       <CardHeader className="pb-2">
@@ -196,13 +289,53 @@ export default function Services() {
             </TabsContent>
 
             <TabsContent value="dinner">
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">
+                <motion.div
+                  initial={{ opacity: 0, x: -20 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  className="relative rounded-2xl overflow-hidden shadow-lg"
+                >
+                  <img 
+                    src={dinnerImg} 
+                    alt="Dinner at Rafiki House" 
+                    className="w-full h-64 lg:h-80 object-cover"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
+                  <div className="absolute bottom-4 left-4 right-4 text-white">
+                    <h3 className="font-display text-2xl font-bold mb-1">Evening Elegance</h3>
+                    <p className="text-white/80 text-sm">Fine dining under the African stars</p>
+                  </div>
+                </motion.div>
+                <motion.div
+                  variants={containerVariants}
+                  initial="hidden"
+                  animate="visible"
+                  className="grid grid-cols-1 sm:grid-cols-2 gap-4"
+                >
+                  {dinnerItems.slice(0, 4).map((item) => (
+                    <motion.div key={item.name} variants={itemVariants}>
+                      <Card className="h-full hover:shadow-card-hover transition-shadow">
+                        <CardHeader className="pb-2">
+                          <CardTitle className="text-base flex justify-between items-start">
+                            <span>{item.name}</span>
+                            <span className="text-primary font-semibold text-xs">{item.price}</span>
+                          </CardTitle>
+                        </CardHeader>
+                        <CardContent>
+                          <p className="text-muted-foreground text-xs">{item.description}</p>
+                        </CardContent>
+                      </Card>
+                    </motion.div>
+                  ))}
+                </motion.div>
+              </div>
               <motion.div
                 variants={containerVariants}
                 initial="hidden"
                 animate="visible"
-                className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"
+                className="grid grid-cols-1 md:grid-cols-3 gap-4"
               >
-                {dinnerItems.map((item, index) => (
+                {dinnerItems.slice(4).map((item) => (
                   <motion.div key={item.name} variants={itemVariants}>
                     <Card className="h-full hover:shadow-card-hover transition-shadow">
                       <CardHeader className="pb-2">
@@ -226,70 +359,109 @@ export default function Services() {
       {/* Drinks Section */}
       <section className="py-16 bg-muted/50">
         <div className="container mx-auto px-4">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            className="text-center mb-12"
-          >
-            <div className="inline-flex items-center gap-2 bg-accent/20 px-4 py-2 rounded-full mb-4">
-              <Wine className="h-5 w-5 text-accent-foreground" />
-              <span className="text-accent-foreground font-medium">Bar & Beverages</span>
-            </div>
-            <h2 className="font-display text-3xl md:text-4xl font-bold mb-4">
-              Refreshing Drinks
-            </h2>
-            <p className="text-muted-foreground max-w-2xl mx-auto">
-              From fresh tropical juices to signature cocktails and fine wines, our bar has something for everyone.
-            </p>
-          </motion.div>
-
-          <motion.div
-            variants={containerVariants}
-            initial="hidden"
-            whileInView="visible"
-            viewport={{ once: true }}
-            className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6"
-          >
-            {drinks.map((drink, index) => (
-              <motion.div key={drink.name} variants={itemVariants}>
-                <Card className="h-full hover:shadow-card-hover transition-shadow group">
-                  <CardHeader className="pb-2">
-                    <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center mb-2 group-hover:bg-primary/20 transition-colors">
-                      <Coffee className="h-5 w-5 text-primary" />
-                    </div>
-                    <CardTitle className="text-lg">{drink.name}</CardTitle>
-                  </CardHeader>
-                  <CardContent>
-                    <p className="text-muted-foreground text-sm mb-2">{drink.description}</p>
-                    <p className="text-primary font-semibold">{drink.price}</p>
-                  </CardContent>
-                </Card>
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+            <motion.div
+              initial={{ opacity: 0, x: -30 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: true }}
+              className="relative"
+            >
+              <div className="relative rounded-2xl overflow-hidden shadow-xl">
+                <img 
+                  src={drinksImg} 
+                  alt="Drinks at Rafiki House" 
+                  className="w-full h-80 lg:h-[500px] object-cover"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent" />
+              </div>
+              <motion.div
+                initial={{ opacity: 0, scale: 0.8 }}
+                whileInView={{ opacity: 1, scale: 1 }}
+                viewport={{ once: true }}
+                transition={{ delay: 0.3 }}
+                className="absolute -bottom-6 -right-6 bg-card p-4 rounded-xl shadow-lg"
+              >
+                <Wine className="h-8 w-8 text-primary mb-2" />
+                <p className="font-display font-bold text-lg">8+ Signature</p>
+                <p className="text-muted-foreground text-sm">Cocktails & Beverages</p>
               </motion.div>
-            ))}
-          </motion.div>
+            </motion.div>
+
+            <motion.div
+              initial={{ opacity: 0, x: 30 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: true }}
+            >
+              <div className="inline-flex items-center gap-2 bg-accent/20 px-4 py-2 rounded-full mb-4">
+                <Wine className="h-5 w-5 text-accent-foreground" />
+                <span className="text-accent-foreground font-medium">Bar & Beverages</span>
+              </div>
+              <h2 className="font-display text-3xl md:text-4xl font-bold mb-4">
+                Refreshing Drinks
+              </h2>
+              <p className="text-muted-foreground mb-8">
+                From fresh tropical juices to signature cocktails and fine wines, our bar has something for everyone.
+              </p>
+
+              <motion.div
+                variants={containerVariants}
+                initial="hidden"
+                whileInView="visible"
+                viewport={{ once: true }}
+                className="grid grid-cols-1 sm:grid-cols-2 gap-4"
+              >
+                {drinks.map((drink) => (
+                  <motion.div key={drink.name} variants={itemVariants}>
+                    <div className="flex items-start gap-3 p-3 rounded-lg bg-background hover:shadow-md transition-shadow">
+                      <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center flex-shrink-0">
+                        <Coffee className="h-5 w-5 text-primary" />
+                      </div>
+                      <div className="flex-1 min-w-0">
+                        <div className="flex justify-between items-start gap-2">
+                          <p className="font-medium text-sm truncate">{drink.name}</p>
+                          <span className="text-primary font-semibold text-xs whitespace-nowrap">{drink.price}</span>
+                        </div>
+                        <p className="text-muted-foreground text-xs mt-0.5">{drink.description}</p>
+                      </div>
+                    </div>
+                  </motion.div>
+                ))}
+              </motion.div>
+            </motion.div>
+          </div>
         </div>
       </section>
 
       {/* Game Drives Section */}
       <section className="py-16">
         <div className="container mx-auto px-4">
+          {/* Hero Image for Game Drives */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            className="text-center mb-12"
+            className="relative rounded-2xl overflow-hidden mb-12 shadow-xl"
           >
-            <div className="inline-flex items-center gap-2 bg-secondary/50 px-4 py-2 rounded-full mb-4">
-              <Car className="h-5 w-5 text-secondary-foreground" />
-              <span className="text-secondary-foreground font-medium">Safari Adventures</span>
+            <img 
+              src={gamedriveImg} 
+              alt="Safari Game Drive" 
+              className="w-full h-64 md:h-96 object-cover"
+            />
+            <div className="absolute inset-0 bg-gradient-to-r from-black/70 via-black/40 to-transparent" />
+            <div className="absolute inset-0 flex items-center">
+              <div className="container mx-auto px-8">
+                <div className="inline-flex items-center gap-2 bg-white/20 backdrop-blur-sm px-4 py-2 rounded-full mb-4">
+                  <Car className="h-5 w-5 text-white" />
+                  <span className="text-white font-medium">Safari Adventures</span>
+                </div>
+                <h2 className="font-display text-3xl md:text-5xl font-bold text-white mb-4">
+                  Game Drives
+                </h2>
+                <p className="text-white/80 max-w-xl text-lg">
+                  Embark on thrilling wildlife safaris with our experienced guides. Explore the stunning landscapes around Nanyuki and encounter Africa's magnificent wildlife.
+                </p>
+              </div>
             </div>
-            <h2 className="font-display text-3xl md:text-4xl font-bold mb-4">
-              Game Drives
-            </h2>
-            <p className="text-muted-foreground max-w-2xl mx-auto">
-              Embark on thrilling wildlife safaris with our experienced guides. Explore the stunning landscapes around Nanyuki and encounter Africa's magnificent wildlife.
-            </p>
           </motion.div>
 
           <motion.div
@@ -301,7 +473,7 @@ export default function Services() {
           >
             {gameDrives.map((drive, index) => (
               <motion.div key={drive.name} variants={itemVariants}>
-                <Card className="h-full hover:shadow-card-hover transition-all hover:-translate-y-1">
+                <Card className="h-full hover:shadow-card-hover transition-all hover:-translate-y-1 border-2 border-transparent hover:border-primary/20">
                   <CardHeader>
                     <div className="flex items-center gap-2 text-sm text-muted-foreground mb-2">
                       <Car className="h-4 w-4" />
