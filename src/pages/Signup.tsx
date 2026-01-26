@@ -25,8 +25,8 @@ export default function Signup() {
     setIsLoading(true);
 
     try {
-      const success = await signup(name, email, password);
-      if (success) {
+      const result = await signup(name, email, password);
+      if (result.success) {
         toast({
           title: 'Account created!',
           description: 'Welcome to Rafiki House.',
@@ -35,7 +35,7 @@ export default function Signup() {
       } else {
         toast({
           title: 'Sign up failed',
-          description: 'This email is already registered.',
+          description: result.error || 'This email may already be registered.',
           variant: 'destructive',
         });
       }

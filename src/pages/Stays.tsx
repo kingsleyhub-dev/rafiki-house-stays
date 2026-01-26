@@ -1,6 +1,6 @@
 import { useState, useMemo } from 'react';
 import { motion } from 'framer-motion';
-import { Filter, X, ChevronDown } from 'lucide-react';
+import { Filter, X, Loader2 } from 'lucide-react';
 import { Layout } from '@/components/layout/Layout';
 import { SearchBar } from '@/components/search/SearchBar';
 import { PropertyCard } from '@/components/properties/PropertyCard';
@@ -22,7 +22,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
-import { properties } from '@/data/properties';
+import { useProperties } from '@/hooks/useProperties';
 
 const allAmenities = [
   'Wi-Fi',
@@ -37,6 +37,7 @@ const allAmenities = [
 ];
 
 export default function Stays() {
+  const { data: properties = [], isLoading, error } = useProperties();
   const [priceRange, setPriceRange] = useState<[number, number]>([0, 50000]);
   const [maxGuests, setMaxGuests] = useState<number | null>(null);
   const [selectedAmenities, setSelectedAmenities] = useState<string[]>([]);
@@ -94,7 +95,7 @@ export default function Stays() {
     }
 
     return result;
-  }, [priceRange, maxGuests, selectedAmenities, sortBy]);
+  }, [properties, priceRange, maxGuests, selectedAmenities, sortBy]);
 
   const clearFilters = () => {
     setPriceRange([0, 50000]);
@@ -109,7 +110,7 @@ export default function Stays() {
     maxGuests !== null || 
     selectedAmenities.length > 0;
 
-  const FilterContent = () => (
+  const filterContent = (
     <div className="space-y-6">
       {/* Price Range */}
       <div>
@@ -178,6 +179,16 @@ export default function Stays() {
     </div>
   );
 
+  if (error) {
+    return (
+      <Layout>
+        <div className="container mx-auto px-4 py-20 text-center">
+          <p className="text-destructive">Error loading properties. Please try again later.</p>
+        </div>
+      </Layout>
+    );
+  }
+
   return (
     <Layout>
       {/* Header */}
@@ -191,7 +202,7 @@ export default function Stays() {
               All Stays
             </h1>
             <p className="text-muted-foreground mb-6">
-              {filteredProperties.length} home{filteredProperties.length !== 1 ? 's' : ''} in Nanyuki, Kenya
+              {isLoading ? 'Loading...' : `${filteredProperties.length} home${filteredProperties.length !== 1 ? 's' : ''} in Nanyuki, Kenya`}
             </p>
             <SearchBar variant="compact" />
           </motion.div>
@@ -222,7 +233,7 @@ export default function Stays() {
                     <SheetTitle>Filters</SheetTitle>
                   </SheetHeader>
                   <div className="mt-6">
-                    <FilterContent />
+                    {filterContent}
                   </div>
                 </SheetContent>
               </Sheet>
@@ -262,13 +273,17 @@ export default function Stays() {
             <aside className="hidden lg:block w-64 flex-shrink-0">
               <div className="sticky top-24 bg-card rounded-xl border border-border p-6">
                 <h3 className="font-display text-lg font-semibold mb-6">Filters</h3>
-                <FilterContent />
+                {filterContent}
               </div>
             </aside>
 
             {/* Properties Grid */}
             <div className="flex-1">
-              {filteredProperties.length === 0 ? (
+              {isLoading ? (
+                <div className="flex justify-center py-16">
+                  <Loader2 className="h-8 w-8 animate-spin text-muted-foreground" />
+                </div>
+              ) : filteredProperties.length === 0 ? (
                 <motion.div
                   initial={{ opacity: 0 }}
                   animate={{ opacity: 1 }}

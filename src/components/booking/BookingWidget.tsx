@@ -11,9 +11,8 @@ import {
   PopoverTrigger,
 } from '@/components/ui/popover';
 import { useAuth } from '@/contexts/AuthContext';
-import { useBooking } from '@/contexts/BookingContext';
+import { useCreateBooking } from '@/hooks/useBookings';
 import { Property } from '@/types';
-import { cn } from '@/lib/utils';
 import { toast } from '@/hooks/use-toast';
 
 interface BookingWidgetProps {
@@ -23,12 +22,11 @@ interface BookingWidgetProps {
 export function BookingWidget({ property }: BookingWidgetProps) {
   const navigate = useNavigate();
   const { user } = useAuth();
-  const { addBooking, searchParams } = useBooking();
+  const createBooking = useCreateBooking();
   
-  const [checkIn, setCheckIn] = useState<Date | undefined>(searchParams.checkIn);
-  const [checkOut, setCheckOut] = useState<Date | undefined>(searchParams.checkOut);
-  const [guests, setGuests] = useState(searchParams.guests || 2);
-  const [isLoading, setIsLoading] = useState(false);
+  const [checkIn, setCheckIn] = useState<Date | undefined>();
+  const [checkOut, setCheckOut] = useState<Date | undefined>();
+  const [guests, setGuests] = useState(2);
 
   const nights = useMemo(() => {
     if (!checkIn || !checkOut) return 0;
@@ -62,6 +60,15 @@ export function BookingWidget({ property }: BookingWidgetProps) {
       return;
     }
 
+    if (nights <= 0) {
+      toast({
+        title: 'Invalid dates',
+        description: 'Check-out must be after check-in.',
+        variant: 'destructive',
+      });
+      return;
+    }
+
     if (guests > property.maxGuests) {
       toast({
         title: 'Too many guests',
@@ -71,26 +78,19 @@ export function BookingWidget({ property }: BookingWidgetProps) {
       return;
     }
 
-    setIsLoading(true);
-    
     try {
-      // Simulate API call
-      await new Promise(resolve => setTimeout(resolve, 1000));
-      
-      addBooking({
-        propertyId: property.id,
-        userId: user.id,
-        checkIn: checkIn.toISOString().split('T')[0],
-        checkOut: checkOut.toISOString().split('T')[0],
+      await createBooking.mutateAsync({
+        property_id: property.id,
+        check_in: checkIn.toISOString().split('T')[0],
+        check_out: checkOut.toISOString().split('T')[0],
         guests,
-        nightlyPrice: property.nightlyPrice,
-        totalPrice,
-        status: 'pending',
+        nightly_price: property.nightlyPrice,
+        total_price: totalPrice,
       });
 
       toast({
         title: 'Booking request submitted!',
-        description: 'We\'ll confirm your reservation shortly.',
+        description: "We'll confirm your reservation shortly.",
       });
 
       navigate('/bookings');
@@ -100,8 +100,6 @@ export function BookingWidget({ property }: BookingWidgetProps) {
         description: 'Please try again later.',
         variant: 'destructive',
       });
-    } finally {
-      setIsLoading(false);
     }
   };
 
@@ -220,11 +218,11 @@ export function BookingWidget({ property }: BookingWidgetProps) {
       {/* Book Button */}
       <Button
         onClick={handleBooking}
-        disabled={isLoading}
+        disabled={createBooking.isPending}
         className="w-full"
         size="lg"
       >
-        {isLoading ? 'Processing...' : user ? 'Request to Book' : 'Sign in to Book'}
+        {createBooking.isPending ? 'Processing...' : user ? 'Request to Book' : 'Sign in to Book'}
       </Button>
 
       {/* Price Breakdown */}

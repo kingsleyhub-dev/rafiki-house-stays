@@ -2,13 +2,13 @@ import { useParams, Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { 
   ArrowLeft, MapPin, Star, Users, Bed, Bath, 
-  Wifi, Car, UtensilsCrossed, Flame, Check, Share, Heart 
+  Wifi, Car, UtensilsCrossed, Flame, Check, Share, Heart, Loader2 
 } from 'lucide-react';
 import { Layout } from '@/components/layout/Layout';
 import { BookingWidget } from '@/components/booking/BookingWidget';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
-import { getPropertyBySlug } from '@/data/properties';
+import { useProperty } from '@/hooks/useProperties';
 
 const amenityIcons: Record<string, React.ElementType> = {
   'Wi-Fi': Wifi,
@@ -19,9 +19,27 @@ const amenityIcons: Record<string, React.ElementType> = {
 
 export default function PropertyDetail() {
   const { slug } = useParams<{ slug: string }>();
-  const property = getPropertyBySlug(slug || '');
+  const { data: property, isLoading, error } = useProperty(slug || '');
 
-  if (!property) {
+  const formatPrice = (price: number) => {
+    return new Intl.NumberFormat('en-KE', {
+      style: 'currency',
+      currency: 'KES',
+      minimumFractionDigits: 0,
+    }).format(price);
+  };
+
+  if (isLoading) {
+    return (
+      <Layout>
+        <div className="container mx-auto px-4 py-20 flex justify-center">
+          <Loader2 className="h-8 w-8 animate-spin text-muted-foreground" />
+        </div>
+      </Layout>
+    );
+  }
+
+  if (error || !property) {
     return (
       <Layout>
         <div className="container mx-auto px-4 py-20 text-center">
@@ -36,14 +54,6 @@ export default function PropertyDetail() {
       </Layout>
     );
   }
-
-  const formatPrice = (price: number) => {
-    return new Intl.NumberFormat('en-KE', {
-      style: 'currency',
-      currency: 'KES',
-      minimumFractionDigits: 0,
-    }).format(price);
-  };
 
   return (
     <Layout>
