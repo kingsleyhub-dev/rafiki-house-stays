@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { motion, AnimatePresence } from 'framer-motion';
-import { Menu, X, User, LogOut, Calendar, Settings } from 'lucide-react';
+import { motion } from 'framer-motion';
+import { Menu, User, LogOut, Calendar, Settings } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import {
   DropdownMenu,
@@ -10,6 +10,13 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
+import {
+  Sheet,
+  SheetContent,
+  SheetHeader,
+  SheetTitle,
+  SheetTrigger,
+} from '@/components/ui/sheet';
 import { useAuth } from '@/contexts/AuthContext';
 import logo from '@/assets/rafiki-house-logo.png';
 
@@ -21,11 +28,13 @@ const navLinks = [
 ];
 
 export function Navbar() {
-  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [isSheetOpen, setIsSheetOpen] = useState(false);
   const { user, logout } = useAuth();
   const location = useLocation();
 
   const isActive = (path: string) => location.pathname === path;
+
+  const closeSheet = () => setIsSheetOpen(false);
 
   return (
     <motion.header
@@ -117,84 +126,88 @@ export function Navbar() {
           )}
         </div>
 
-        {/* Mobile Menu Button */}
-        <button
-          className="md:hidden p-2 rounded-lg hover:bg-muted transition-colors"
-          onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-        >
-          {isMobileMenuOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
-        </button>
-      </nav>
-
-      {/* Mobile Menu */}
-      <AnimatePresence>
-        {isMobileMenuOpen && (
-          <motion.div
-            initial={{ opacity: 0, height: 0 }}
-            animate={{ opacity: 1, height: 'auto' }}
-            exit={{ opacity: 0, height: 0 }}
-            className="md:hidden bg-background border-b border-border overflow-hidden"
-          >
-            <div className="container mx-auto px-4 py-4 flex flex-col gap-4">
+        {/* Mobile Menu - Sheet Drawer */}
+        <Sheet open={isSheetOpen} onOpenChange={setIsSheetOpen}>
+          <SheetTrigger asChild className="md:hidden">
+            <button className="p-2 rounded-lg hover:bg-muted transition-colors">
+              <Menu className="h-6 w-6" />
+            </button>
+          </SheetTrigger>
+          <SheetContent side="right" className="w-[280px] sm:w-[320px]">
+            <SheetHeader className="mb-6">
+              <SheetTitle className="flex items-center gap-2">
+                <img src={logo} alt="Rafiki House" className="h-8 w-auto" />
+                <span className="font-display text-lg">Rafiki House</span>
+              </SheetTitle>
+            </SheetHeader>
+            
+            <nav className="flex flex-col gap-2">
               {navLinks.map(link => (
                 <Link
                   key={link.href}
                   to={link.href}
-                  onClick={() => setIsMobileMenuOpen(false)}
-                  className={`text-lg font-medium py-2 ${
-                    isActive(link.href) ? 'text-primary' : 'text-foreground/70'
+                  onClick={closeSheet}
+                  className={`text-lg font-medium py-3 px-4 rounded-lg transition-colors ${
+                    isActive(link.href) 
+                      ? 'bg-primary/10 text-primary' 
+                      : 'text-foreground/70 hover:bg-muted hover:text-foreground'
                   }`}
                 >
                   {link.label}
                 </Link>
               ))}
-              <div className="h-px bg-border my-2" />
+              
+              <div className="h-px bg-border my-4" />
+              
               {user ? (
                 <>
                   <Link
                     to="/bookings"
-                    onClick={() => setIsMobileMenuOpen(false)}
-                    className="text-lg font-medium py-2 text-foreground/70"
+                    onClick={closeSheet}
+                    className="flex items-center gap-3 text-lg font-medium py-3 px-4 rounded-lg text-foreground/70 hover:bg-muted hover:text-foreground transition-colors"
                   >
+                    <Calendar className="h-5 w-5" />
                     My Bookings
                   </Link>
                   {user.role === 'admin' && (
                     <Link
                       to="/admin"
-                      onClick={() => setIsMobileMenuOpen(false)}
-                      className="text-lg font-medium py-2 text-foreground/70"
+                      onClick={closeSheet}
+                      className="flex items-center gap-3 text-lg font-medium py-3 px-4 rounded-lg text-foreground/70 hover:bg-muted hover:text-foreground transition-colors"
                     >
+                      <Settings className="h-5 w-5" />
                       Admin Dashboard
                     </Link>
                   )}
                   <button
                     onClick={() => {
                       logout();
-                      setIsMobileMenuOpen(false);
+                      closeSheet();
                     }}
-                    className="text-lg font-medium py-2 text-destructive text-left"
+                    className="flex items-center gap-3 text-lg font-medium py-3 px-4 rounded-lg text-destructive hover:bg-destructive/10 transition-colors text-left w-full"
                   >
+                    <LogOut className="h-5 w-5" />
                     Sign Out
                   </button>
                 </>
               ) : (
-                <div className="flex gap-3">
-                  <Button variant="outline" className="flex-1" asChild>
-                    <Link to="/login" onClick={() => setIsMobileMenuOpen(false)}>
+                <div className="flex flex-col gap-3 mt-2">
+                  <Button variant="outline" size="lg" asChild>
+                    <Link to="/login" onClick={closeSheet}>
                       Sign In
                     </Link>
                   </Button>
-                  <Button className="flex-1" asChild>
-                    <Link to="/signup" onClick={() => setIsMobileMenuOpen(false)}>
+                  <Button size="lg" asChild>
+                    <Link to="/signup" onClick={closeSheet}>
                       Sign Up
                     </Link>
                   </Button>
                 </div>
               )}
-            </div>
-          </motion.div>
-        )}
-      </AnimatePresence>
+            </nav>
+          </SheetContent>
+        </Sheet>
+      </nav>
     </motion.header>
   );
 }
