@@ -14,7 +14,122 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      bookings: {
+        Row: {
+          check_in: string
+          check_out: string
+          created_at: string
+          guests: number
+          id: string
+          nightly_price: number
+          property_id: string
+          status: string
+          total_price: number
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          check_in: string
+          check_out: string
+          created_at?: string
+          guests?: number
+          id?: string
+          nightly_price: number
+          property_id: string
+          status?: string
+          total_price: number
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          check_in?: string
+          check_out?: string
+          created_at?: string
+          guests?: number
+          id?: string
+          nightly_price?: number
+          property_id?: string
+          status?: string
+          total_price?: number
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "bookings_property_id_fkey"
+            columns: ["property_id"]
+            isOneToOne: false
+            referencedRelation: "properties"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      properties: {
+        Row: {
+          amenities: string[] | null
+          baths: number
+          beds: number
+          city: string
+          country: string
+          created_at: string
+          description: string
+          home_type: string
+          id: string
+          image_urls: string[] | null
+          is_active: boolean
+          max_guests: number
+          name: string
+          nightly_price: number
+          rating: number | null
+          review_count: number | null
+          slug: string
+          title: string
+          updated_at: string
+        }
+        Insert: {
+          amenities?: string[] | null
+          baths?: number
+          beds?: number
+          city?: string
+          country?: string
+          created_at?: string
+          description: string
+          home_type?: string
+          id?: string
+          image_urls?: string[] | null
+          is_active?: boolean
+          max_guests?: number
+          name: string
+          nightly_price: number
+          rating?: number | null
+          review_count?: number | null
+          slug: string
+          title: string
+          updated_at?: string
+        }
+        Update: {
+          amenities?: string[] | null
+          baths?: number
+          beds?: number
+          city?: string
+          country?: string
+          created_at?: string
+          description?: string
+          home_type?: string
+          id?: string
+          image_urls?: string[] | null
+          is_active?: boolean
+          max_guests?: number
+          name?: string
+          nightly_price?: number
+          rating?: number | null
+          review_count?: number | null
+          slug?: string
+          title?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never

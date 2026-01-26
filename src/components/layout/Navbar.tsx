@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { Menu, User, LogOut, Calendar, Settings } from 'lucide-react';
+import { Menu, User, LogOut, Calendar } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import {
   DropdownMenu,
@@ -99,14 +99,6 @@ export function Navbar() {
                     My Bookings
                   </Link>
                 </DropdownMenuItem>
-                {user.role === 'admin' && (
-                  <DropdownMenuItem asChild>
-                    <Link to="/admin" className="flex items-center gap-2 cursor-pointer">
-                      <Settings className="h-4 w-4" />
-                      Admin Dashboard
-                    </Link>
-                  </DropdownMenuItem>
-                )}
                 <DropdownMenuSeparator />
                 <DropdownMenuItem onClick={logout} className="flex items-center gap-2 cursor-pointer text-destructive">
                   <LogOut className="h-4 w-4" />
@@ -169,16 +161,6 @@ export function Navbar() {
                     <Calendar className="h-5 w-5" />
                     My Bookings
                   </Link>
-                  {user.role === 'admin' && (
-                    <Link
-                      to="/admin"
-                      onClick={closeSheet}
-                      className="flex items-center gap-3 text-lg font-medium py-3 px-4 rounded-lg text-foreground/70 hover:bg-muted hover:text-foreground transition-colors"
-                    >
-                      <Settings className="h-5 w-5" />
-                      Admin Dashboard
-                    </Link>
-                  )}
                   <button
                     onClick={() => {
                       logout();

@@ -27,8 +27,8 @@ export default function Login() {
     setIsLoading(true);
 
     try {
-      const success = await login(email, password);
-      if (success) {
+      const result = await login(email, password);
+      if (result.success) {
         toast({
           title: 'Welcome back!',
           description: 'You have successfully signed in.',
@@ -37,7 +37,7 @@ export default function Login() {
       } else {
         toast({
           title: 'Sign in failed',
-          description: 'Invalid email or password.',
+          description: result.error || 'Invalid email or password.',
           variant: 'destructive',
         });
       }
@@ -60,17 +60,6 @@ export default function Login() {
               <img src={logo} alt="Rafiki House" className="h-16 mx-auto mb-4" />
               <h1 className="font-display text-2xl font-bold">Welcome back</h1>
               <p className="text-muted-foreground mt-1">Sign in to your account</p>
-            </div>
-
-            {/* Demo Credentials */}
-            <div className="bg-muted/50 rounded-lg p-4 mb-6 text-sm">
-              <p className="font-medium mb-2">Demo Credentials:</p>
-              <p className="text-muted-foreground">
-                Guest: <span className="font-mono">guest@example.com</span> / <span className="font-mono">guest123</span>
-              </p>
-              <p className="text-muted-foreground">
-                Admin: <span className="font-mono">admin@rafikihouse.com</span> / <span className="font-mono">admin123</span>
-              </p>
             </div>
 
             {/* Form */}
