@@ -1,7 +1,6 @@
 import { motion } from 'framer-motion';
 import { Heart, Users, Leaf, Mountain } from 'lucide-react';
 import { Layout } from '@/components/layout/Layout';
-import heroImage from '@/assets/hero-image.jpg';
 
 const values = [
   {
@@ -30,20 +29,12 @@ export default function About() {
   return (
     <Layout>
       {/* Hero */}
-      <section className="relative py-20 md:py-32">
-        <div className="absolute inset-0 z-0">
-          <img
-            src={heroImage}
-            alt="Rafiki House Nanyuki"
-            className="w-full h-full object-cover"
-          />
-          <div className="absolute inset-0 bg-navy/70" />
-        </div>
-        <div className="container mx-auto px-4 relative z-10 text-center">
+      <section className="relative py-20 bg-gradient-to-br from-primary/10 via-background to-accent/10">
+        <div className="container mx-auto px-4 text-center">
           <motion.h1
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            className="font-display text-4xl md:text-5xl font-bold text-primary-foreground mb-4"
+            className="font-display text-4xl md:text-5xl font-bold text-foreground mb-4"
           >
             Our Story
           </motion.h1>
@@ -51,7 +42,7 @@ export default function About() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.1 }}
-            className="text-lg text-primary-foreground/80 max-w-2xl mx-auto"
+            className="text-muted-foreground max-w-2xl mx-auto text-lg"
           >
             Rafiki House is more than a place to stay — it's a celebration of Kenyan 
             heritage, nature, and the art of hospitality.
