@@ -55,11 +55,6 @@ export function BookingWidget({ property }: BookingWidgetProps) {
   };
 
   const validateBooking = () => {
-    if (!user) {
-      navigate('/login', { state: { from: `/stays/${property.slug}` } });
-      return false;
-    }
-
     if (!checkIn || !checkOut) {
       toast({
         title: 'Please select dates',
@@ -92,6 +87,15 @@ export function BookingWidget({ property }: BookingWidgetProps) {
 
   const handleProceedToPayment = () => {
     if (validateBooking()) {
+      // Only require login when proceeding to payment
+      if (!user) {
+        navigate('/login', { state: { from: `/stays/${property.slug}` } });
+        toast({
+          title: 'Sign in required',
+          description: 'Please sign in or create an account to complete your booking.',
+        });
+        return;
+      }
       setShowPaymentDialog(true);
     }
   };
@@ -246,7 +250,7 @@ export function BookingWidget({ property }: BookingWidgetProps) {
         size="lg"
       >
         <CreditCard className="h-4 w-4" />
-        {createBooking.isPending ? 'Processing...' : user ? 'Proceed to Payment' : 'Sign in to Book'}
+        {createBooking.isPending ? 'Processing...' : 'Proceed to Payment'}
       </Button>
 
       {/* Price Breakdown */}
