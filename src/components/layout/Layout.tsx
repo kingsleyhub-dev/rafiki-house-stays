@@ -2,6 +2,7 @@ import { ReactNode } from 'react';
 import { motion } from 'framer-motion';
 import { Navbar } from './Navbar';
 import { Footer } from './Footer';
+import { MobileNav } from './MobileNav';
 
 interface LayoutProps {
   children: ReactNode;
@@ -19,7 +20,7 @@ export function Layout({ children, hideFooter }: LayoutProps) {
     <div className="min-h-screen flex flex-col">
       <Navbar />
       <motion.main
-        className="flex-1 pt-16"
+        className="flex-1 pt-16 pb-16 md:pb-0"
         variants={pageVariants}
         initial="initial"
         animate="animate"
@@ -29,6 +30,7 @@ export function Layout({ children, hideFooter }: LayoutProps) {
         {children}
       </motion.main>
       {!hideFooter && <Footer />}
+      <MobileNav />
     </div>
   );
 }

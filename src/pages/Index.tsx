@@ -3,7 +3,6 @@ import { ArrowRight, Star, Shield, Heart, MapPin, ChevronLeft, ChevronRight } fr
 import { Link } from 'react-router-dom';
 import { useRef, useState, useEffect } from 'react';
 import { Layout } from '@/components/layout/Layout';
-import { SearchBar } from '@/components/search/SearchBar';
 import { PropertyCard } from '@/components/properties/PropertyCard';
 import { Button } from '@/components/ui/button';
 import { properties } from '@/data/properties';
@@ -173,14 +172,16 @@ export default function Index() {
               each named after aromatic herbs and spices. Your next great adventure starts here.
             </motion.p>
 
-            {/* Search Bar */}
             <motion.div
               initial={{ opacity: 0, y: 30 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, delay: 0.3 }}
-              className="max-w-3xl"
             >
-              <SearchBar variant="hero" />
+              <Button size="lg" className="bg-accent hover:bg-accent/90 text-accent-foreground gap-2 min-h-[48px]" asChild>
+                <Link to="/stays">
+                  Explore Our Stays <ArrowRight className="h-4 w-4" />
+                </Link>
+              </Button>
             </motion.div>
           </div>
         </div>
