@@ -117,10 +117,35 @@
   body {
     @apply bg-background text-foreground antialiased;
     font-family: 'Inter', sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
   }
 
   h1, h2, h3, h4, h5, h6 {
     font-family: 'Playfair Display', serif;
+  }
+
+  /* Fluid typography with clamp() for responsive scaling */
+  h1 {
+    font-size: clamp(1.75rem, 4vw + 1rem, 3.5rem);
+  }
+  
+  h2 {
+    font-size: clamp(1.5rem, 3vw + 0.5rem, 2.5rem);
+  }
+  
+  h3 {
+    font-size: clamp(1.25rem, 2vw + 0.25rem, 1.75rem);
+  }
+
+  /* Ensure all interactive elements are touch-friendly */
+  button, 
+  [role="button"],
+  a,
+  input,
+  select,
+  textarea {
+    touch-action: manipulation;
   }
 }
 
@@ -146,6 +171,21 @@
 
   .btn-glow:hover::before {
     @apply opacity-100;
+  }
+
+  /* Touch-friendly interactive elements */
+  .touch-target {
+    min-height: 44px;
+    min-width: 44px;
+  }
+
+  /* Safe area support for mobile devices */
+  .safe-area-bottom {
+    padding-bottom: env(safe-area-inset-bottom, 0);
+  }
+
+  .safe-area-top {
+    padding-top: env(safe-area-inset-top, 0);
   }
 }
 

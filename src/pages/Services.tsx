@@ -97,27 +97,40 @@ const itemVariants = {
   visible: { opacity: 1, y: 0 },
 };
 
+import heroServices from '@/assets/hero-services.jpg';
+
 export default function Services() {
   return (
     <Layout>
-      {/* Hero Section */}
-      <section className="relative py-20 bg-gradient-to-br from-primary/10 via-background to-accent/10">
-        <div className="container mx-auto px-4 text-center">
-          <motion.h1
+      {/* Hero Section with Background Image */}
+      <section className="relative min-h-[50vh] md:min-h-[60vh] flex items-center">
+        {/* Background Image */}
+        <div className="absolute inset-0 z-0">
+          <img
+            src={heroServices}
+            alt="Elegant dining at Rafiki House"
+            className="w-full h-full object-cover"
+          />
+          <div className="absolute inset-0 bg-gradient-to-r from-navy/80 via-navy/60 to-transparent" />
+        </div>
+
+        {/* Content */}
+        <div className="container mx-auto px-4 relative z-10 py-12 md:py-20">
+          <motion.div
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
-            className="font-display text-4xl md:text-5xl font-bold text-foreground mb-4"
+            className="max-w-2xl"
           >
-            Our Services
-          </motion.h1>
-          <motion.p
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.1 }}
-            className="text-muted-foreground max-w-2xl mx-auto text-lg"
-          >
-            From exquisite dining to unforgettable safari adventures, we offer a complete Kenyan experience at Rafiki House Nanyuki.
-          </motion.p>
+            <span className="inline-block px-4 py-2 bg-accent/20 text-accent rounded-full text-sm font-medium mb-4">
+              Complete Experience
+            </span>
+            <h1 className="font-display text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold text-primary-foreground mb-4 leading-tight">
+              Our Services
+            </h1>
+            <p className="text-base sm:text-lg md:text-xl text-primary-foreground/80 max-w-lg">
+              From exquisite dining to unforgettable safari adventures, we offer a complete Kenyan experience at Rafiki House Nanyuki.
+            </p>
+          </motion.div>
         </div>
       </section>
 
