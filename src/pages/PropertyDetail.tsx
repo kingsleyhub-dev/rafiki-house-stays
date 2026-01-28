@@ -9,6 +9,7 @@ import { BookingWidget } from '@/components/booking/BookingWidget';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { useProperty } from '@/hooks/useProperties';
+import { ImageGallery } from '@/components/properties/ImageGallery';
 
 const amenityIcons: Record<string, React.ElementType> = {
   'Wi-Fi': Wifi,
@@ -117,26 +118,9 @@ export default function PropertyDetail() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.1 }}
-            className="mb-8"
+            className="mb-8 relative"
           >
-            <div className="grid grid-cols-1 md:grid-cols-4 gap-2 rounded-xl overflow-hidden">
-              <div className="md:col-span-2 md:row-span-2 aspect-[4/3] md:aspect-auto">
-                <img
-                  src={property.imageUrls[0] || '/placeholder.svg'}
-                  alt={property.name}
-                  className="w-full h-full object-cover hover:opacity-95 transition-opacity cursor-pointer"
-                />
-              </div>
-              {[1, 2, 3, 4].map((i) => (
-                <div key={i} className="hidden md:block aspect-[4/3]">
-                  <img
-                    src={property.imageUrls[i] || '/placeholder.svg'}
-                    alt={`${property.name} ${i + 1}`}
-                    className="w-full h-full object-cover hover:opacity-95 transition-opacity cursor-pointer"
-                  />
-                </div>
-              ))}
-            </div>
+            <ImageGallery images={property.imageUrls} propertyName={property.name} />
           </motion.div>
 
           {/* Content Grid */}
