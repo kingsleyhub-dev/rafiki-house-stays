@@ -136,8 +136,8 @@ export default function Index() {
             >
               <img
                 src={logo}
-                alt="Rafiki House"
-                className="h-14 sm:h-16 md:h-20 w-auto mb-4 md:mb-6 brightness-0 invert"
+                alt="Rafiki House Nanyuki"
+                className="h-16 sm:h-20 md:h-24 w-auto mb-4 md:mb-6 drop-shadow-lg"
               />
             </motion.div>
 
