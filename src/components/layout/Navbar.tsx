@@ -48,13 +48,13 @@ export function Navbar() {
         <Link to="/" className="flex items-center gap-2 group">
           <motion.img
             src={logo}
-            alt="Rafiki House"
+            alt="Rafiki House Nanyuki"
             className="h-10 w-auto"
             whileHover={{ scale: 1.05 }}
             transition={{ type: 'spring', stiffness: 400 }}
           />
           <span className="font-display text-xl font-semibold text-navy hidden sm:block">
-            Rafiki House
+            Rafiki House Nanyuki
           </span>
         </Link>
 
@@ -129,8 +129,8 @@ export function Navbar() {
           <SheetContent side="right" className="w-[280px] sm:w-[320px]">
             <SheetHeader className="mb-6">
               <SheetTitle className="flex items-center gap-2">
-                <img src={logo} alt="Rafiki House" className="h-8 w-auto" />
-                <span className="font-display text-lg">Rafiki House</span>
+                <img src={logo} alt="Rafiki House Nanyuki" className="h-8 w-auto" />
+                <span className="font-display text-lg">Rafiki House Nanyuki</span>
               </SheetTitle>
             </SheetHeader>
             
