@@ -130,6 +130,51 @@ export type Database = {
         }
         Relationships: []
       }
+      services: {
+        Row: {
+          category: string
+          created_at: string
+          description: string
+          duration: string | null
+          id: string
+          includes: string[] | null
+          is_active: boolean
+          name: string
+          price: string
+          sort_order: number
+          time_slot: string | null
+          updated_at: string
+        }
+        Insert: {
+          category: string
+          created_at?: string
+          description: string
+          duration?: string | null
+          id?: string
+          includes?: string[] | null
+          is_active?: boolean
+          name: string
+          price: string
+          sort_order?: number
+          time_slot?: string | null
+          updated_at?: string
+        }
+        Update: {
+          category?: string
+          created_at?: string
+          description?: string
+          duration?: string | null
+          id?: string
+          includes?: string[] | null
+          is_active?: boolean
+          name?: string
+          price?: string
+          sort_order?: number
+          time_slot?: string | null
+          updated_at?: string
+        }
+        Relationships: []
+      }
       user_roles: {
         Row: {
           created_at: string
