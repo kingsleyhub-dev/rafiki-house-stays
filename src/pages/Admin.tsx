@@ -176,6 +176,7 @@ export default function Admin() {
     beds: number;
     baths: number;
     home_type: string;
+    image_urls?: string[];
   }) => {
     try {
       await updateProperty.mutateAsync(data);
