@@ -250,7 +250,7 @@ export function BookingWidget({ property }: BookingWidgetProps) {
         size="lg"
       >
         <CreditCard className="h-4 w-4" />
-        {createBooking.isPending ? 'Processing...' : 'Proceed to Payment'}
+        {createBooking.isPending ? 'Processing...' : 'Reserve'}
       </Button>
 
       {/* Price Breakdown */}
