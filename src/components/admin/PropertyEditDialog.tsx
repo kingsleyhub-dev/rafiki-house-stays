@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -11,6 +11,9 @@ import {
   DialogFooter,
 } from '@/components/ui/dialog';
 import { Property } from '@/types';
+import { supabase } from '@/integrations/supabase/client';
+import { toast } from '@/hooks/use-toast';
+import { X, Loader2, ImagePlus } from 'lucide-react';
 
 interface PropertyEditDialogProps {
   property: Property | null;
@@ -26,6 +29,7 @@ interface PropertyEditDialogProps {
     beds: number;
     baths: number;
     home_type: string;
+    image_urls?: string[];
   }) => void;
   isLoading?: boolean;
 }
@@ -47,6 +51,9 @@ export function PropertyEditDialog({
     baths: 1,
     home_type: '',
   });
+  const [imageUrls, setImageUrls] = useState<string[]>([]);
+  const [uploading, setUploading] = useState(false);
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
     if (property) {
@@ -60,23 +67,186 @@ export function PropertyEditDialog({
         baths: property.baths,
         home_type: property.homeType,
       });
+      // Filter out local asset URLs (they start with /)
+      const dbImages = property.imageUrls.filter(url => url.startsWith('http'));
+      setImageUrls(dbImages);
     }
   }, [property]);
+
+  const handleFileUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const files = e.target.files;
+    if (!files || files.length === 0 || !property) return;
+
+    setUploading(true);
+    const newUrls: string[] = [];
+
+    try {
+      for (const file of Array.from(files)) {
+        // Validate file type
+        if (!file.type.startsWith('image/')) {
+          toast({
+            title: 'Invalid file',
+            description: `${file.name} is not an image file.`,
+            variant: 'destructive',
+          });
+          continue;
+        }
+
+        // Create unique filename
+        const fileExt = file.name.split('.').pop();
+        const fileName = `${property.slug}/${Date.now()}-${Math.random().toString(36).substring(2)}.${fileExt}`;
+
+        const { error: uploadError } = await supabase.storage
+          .from('property-images')
+          .upload(fileName, file, {
+            cacheControl: '3600',
+            upsert: false,
+          });
+
+        if (uploadError) {
+          console.error('Upload error:', uploadError);
+          toast({
+            title: 'Upload failed',
+            description: uploadError.message,
+            variant: 'destructive',
+          });
+          continue;
+        }
+
+        // Get public URL
+        const { data: { publicUrl } } = supabase.storage
+          .from('property-images')
+          .getPublicUrl(fileName);
+
+        newUrls.push(publicUrl);
+      }
+
+      if (newUrls.length > 0) {
+        setImageUrls(prev => [...prev, ...newUrls]);
+        toast({
+          title: 'Images uploaded',
+          description: `${newUrls.length} image(s) uploaded successfully.`,
+        });
+      }
+    } catch (error) {
+      console.error('Upload error:', error);
+      toast({
+        title: 'Upload failed',
+        description: 'An error occurred while uploading images.',
+        variant: 'destructive',
+      });
+    } finally {
+      setUploading(false);
+      if (fileInputRef.current) {
+        fileInputRef.current.value = '';
+      }
+    }
+  };
+
+  const handleRemoveImage = async (urlToRemove: string) => {
+    // Extract the path from the URL
+    try {
+      const url = new URL(urlToRemove);
+      const pathParts = url.pathname.split('/');
+      const bucketIndex = pathParts.indexOf('property-images');
+      if (bucketIndex !== -1) {
+        const filePath = pathParts.slice(bucketIndex + 1).join('/');
+        
+        const { error } = await supabase.storage
+          .from('property-images')
+          .remove([filePath]);
+
+        if (error) {
+          console.error('Delete error:', error);
+          // Still remove from UI even if storage delete fails
+        }
+      }
+    } catch (error) {
+      console.error('Error parsing URL:', error);
+    }
+
+    setImageUrls(prev => prev.filter(url => url !== urlToRemove));
+    toast({
+      title: 'Image removed',
+      description: 'The image has been removed.',
+    });
+  };
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (property) {
-      onSave({ id: property.id, ...formData });
+      onSave({ 
+        id: property.id, 
+        ...formData,
+        image_urls: imageUrls.length > 0 ? imageUrls : undefined,
+      });
     }
   };
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="sm:max-w-[500px]">
+      <DialogContent className="sm:max-w-[600px] max-h-[90vh] overflow-y-auto">
         <DialogHeader>
           <DialogTitle>Edit Property</DialogTitle>
         </DialogHeader>
         <form onSubmit={handleSubmit} className="space-y-4">
+          {/* Image Management Section */}
+          <div className="space-y-3">
+            <Label>Property Images</Label>
+            
+            {/* Current Images */}
+            <div className="grid grid-cols-3 gap-3">
+              {imageUrls.map((url, index) => (
+                <div key={index} className="relative group">
+                  <img
+                    src={url}
+                    alt={`Property ${index + 1}`}
+                    className="w-full h-24 object-cover rounded-lg border border-border"
+                  />
+                  <button
+                    type="button"
+                    onClick={() => handleRemoveImage(url)}
+                    className="absolute -top-2 -right-2 bg-destructive text-destructive-foreground rounded-full p-1 opacity-0 group-hover:opacity-100 transition-opacity"
+                  >
+                    <X className="h-3 w-3" />
+                  </button>
+                </div>
+              ))}
+              
+              {/* Upload Button */}
+              <button
+                type="button"
+                onClick={() => fileInputRef.current?.click()}
+                disabled={uploading}
+                className="w-full h-24 border-2 border-dashed border-border rounded-lg flex flex-col items-center justify-center gap-1 hover:border-primary hover:bg-primary/5 transition-colors disabled:opacity-50"
+              >
+                {uploading ? (
+                  <Loader2 className="h-5 w-5 animate-spin text-muted-foreground" />
+                ) : (
+                  <>
+                    <ImagePlus className="h-5 w-5 text-muted-foreground" />
+                    <span className="text-xs text-muted-foreground">Add Image</span>
+                  </>
+                )}
+              </button>
+            </div>
+            
+            <input
+              ref={fileInputRef}
+              type="file"
+              accept="image/*"
+              multiple
+              onChange={handleFileUpload}
+              className="hidden"
+            />
+            
+            {imageUrls.length === 0 && (
+              <p className="text-sm text-muted-foreground">
+                Note: Local images are used as defaults. Upload new images to replace them.
+              </p>
+            )}
+          </div>
+
           <div className="grid grid-cols-2 gap-4">
             <div className="space-y-2">
               <Label htmlFor="name">Name</Label>
@@ -172,7 +342,7 @@ export function PropertyEditDialog({
             <Button type="button" variant="outline" onClick={() => onOpenChange(false)}>
               Cancel
             </Button>
-            <Button type="submit" disabled={isLoading}>
+            <Button type="submit" disabled={isLoading || uploading}>
               {isLoading ? 'Saving...' : 'Save Changes'}
             </Button>
           </DialogFooter>
