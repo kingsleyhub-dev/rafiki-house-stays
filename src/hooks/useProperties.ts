@@ -44,9 +44,16 @@ interface DbProperty {
 }
 
 function mapDbToProperty(db: DbProperty): Property {
-  // Use local image if available, otherwise use database images
+  // Prefer backend-provided gallery images; fall back to local image only when none exist.
+  // If a local image exists, prepend it as the primary image (without duplicating).
   const localImage = propertyImages[db.slug];
-  const imageUrls = localImage ? [localImage] : db.image_urls;
+  const dbImages = (db.image_urls ?? []).filter(Boolean);
+
+  const imageUrls = (() => {
+    if (dbImages.length === 0) return localImage ? [localImage] : [];
+    if (!localImage) return dbImages;
+    return [localImage, ...dbImages.filter((u) => u !== localImage)];
+  })();
 
   return {
     id: db.id,
