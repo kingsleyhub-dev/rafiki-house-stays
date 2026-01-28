@@ -175,9 +175,15 @@ export function useUpdateProperty() {
   return useMutation({
     mutationFn: async (property: Partial<DbProperty> & { id: string }) => {
       const { id, ...updateData } = property;
+      
+      // Filter out undefined values but keep empty arrays (for clearing images)
+      const cleanedData = Object.fromEntries(
+        Object.entries(updateData).filter(([_, value]) => value !== undefined)
+      );
+      
       const { data, error } = await supabase
         .from('properties')
-        .update(updateData)
+        .update(cleanedData)
         .eq('id', id)
         .select()
         .single();
@@ -188,6 +194,7 @@ export function useUpdateProperty() {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['admin', 'properties'] });
       queryClient.invalidateQueries({ queryKey: ['properties'] });
+      queryClient.invalidateQueries({ queryKey: ['property'] });
     },
   });
 }
