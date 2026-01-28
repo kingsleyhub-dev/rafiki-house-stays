@@ -175,10 +175,11 @@ export function PropertyEditDialog({
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (property) {
+      // Always include image_urls to sync with database (even empty array clears images)
       onSave({ 
         id: property.id, 
         ...formData,
-        image_urls: imageUrls.length > 0 ? imageUrls : undefined,
+        image_urls: imageUrls,
       });
     }
   };
