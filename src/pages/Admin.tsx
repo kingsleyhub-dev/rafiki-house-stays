@@ -2,8 +2,8 @@ import { useState } from 'react';
 import { Navigate, Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { 
-  Home, Calendar, Users, Settings, Check, X, Clock,
-  Edit, Trash2, Eye, EyeOff, Shield, Loader2
+  Home, Calendar, Users, Check, X, Clock,
+  Edit, Trash2, Eye, EyeOff, Shield, Loader2, Utensils, Plus
 } from 'lucide-react';
 import { format, parseISO } from 'date-fns';
 import { Layout } from '@/components/layout/Layout';
@@ -50,7 +50,17 @@ import {
   useUpdateProperty,
   useDeleteBooking,
 } from '@/hooks/useAdminData';
+import {
+  useAllServices,
+  useCreateService,
+  useUpdateService,
+  useDeleteService,
+  useToggleServiceStatus,
+  Service,
+  ServiceCategory,
+} from '@/hooks/useServices';
 import { PropertyEditDialog } from '@/components/admin/PropertyEditDialog';
+import { ServiceEditDialog } from '@/components/admin/ServiceEditDialog';
 import { toast } from '@/hooks/use-toast';
 import { Property } from '@/types';
 
@@ -60,16 +70,26 @@ export default function Admin() {
   
   const [statusFilter, setStatusFilter] = useState<string>('all');
   const [propertyFilter, setPropertyFilter] = useState<string>('all');
+  const [serviceCategoryFilter, setServiceCategoryFilter] = useState<string>('all');
   const [editingProperty, setEditingProperty] = useState<Property | null>(null);
+  const [editingService, setEditingService] = useState<Service | null>(null);
+  const [isCreatingService, setIsCreatingService] = useState(false);
   const [deleteBookingId, setDeleteBookingId] = useState<string | null>(null);
+  const [deleteServiceId, setDeleteServiceId] = useState<string | null>(null);
 
   const { data: properties = [], isLoading: propertiesLoading } = useAllProperties();
   const { data: bookings = [], isLoading: bookingsLoading } = useAllBookings();
+  const { data: services = [], isLoading: servicesLoading } = useAllServices();
   
   const updateBookingStatus = useAdminUpdateBookingStatus();
   const updatePropertyStatus = useUpdatePropertyStatus();
   const updateProperty = useUpdateProperty();
   const deleteBooking = useDeleteBooking();
+  
+  const createService = useCreateService();
+  const updateService = useUpdateService();
+  const deleteService = useDeleteService();
+  const toggleServiceStatus = useToggleServiceStatus();
 
   // Show loading state while checking auth
   if (authLoading || adminLoading) {
@@ -212,6 +232,79 @@ export default function Admin() {
     }
   };
 
+  const handleSaveService = async (data: Partial<Service> & { id?: string }) => {
+    try {
+      if (data.id) {
+        await updateService.mutateAsync(data as Partial<Service> & { id: string });
+        setEditingService(null);
+        toast({
+          title: 'Service updated',
+          description: 'Service details have been saved.',
+        });
+      } else {
+        await createService.mutateAsync(data as Omit<Service, 'id' | 'created_at' | 'updated_at'>);
+        setIsCreatingService(false);
+        toast({
+          title: 'Service created',
+          description: 'New service has been added.',
+        });
+      }
+    } catch (error) {
+      toast({
+        title: 'Error',
+        description: 'Failed to save service.',
+        variant: 'destructive',
+      });
+    }
+  };
+
+  const handleDeleteService = async () => {
+    if (!deleteServiceId) return;
+    try {
+      await deleteService.mutateAsync(deleteServiceId);
+      setDeleteServiceId(null);
+      toast({
+        title: 'Service deleted',
+        description: 'The service has been removed.',
+      });
+    } catch (error) {
+      toast({
+        title: 'Error',
+        description: 'Failed to delete service.',
+        variant: 'destructive',
+      });
+    }
+  };
+
+  const handleToggleServiceStatus = async (serviceId: string, currentStatus: boolean) => {
+    try {
+      await toggleServiceStatus.mutateAsync({ id: serviceId, isActive: !currentStatus });
+      toast({
+        title: 'Service updated',
+        description: `Service is now ${!currentStatus ? 'active' : 'inactive'}.`,
+      });
+    } catch (error) {
+      toast({
+        title: 'Error',
+        description: 'Failed to update service status.',
+        variant: 'destructive',
+      });
+    }
+  };
+
+  const categoryLabels: Record<ServiceCategory, string> = {
+    breakfast: 'Breakfast',
+    lunch: 'Lunch',
+    dinner: 'Dinner',
+    drinks: 'Drinks',
+    game_drive: 'Game Drive',
+  };
+
+  const filteredServices = services.filter(service => {
+    if (serviceCategoryFilter !== 'all' && service.category !== serviceCategoryFilter) return false;
+    return true;
+  });
+
   const stats = {
     totalProperties: properties.length,
     activeProperties: properties.filter(p => p.isActive).length,
@@ -301,6 +394,10 @@ export default function Admin() {
               <TabsTrigger value="properties" className="gap-2">
                 <Home className="h-4 w-4" />
                 Properties
+              </TabsTrigger>
+              <TabsTrigger value="services" className="gap-2">
+                <Utensils className="h-4 w-4" />
+                Services
               </TabsTrigger>
               <TabsTrigger value="users" className="gap-2">
                 <Users className="h-4 w-4" />
@@ -505,6 +602,115 @@ export default function Admin() {
               </div>
             </TabsContent>
 
+            {/* Services Tab */}
+            <TabsContent value="services" className="space-y-4">
+              {/* Filters and Add Button */}
+              <div className="flex flex-wrap gap-4 justify-between items-center">
+                <Select value={serviceCategoryFilter} onValueChange={setServiceCategoryFilter}>
+                  <SelectTrigger className="w-[180px]">
+                    <SelectValue placeholder="Category" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="all">All Categories</SelectItem>
+                    {Object.entries(categoryLabels).map(([value, label]) => (
+                      <SelectItem key={value} value={value}>{label}</SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+                <Button onClick={() => setIsCreatingService(true)} className="gap-2">
+                  <Plus className="h-4 w-4" />
+                  Add Service
+                </Button>
+              </div>
+
+              {/* Services Table */}
+              <div className="bg-card rounded-xl border border-border overflow-hidden">
+                {servicesLoading ? (
+                  <div className="flex items-center justify-center py-12">
+                    <Loader2 className="h-6 w-6 animate-spin text-primary" />
+                  </div>
+                ) : (
+                  <Table>
+                    <TableHeader>
+                      <TableRow>
+                        <TableHead>Name</TableHead>
+                        <TableHead>Category</TableHead>
+                        <TableHead>Price</TableHead>
+                        <TableHead>Status</TableHead>
+                        <TableHead>Actions</TableHead>
+                      </TableRow>
+                    </TableHeader>
+                    <TableBody>
+                      {filteredServices.length === 0 ? (
+                        <TableRow>
+                          <TableCell colSpan={5} className="text-center py-8 text-muted-foreground">
+                            No services found
+                          </TableCell>
+                        </TableRow>
+                      ) : (
+                        filteredServices.map((service) => (
+                          <TableRow key={service.id}>
+                            <TableCell>
+                              <div>
+                                <p className="font-medium">{service.name}</p>
+                                <p className="text-sm text-muted-foreground line-clamp-1">
+                                  {service.description}
+                                </p>
+                              </div>
+                            </TableCell>
+                            <TableCell>
+                              <Badge variant="outline">
+                                {categoryLabels[service.category]}
+                              </Badge>
+                            </TableCell>
+                            <TableCell>{service.price}</TableCell>
+                            <TableCell>
+                              <Badge variant={service.is_active ? 'default' : 'secondary'}>
+                                {service.is_active ? 'Active' : 'Inactive'}
+                              </Badge>
+                            </TableCell>
+                            <TableCell>
+                              <div className="flex items-center gap-2">
+                                <Button
+                                  size="icon"
+                                  variant="outline"
+                                  className="h-8 w-8"
+                                  onClick={() => setEditingService(service)}
+                                >
+                                  <Edit className="h-4 w-4" />
+                                </Button>
+                                <Button
+                                  size="icon"
+                                  variant="outline"
+                                  className="h-8 w-8"
+                                  onClick={() => handleToggleServiceStatus(service.id, service.is_active)}
+                                  disabled={toggleServiceStatus.isPending}
+                                >
+                                  {service.is_active ? (
+                                    <EyeOff className="h-4 w-4" />
+                                  ) : (
+                                    <Eye className="h-4 w-4" />
+                                  )}
+                                </Button>
+                                <Button
+                                  size="icon"
+                                  variant="outline"
+                                  className="h-8 w-8"
+                                  onClick={() => setDeleteServiceId(service.id)}
+                                >
+                                  <Trash2 className="h-4 w-4 text-destructive" />
+                                </Button>
+                              </div>
+                            </TableCell>
+                          </TableRow>
+                        ))
+                      )}
+                    </TableBody>
+                  </Table>
+                )}
+              </div>
+            </TabsContent>
+
             {/* Users Tab */}
             <TabsContent value="users" className="space-y-4">
               <div className="bg-card rounded-xl border border-border p-8 text-center">
@@ -531,6 +737,18 @@ export default function Admin() {
         isLoading={updateProperty.isPending}
       />
 
+      {/* Edit/Create Service Dialog */}
+      <ServiceEditDialog
+        service={editingService}
+        isOpen={!!editingService || isCreatingService}
+        onClose={() => {
+          setEditingService(null);
+          setIsCreatingService(false);
+        }}
+        onSave={handleSaveService}
+        isCreating={isCreatingService}
+      />
+
       {/* Delete Booking Confirmation */}
       <AlertDialog open={!!deleteBookingId} onOpenChange={(open) => !open && setDeleteBookingId(null)}>
         <AlertDialogContent>
@@ -544,6 +762,27 @@ export default function Admin() {
             <AlertDialogCancel>Cancel</AlertDialogCancel>
             <AlertDialogAction
               onClick={handleDeleteBooking}
+              className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
+            >
+              Delete
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
+
+      {/* Delete Service Confirmation */}
+      <AlertDialog open={!!deleteServiceId} onOpenChange={(open) => !open && setDeleteServiceId(null)}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Delete Service</AlertDialogTitle>
+            <AlertDialogDescription>
+              Are you sure you want to delete this service? This action cannot be undone.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel>Cancel</AlertDialogCancel>
+            <AlertDialogAction
+              onClick={handleDeleteService}
               className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
             >
               Delete
