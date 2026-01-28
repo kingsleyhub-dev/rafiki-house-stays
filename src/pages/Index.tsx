@@ -135,13 +135,11 @@ export default function Index() {
               transition={{ duration: 0.6 }}
               className="mb-4 md:mb-6"
             >
-              <div className="bg-white/90 backdrop-blur-sm rounded-2xl p-4 inline-block shadow-xl">
-                <img
-                  src={logo}
-                  alt="Rafiki House Nanyuki"
-                  className="h-20 sm:h-24 md:h-32 lg:h-36 w-auto"
-                />
-              </div>
+              <img
+                src={logo}
+                alt="Rafiki House Nanyuki"
+                className="h-20 sm:h-24 md:h-32 lg:h-36 w-auto drop-shadow-2xl"
+              />
             </motion.div>
 
             <motion.div
