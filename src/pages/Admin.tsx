@@ -3,7 +3,7 @@ import { Navigate, Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { 
   Home, Calendar, Users, Check, X, Clock,
-  Edit, Trash2, Eye, EyeOff, Shield, Loader2, Utensils, Plus
+  Edit, Trash2, Eye, EyeOff, Shield, Loader2, Utensils, Plus, Image
 } from 'lucide-react';
 import { format, parseISO } from 'date-fns';
 import { Layout } from '@/components/layout/Layout';
@@ -61,6 +61,7 @@ import {
 } from '@/hooks/useServices';
 import { PropertyEditDialog } from '@/components/admin/PropertyEditDialog';
 import { ServiceEditDialog } from '@/components/admin/ServiceEditDialog';
+import { ServiceCategoryImages } from '@/components/admin/ServiceCategoryImages';
 import { toast } from '@/hooks/use-toast';
 import { Property } from '@/types';
 
@@ -603,25 +604,41 @@ export default function Admin() {
             </TabsContent>
 
             {/* Services Tab */}
-            <TabsContent value="services" className="space-y-4">
-              {/* Filters and Add Button */}
-              <div className="flex flex-wrap gap-4 justify-between items-center">
-                <Select value={serviceCategoryFilter} onValueChange={setServiceCategoryFilter}>
-                  <SelectTrigger className="w-[180px]">
-                    <SelectValue placeholder="Category" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="all">All Categories</SelectItem>
-                    {Object.entries(categoryLabels).map(([value, label]) => (
-                      <SelectItem key={value} value={value}>{label}</SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-                <Button onClick={() => setIsCreatingService(true)} className="gap-2">
-                  <Plus className="h-4 w-4" />
-                  Add Service
-                </Button>
+            <TabsContent value="services" className="space-y-6">
+              {/* Category Images Section */}
+              <div className="bg-card rounded-xl border border-border p-6">
+                <div className="flex items-center gap-2 mb-4">
+                  <Image className="h-5 w-5 text-primary" />
+                  <h3 className="font-semibold">Category Images</h3>
+                </div>
+                <ServiceCategoryImages />
               </div>
+
+              {/* Service Items Section */}
+              <div className="space-y-4">
+                <div className="flex items-center gap-2">
+                  <Utensils className="h-5 w-5 text-primary" />
+                  <h3 className="font-semibold">Service Items</h3>
+                </div>
+                
+                {/* Filters and Add Button */}
+                <div className="flex flex-wrap gap-4 justify-between items-center">
+                  <Select value={serviceCategoryFilter} onValueChange={setServiceCategoryFilter}>
+                    <SelectTrigger className="w-[180px]">
+                      <SelectValue placeholder="Category" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="all">All Categories</SelectItem>
+                      {Object.entries(categoryLabels).map(([value, label]) => (
+                        <SelectItem key={value} value={value}>{label}</SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                  <Button onClick={() => setIsCreatingService(true)} className="gap-2">
+                    <Plus className="h-4 w-4" />
+                    Add Service
+                  </Button>
+                </div>
 
               {/* Services Table */}
               <div className="bg-card rounded-xl border border-border overflow-hidden">
@@ -708,6 +725,7 @@ export default function Admin() {
                     </TableBody>
                   </Table>
                 )}
+              </div>
               </div>
             </TabsContent>
 

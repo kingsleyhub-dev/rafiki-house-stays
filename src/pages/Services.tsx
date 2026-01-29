@@ -4,14 +4,24 @@ import { Utensils, Coffee, Wine, Car, Sun, Moon, Sunset, Loader2, Clock } from '
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { useServices, Service } from '@/hooks/useServices';
+import { useServiceCategoryImages, ServiceCategory } from '@/hooks/useServiceCategoryImages';
 
-// Import images
+// Fallback images
 import breakfastImg from '@/assets/services-breakfast.jpg';
 import lunchImg from '@/assets/services-lunch.jpg';
 import dinnerImg from '@/assets/services-dinner.jpg';
 import drinksImg from '@/assets/services-drinks.jpg';
 import gamedriveImg from '@/assets/services-gamedrive.jpg';
 import heroServices from '@/assets/hero-services.jpg';
+
+// Fallback image map
+const fallbackImages: Record<ServiceCategory, string> = {
+  breakfast: breakfastImg,
+  lunch: lunchImg,
+  dinner: dinnerImg,
+  drinks: drinksImg,
+  game_drive: gamedriveImg,
+};
 
 const containerVariants = {
   hidden: { opacity: 0 },
@@ -115,6 +125,13 @@ function MealTabContent({ items, image, imageAlt, title, subtitle }: MealTabCont
 
 export default function Services() {
   const { data: services = [], isLoading } = useServices();
+  const { data: categoryImages = [] } = useServiceCategoryImages();
+
+  // Helper to get category image with fallback
+  const getCategoryImage = (category: ServiceCategory): string => {
+    const dbImage = categoryImages.find(img => img.category === category)?.image_url;
+    return dbImage || fallbackImages[category];
+  };
 
   // Filter services by category
   const breakfastItems = services.filter(s => s.category === 'breakfast');
@@ -207,7 +224,7 @@ export default function Services() {
             <TabsContent value="breakfast">
               <MealTabContent
                 items={breakfastItems}
-                image={breakfastImg}
+                image={getCategoryImage('breakfast')}
                 imageAlt="Breakfast at Rafiki House"
                 title="Morning Delights"
                 subtitle="Start your day with a view of Mount Kenya"
@@ -217,7 +234,7 @@ export default function Services() {
             <TabsContent value="lunch">
               <MealTabContent
                 items={lunchItems}
-                image={lunchImg}
+                image={getCategoryImage('lunch')}
                 imageAlt="Lunch at Rafiki House"
                 title="Midday Feast"
                 subtitle="Fresh local ingredients prepared with care"
@@ -227,7 +244,7 @@ export default function Services() {
             <TabsContent value="dinner">
               <MealTabContent
                 items={dinnerItems}
-                image={dinnerImg}
+                image={getCategoryImage('dinner')}
                 imageAlt="Dinner at Rafiki House"
                 title="Evening Elegance"
                 subtitle="Fine dining under the African stars"
@@ -266,7 +283,7 @@ export default function Services() {
               className="relative rounded-2xl overflow-hidden shadow-lg"
             >
               <img 
-                src={drinksImg} 
+                src={getCategoryImage('drinks')} 
                 alt="Drinks at Rafiki House" 
                 className="w-full h-64 lg:h-full object-cover"
               />
@@ -323,7 +340,7 @@ export default function Services() {
               className="lg:col-span-1 relative rounded-2xl overflow-hidden shadow-lg"
             >
               <img 
-                src={gamedriveImg} 
+                src={getCategoryImage('game_drive')} 
                 alt="Safari Game Drive" 
                 className="w-full h-64 lg:h-full object-cover"
               />
