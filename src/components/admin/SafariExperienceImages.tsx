@@ -34,7 +34,7 @@ export function SafariExperienceImages() {
       await uploadMutation.mutateAsync({
         file,
         type: 'experience',
-        destinationId: selectedDestination || undefined,
+        destinationId: selectedDestination === 'none' ? undefined : selectedDestination || undefined,
       });
       toast({
         title: 'Success',
@@ -194,7 +194,7 @@ export function SafariExperienceImages() {
                   <SelectValue placeholder="Select a destination..." />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="">No specific destination</SelectItem>
+                  <SelectItem value="none">No specific destination</SelectItem>
                   {destinations?.map((d) => (
                     <SelectItem key={d.id} value={d.id}>
                       {d.name}
