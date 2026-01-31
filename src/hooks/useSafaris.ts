@@ -89,7 +89,7 @@ export function useUploadSafariImage() {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: async ({ file, type, destinationId }: { file: File; type: 'destination' | 'experience'; destinationId?: string }) => {
+    mutationFn: async ({ file, type }: { file: File; type: 'destination' | 'experience' }) => {
       const timestamp = Date.now();
       const fileExt = file.name.split('.').pop();
       const fileName = `${type}/${timestamp}-${Math.random().toString(36).substring(7)}.${fileExt}`;
@@ -109,7 +109,7 @@ export function useUploadSafariImage() {
           .from('safari_experience_images')
           .insert({
             image_url: publicUrl,
-            destination_id: destinationId || null,
+            destination_id: null,
             title: null,
             description: null,
           });
@@ -124,6 +124,49 @@ export function useUploadSafariImage() {
       queryClient.invalidateQueries({ queryKey: ['admin-safari-experience-images'] });
       queryClient.invalidateQueries({ queryKey: ['safari-destinations'] });
       queryClient.invalidateQueries({ queryKey: ['admin-safari-destinations'] });
+    },
+  });
+}
+
+export function useUploadMultipleSafariImages() {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: async (files: File[]) => {
+      const uploadPromises = files.map(async (file) => {
+        const timestamp = Date.now();
+        const fileExt = file.name.split('.').pop();
+        const fileName = `experience/${timestamp}-${Math.random().toString(36).substring(7)}.${fileExt}`;
+
+        const { error: uploadError } = await supabase.storage
+          .from('safari-images')
+          .upload(fileName, file);
+
+        if (uploadError) throw uploadError;
+
+        const { data: { publicUrl } } = supabase.storage
+          .from('safari-images')
+          .getPublicUrl(fileName);
+
+        const { error: insertError } = await supabase
+          .from('safari_experience_images')
+          .insert({
+            image_url: publicUrl,
+            destination_id: null,
+            title: null,
+            description: null,
+          });
+
+        if (insertError) throw insertError;
+
+        return publicUrl;
+      });
+
+      return Promise.all(uploadPromises);
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['safari-experience-images'] });
+      queryClient.invalidateQueries({ queryKey: ['admin-safari-experience-images'] });
     },
   });
 }
