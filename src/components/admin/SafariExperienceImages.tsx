@@ -1,5 +1,5 @@
 import { useState, useRef } from 'react';
-import { useAdminSafariDestinations, useAdminSafariExperienceImages, useUploadSafariImage, useDeleteSafariExperienceImage, useUpdateDestinationImage } from '@/hooks/useSafaris';
+import { useAdminSafariDestinations, useAdminSafariExperienceImages, useUploadSafariImage, useUploadMultipleSafariImages, useDeleteSafariExperienceImage, useUpdateDestinationImage } from '@/hooks/useSafaris';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Skeleton } from '@/components/ui/skeleton';
@@ -10,6 +10,7 @@ export function SafariExperienceImages() {
   const { data: destinations, isLoading: loadingDestinations } = useAdminSafariDestinations();
   const { data: experienceImages, isLoading: loadingImages } = useAdminSafariExperienceImages();
   const uploadMutation = useUploadSafariImage();
+  const uploadMultipleMutation = useUploadMultipleSafariImages();
   const deleteMutation = useDeleteSafariExperienceImage();
   const updateDestinationImageMutation = useUpdateDestinationImage();
   
@@ -22,23 +23,21 @@ export function SafariExperienceImages() {
   const { toast } = useToast();
 
   const handleExperienceUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (!file) return;
+    const files = e.target.files;
+    if (!files || files.length === 0) return;
 
     setUploadingExperience(true);
     try {
-      await uploadMutation.mutateAsync({
-        file,
-        type: 'experience',
-      });
+      const fileArray = Array.from(files);
+      await uploadMultipleMutation.mutateAsync(fileArray);
       toast({
         title: 'Success',
-        description: 'Experience image uploaded successfully',
+        description: `${fileArray.length} image${fileArray.length > 1 ? 's' : ''} uploaded successfully`,
       });
     } catch (error) {
       toast({
         title: 'Error',
-        description: 'Failed to upload image',
+        description: 'Failed to upload images',
         variant: 'destructive',
       });
     } finally {
@@ -181,10 +180,11 @@ export function SafariExperienceImages() {
         </CardHeader>
         <CardContent className="space-y-6">
           {/* Upload Section */}
-          <div className="flex items-center gap-4 p-4 bg-muted/50 rounded-lg">
+          <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4 p-4 bg-muted/50 rounded-lg">
             <input
               type="file"
               accept="image/*"
+              multiple
               onChange={handleExperienceUpload}
               ref={experienceFileInputRef}
               className="hidden"
@@ -198,12 +198,12 @@ export function SafariExperienceImages() {
               ) : (
                 <>
                   <Upload className="h-4 w-4 mr-2" />
-                  Upload Experience Image
+                  Upload Experience Images
                 </>
               )}
             </Button>
             <p className="text-sm text-muted-foreground">
-              Add images from past safari experiences to showcase to visitors
+              Select multiple images at once to upload past safari experiences
             </p>
           </div>
 
