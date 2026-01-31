@@ -5,7 +5,8 @@ import { useRef, useState, useEffect } from 'react';
 import { Layout } from '@/components/layout/Layout';
 import { PropertyCard } from '@/components/properties/PropertyCard';
 import { Button } from '@/components/ui/button';
-import { properties } from '@/data/properties';
+import { useProperties } from '@/hooks/useProperties';
+import { Property } from '@/types';
 import heroImage from '@/assets/hero-image.jpg';
 import logo from '@/assets/rafiki-house-logo.png';
 
@@ -33,7 +34,7 @@ const features = [
 ];
 
 // Animated property carousel for mobile
-function AnimatedPropertyCarousel({ properties }: { properties: typeof import('@/data/properties').properties }) {
+function AnimatedPropertyCarousel({ properties }: { properties: Property[] }) {
   const [currentIndex, setCurrentIndex] = useState(0);
   const containerRef = useRef<HTMLDivElement>(null);
   const isInView = useInView(containerRef, { once: false, margin: "-100px" });
@@ -110,6 +111,7 @@ function AnimatedPropertyCarousel({ properties }: { properties: typeof import('@
 }
 
 export default function Index() {
+  const { data: properties = [] } = useProperties();
   const featuredProperties = properties.slice(0, 4);
 
   return (

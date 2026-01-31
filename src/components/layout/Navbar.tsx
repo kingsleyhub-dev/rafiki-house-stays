@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { Menu, User, LogOut, Calendar } from 'lucide-react';
+import { Menu, User, LogOut, Calendar, Compass } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import {
   DropdownMenu,
@@ -24,6 +24,7 @@ const navLinks = [
   { href: '/', label: 'Home' },
   { href: '/stays', label: 'Stays' },
   { href: '/services', label: 'Services' },
+  { href: '/safaris', label: 'Safaris & Game Drives' },
   { href: '/about', label: 'About' },
   { href: '/contact', label: 'Contact' },
 ];
