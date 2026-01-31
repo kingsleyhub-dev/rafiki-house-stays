@@ -130,6 +130,92 @@ export type Database = {
         }
         Relationships: []
       }
+      safari_destinations: {
+        Row: {
+          created_at: string
+          description: string
+          experience: string
+          id: string
+          image_url: string | null
+          is_active: boolean
+          name: string
+          slug: string
+          sort_order: number
+          tagline: string
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          description: string
+          experience: string
+          id?: string
+          image_url?: string | null
+          is_active?: boolean
+          name: string
+          slug: string
+          sort_order?: number
+          tagline: string
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          description?: string
+          experience?: string
+          id?: string
+          image_url?: string | null
+          is_active?: boolean
+          name?: string
+          slug?: string
+          sort_order?: number
+          tagline?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      safari_experience_images: {
+        Row: {
+          created_at: string
+          description: string | null
+          destination_id: string | null
+          id: string
+          image_url: string
+          is_active: boolean
+          sort_order: number
+          title: string | null
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          description?: string | null
+          destination_id?: string | null
+          id?: string
+          image_url: string
+          is_active?: boolean
+          sort_order?: number
+          title?: string | null
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          description?: string | null
+          destination_id?: string | null
+          id?: string
+          image_url?: string
+          is_active?: boolean
+          sort_order?: number
+          title?: string | null
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "safari_experience_images_destination_id_fkey"
+            columns: ["destination_id"]
+            isOneToOne: false
+            referencedRelation: "safari_destinations"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       service_category_images: {
         Row: {
           category: string

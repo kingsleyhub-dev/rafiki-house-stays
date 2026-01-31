@@ -1,13 +1,13 @@
 import { Link, useLocation } from 'react-router-dom';
-import { Home, Building2, Utensils, Info, Phone } from 'lucide-react';
+import { Home, Building2, Utensils, Info, Compass } from 'lucide-react';
 import { motion } from 'framer-motion';
 
 const navItems = [
   { href: '/', label: 'Home', icon: Home },
   { href: '/stays', label: 'Stays', icon: Building2 },
   { href: '/services', label: 'Services', icon: Utensils },
+  { href: '/safaris', label: 'Safaris', icon: Compass },
   { href: '/about', label: 'About', icon: Info },
-  { href: '/contact', label: 'Contact', icon: Phone },
 ];
 
 export function MobileNav() {

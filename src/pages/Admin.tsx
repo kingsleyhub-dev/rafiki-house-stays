@@ -3,7 +3,7 @@ import { Navigate, Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { 
   Home, Calendar, Users, Check, X, Clock,
-  Edit, Trash2, Eye, EyeOff, Shield, Loader2, Utensils, Plus, Image
+  Edit, Trash2, Eye, EyeOff, Shield, Loader2, Utensils, Plus, Image, Compass
 } from 'lucide-react';
 import { format, parseISO } from 'date-fns';
 import { Layout } from '@/components/layout/Layout';
@@ -62,6 +62,7 @@ import {
 import { PropertyEditDialog } from '@/components/admin/PropertyEditDialog';
 import { ServiceEditDialog } from '@/components/admin/ServiceEditDialog';
 import { ServiceCategoryImages } from '@/components/admin/ServiceCategoryImages';
+import { SafariExperienceImages } from '@/components/admin/SafariExperienceImages';
 import { toast } from '@/hooks/use-toast';
 import { Property } from '@/types';
 
@@ -387,7 +388,7 @@ export default function Admin() {
 
           {/* Tabs */}
           <Tabs defaultValue="bookings" className="space-y-6">
-            <TabsList>
+            <TabsList className="flex-wrap">
               <TabsTrigger value="bookings" className="gap-2">
                 <Calendar className="h-4 w-4" />
                 Bookings
@@ -399,6 +400,10 @@ export default function Admin() {
               <TabsTrigger value="services" className="gap-2">
                 <Utensils className="h-4 w-4" />
                 Services
+              </TabsTrigger>
+              <TabsTrigger value="safaris" className="gap-2">
+                <Compass className="h-4 w-4" />
+                Safaris
               </TabsTrigger>
               <TabsTrigger value="users" className="gap-2">
                 <Users className="h-4 w-4" />
@@ -727,6 +732,11 @@ export default function Admin() {
                 )}
               </div>
               </div>
+            </TabsContent>
+
+            {/* Safaris Tab */}
+            <TabsContent value="safaris" className="space-y-4">
+              <SafariExperienceImages />
             </TabsContent>
 
             {/* Users Tab */}
