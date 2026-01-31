@@ -6,7 +6,7 @@ import { useGeolocation, calculateDistance, RAFIKI_HOUSE_COORDS } from '@/hooks/
 import { Skeleton } from '@/components/ui/skeleton';
 import { Card, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
-
+import { ExperienceGallery } from '@/components/safari/ExperienceGallery';
 // Placeholder images for destinations that don't have custom images yet
 const placeholderImages: Record<string, string> = {
   'ol-pejeta': 'https://images.unsplash.com/photo-1516426122078-c23e76319801?w=800&q=80',
@@ -178,63 +178,33 @@ export default function Safaris() {
       </section>
 
       {/* Experience Gallery */}
-      {experienceImages && experienceImages.length > 0 && (
-        <section className="py-16 md:py-24 bg-muted/50">
-          <div className="container mx-auto px-4">
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              className="text-center mb-12"
-            >
-              <Badge variant="secondary" className="mb-4">
-                <Camera className="w-3 h-3 mr-1" />
-                Our Adventures
-              </Badge>
-              <h2 className="font-display text-2xl md:text-4xl font-bold mb-4">
-                Past Safari Experiences
-              </h2>
-              <p className="text-muted-foreground max-w-2xl mx-auto">
-                Glimpses from our previous safaris and game drives. These memories showcase 
-                the incredible experiences awaiting you.
-              </p>
-            </motion.div>
+      <section className="py-16 md:py-24 bg-muted/50">
+        <div className="container mx-auto px-4">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            className="text-center mb-12"
+          >
+            <Badge variant="secondary" className="mb-4">
+              <Camera className="w-3 h-3 mr-1" />
+              Our Adventures
+            </Badge>
+            <h2 className="font-display text-2xl md:text-4xl font-bold mb-4">
+              Past Safari Experiences
+            </h2>
+            <p className="text-muted-foreground max-w-2xl mx-auto">
+              Glimpses from our previous safaris and game drives. These memories showcase 
+              the incredible experiences awaiting you. Click any image to view it full-size.
+            </p>
+          </motion.div>
 
-            {loadingImages ? (
-              <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-                {[...Array(8)].map((_, i) => (
-                  <Skeleton key={i} className="aspect-square rounded-xl" />
-                ))}
-              </div>
-            ) : (
-              <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-                {experienceImages.map((image, index) => (
-                  <motion.div
-                    key={image.id}
-                    initial={{ opacity: 0, scale: 0.9 }}
-                    whileInView={{ opacity: 1, scale: 1 }}
-                    viewport={{ once: true }}
-                    transition={{ delay: index * 0.05 }}
-                    whileHover={{ scale: 1.03, zIndex: 10 }}
-                    className="relative aspect-square rounded-xl overflow-hidden shadow-card group cursor-pointer"
-                  >
-                    <img
-                      src={image.image_url}
-                      alt={image.title || 'Safari experience'}
-                      className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
-                    />
-                    {image.title && (
-                      <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity flex items-end p-4">
-                        <p className="text-white text-sm font-medium">{image.title}</p>
-                      </div>
-                    )}
-                  </motion.div>
-                ))}
-              </div>
-            )}
-          </div>
-        </section>
-      )}
+          <ExperienceGallery 
+            images={experienceImages || []} 
+            isLoading={loadingImages} 
+          />
+        </div>
+      </section>
 
       {/* CTA Section */}
       <section className="py-16 md:py-24 bg-navy text-primary-foreground">
