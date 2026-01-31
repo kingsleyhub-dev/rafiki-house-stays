@@ -2,9 +2,6 @@ import { useState, useRef } from 'react';
 import { useAdminSafariDestinations, useAdminSafariExperienceImages, useUploadSafariImage, useDeleteSafariExperienceImage, useUpdateDestinationImage } from '@/hooks/useSafaris';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Skeleton } from '@/components/ui/skeleton';
 import { useToast } from '@/hooks/use-toast';
 import { Upload, Trash2, Image as ImageIcon, MapPin, Camera } from 'lucide-react';
@@ -16,7 +13,6 @@ export function SafariExperienceImages() {
   const deleteMutation = useDeleteSafariExperienceImage();
   const updateDestinationImageMutation = useUpdateDestinationImage();
   
-  const [selectedDestination, setSelectedDestination] = useState<string>('');
   const [uploadingExperience, setUploadingExperience] = useState(false);
   const [uploadingDestination, setUploadingDestination] = useState<string | null>(null);
   
@@ -34,7 +30,6 @@ export function SafariExperienceImages() {
       await uploadMutation.mutateAsync({
         file,
         type: 'experience',
-        destinationId: selectedDestination === 'none' ? undefined : selectedDestination || undefined,
       });
       toast({
         title: 'Success',
@@ -186,45 +181,30 @@ export function SafariExperienceImages() {
         </CardHeader>
         <CardContent className="space-y-6">
           {/* Upload Section */}
-          <div className="flex flex-col sm:flex-row gap-4 p-4 bg-muted/50 rounded-lg">
-            <div className="flex-1 space-y-2">
-              <Label>Link to Destination (Optional)</Label>
-              <Select value={selectedDestination} onValueChange={setSelectedDestination}>
-                <SelectTrigger>
-                  <SelectValue placeholder="Select a destination..." />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="none">No specific destination</SelectItem>
-                  {destinations?.map((d) => (
-                    <SelectItem key={d.id} value={d.id}>
-                      {d.name}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-            </div>
-            <div className="flex items-end">
-              <input
-                type="file"
-                accept="image/*"
-                onChange={handleExperienceUpload}
-                ref={experienceFileInputRef}
-                className="hidden"
-              />
-              <Button
-                onClick={() => experienceFileInputRef.current?.click()}
-                disabled={uploadingExperience}
-              >
-                {uploadingExperience ? (
-                  'Uploading...'
-                ) : (
-                  <>
-                    <Upload className="h-4 w-4 mr-2" />
-                    Upload Experience Image
-                  </>
-                )}
-              </Button>
-            </div>
+          <div className="flex items-center gap-4 p-4 bg-muted/50 rounded-lg">
+            <input
+              type="file"
+              accept="image/*"
+              onChange={handleExperienceUpload}
+              ref={experienceFileInputRef}
+              className="hidden"
+            />
+            <Button
+              onClick={() => experienceFileInputRef.current?.click()}
+              disabled={uploadingExperience}
+            >
+              {uploadingExperience ? (
+                'Uploading...'
+              ) : (
+                <>
+                  <Upload className="h-4 w-4 mr-2" />
+                  Upload Experience Image
+                </>
+              )}
+            </Button>
+            <p className="text-sm text-muted-foreground">
+              Add images from past safari experiences to showcase to visitors
+            </p>
           </div>
 
           {/* Gallery Grid */}
