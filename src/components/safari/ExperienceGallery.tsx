@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { ChevronLeft, ChevronRight, X, Camera } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
@@ -19,8 +19,65 @@ interface ExperienceGalleryProps {
   isLoading?: boolean;
 }
 
+// Optimized image component with lazy loading and blur placeholder
+function OptimizedImage({ 
+  src, 
+  alt, 
+  className,
+  priority = false,
+  onLoad
+}: { 
+  src: string; 
+  alt: string; 
+  className?: string;
+  priority?: boolean;
+  onLoad?: () => void;
+}) {
+  const [isLoaded, setIsLoaded] = useState(false);
+  const [hasError, setHasError] = useState(false);
+  const imgRef = useRef<HTMLImageElement>(null);
+
+  useEffect(() => {
+    if (priority && imgRef.current) {
+      // Preload priority images
+      const img = new Image();
+      img.src = src;
+    }
+  }, [src, priority]);
+
+  return (
+    <div className="relative w-full h-full overflow-hidden bg-muted">
+      {/* Blur placeholder */}
+      {!isLoaded && !hasError && (
+        <div className="absolute inset-0 bg-gradient-to-br from-muted to-muted-foreground/20 animate-pulse" />
+      )}
+      
+      {hasError ? (
+        <div className="absolute inset-0 flex items-center justify-center bg-muted">
+          <Camera className="h-8 w-8 text-muted-foreground/50" />
+        </div>
+      ) : (
+        <img
+          ref={imgRef}
+          src={src}
+          alt={alt}
+          loading={priority ? "eager" : "lazy"}
+          decoding="async"
+          className={`${className} transition-opacity duration-300 ${isLoaded ? 'opacity-100' : 'opacity-0'}`}
+          onLoad={() => {
+            setIsLoaded(true);
+            onLoad?.();
+          }}
+          onError={() => setHasError(true)}
+        />
+      )}
+    </div>
+  );
+}
+
 export function ExperienceGallery({ images, isLoading }: ExperienceGalleryProps) {
   const [selectedIndex, setSelectedIndex] = useState<number | null>(null);
+  const [loadedImages, setLoadedImages] = useState<Set<string>>(new Set());
   const [emblaRef, emblaApi] = useEmblaCarousel({ 
     loop: true,
     align: 'start',
@@ -45,6 +102,20 @@ export function ExperienceGallery({ images, isLoading }: ExperienceGalleryProps)
     emblaApi.on('select', onSelect);
     emblaApi.on('reInit', onSelect);
   }, [emblaApi, onSelect]);
+
+  // Preload first few images for faster initial render
+  useEffect(() => {
+    if (images.length > 0) {
+      const preloadCount = Math.min(6, images.length);
+      images.slice(0, preloadCount).forEach(image => {
+        const img = new Image();
+        img.src = image.image_url;
+        img.onload = () => {
+          setLoadedImages(prev => new Set([...prev, image.id]));
+        };
+      });
+    }
+  }, [images]);
 
   // Auto-scroll effect
   useEffect(() => {
@@ -86,6 +157,20 @@ export function ExperienceGallery({ images, isLoading }: ExperienceGalleryProps)
       document.body.style.overflow = '';
     };
   }, [selectedIndex]);
+
+  // Preload adjacent images when lightbox is open
+  useEffect(() => {
+    if (selectedIndex !== null && images.length > 0) {
+      const preloadIndexes = [
+        (selectedIndex - 1 + images.length) % images.length,
+        (selectedIndex + 1) % images.length
+      ];
+      preloadIndexes.forEach(index => {
+        const img = new Image();
+        img.src = images[index].image_url;
+      });
+    }
+  }, [selectedIndex, images]);
 
   if (isLoading) {
     return (
@@ -140,16 +225,17 @@ export function ExperienceGallery({ images, isLoading }: ExperienceGalleryProps)
                 className="flex-[0_0_45%] sm:flex-[0_0_33.333%] md:flex-[0_0_25%] lg:flex-[0_0_20%] min-w-0"
                 initial={{ opacity: 0, scale: 0.9 }}
                 animate={{ opacity: 1, scale: 1 }}
-                transition={{ delay: index * 0.05 }}
+                transition={{ delay: Math.min(index * 0.03, 0.3) }}
               >
                 <div
                   className="relative aspect-square rounded-xl overflow-hidden shadow-card cursor-pointer group"
                   onClick={() => setSelectedIndex(index)}
                 >
-                  <img
+                  <OptimizedImage
                     src={image.image_url}
                     alt={image.title || 'Safari experience'}
                     className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+                    priority={index < 6}
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
                   <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
@@ -195,7 +281,7 @@ export function ExperienceGallery({ images, isLoading }: ExperienceGalleryProps)
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.98 }}
           >
-            <img
+            <OptimizedImage
               src={image.image_url}
               alt={image.title || 'Safari experience thumbnail'}
               className="w-full h-full object-cover"
@@ -260,10 +346,11 @@ export function ExperienceGallery({ images, isLoading }: ExperienceGalleryProps)
               className="relative max-w-[90vw] max-h-[85vh]"
               onClick={(e) => e.stopPropagation()}
             >
-              <img
+              <OptimizedImage
                 src={images[selectedIndex].image_url}
                 alt={images[selectedIndex].title || 'Safari experience'}
                 className="max-w-full max-h-[85vh] object-contain rounded-lg"
+                priority
               />
               {(images[selectedIndex].title || images[selectedIndex].description) && (
                 <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/80 to-transparent p-6 rounded-b-lg">
@@ -295,7 +382,7 @@ export function ExperienceGallery({ images, isLoading }: ExperienceGalleryProps)
                     setSelectedIndex(index);
                   }}
                 >
-                  <img
+                  <OptimizedImage
                     src={image.image_url}
                     alt=""
                     className="w-full h-full object-cover"
