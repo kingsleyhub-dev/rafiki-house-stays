@@ -183,17 +183,30 @@ export default function PropertyDetail() {
               {/* Location */}
               <div>
                 <h2 className="font-display text-2xl font-semibold mb-4">Location</h2>
-                <div className="bg-muted rounded-xl h-64 flex items-center justify-center">
-                  <div className="text-center">
-                    <MapPin className="h-8 w-8 text-muted-foreground mx-auto mb-2" />
-                    <p className="text-muted-foreground">
-                      {property.location.city}, {property.location.country}
-                    </p>
-                    <p className="text-sm text-muted-foreground mt-1">
-                      Map view coming soon
-                    </p>
+                <a 
+                  href="https://maps.app.goo.gl/fm7SAxX6SYrVyz8D9?g_st=aw"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="relative rounded-xl h-64 overflow-hidden group block"
+                >
+                  <iframe
+                    src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3989.7606!2d37.0731!3d-0.0167!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zMMKwMDEnMDAuMSJTIDM3wrAwNCcyMy4yIkU!5e0!3m2!1sen!2ske!4v1700000000000!5m2!1sen!2ske"
+                    width="100%"
+                    height="100%"
+                    style={{ border: 0 }}
+                    allowFullScreen
+                    loading="lazy"
+                    referrerPolicy="no-referrer-when-downgrade"
+                    title="Rafiki House Nanyuki Location"
+                    className="pointer-events-none"
+                  />
+                  <div className="absolute inset-0 bg-primary/10 group-hover:bg-primary/20 transition-colors flex items-center justify-center">
+                    <div className="bg-background/90 backdrop-blur-sm px-4 py-2 rounded-lg flex items-center gap-2 shadow-lg">
+                      <MapPin className="h-5 w-5 text-primary" />
+                      <span className="font-medium">View on Google Maps</span>
+                    </div>
                   </div>
-                </div>
+                </a>
                 <p className="text-muted-foreground mt-4">
                   Nanyuki is a charming town at the foot of Mount Kenya. The area offers 
                   incredible wildlife experiences, hiking opportunities, and a chance to 

@@ -166,13 +166,31 @@ export default function Contact() {
                 </div>
               </div>
 
-              {/* Map Placeholder */}
-              <div className="mt-8 bg-muted rounded-xl h-64 flex items-center justify-center">
-                <div className="text-center text-muted-foreground">
-                  <MapPin className="h-8 w-8 mx-auto mb-2" />
-                  <p>Map coming soon</p>
+              {/* Map */}
+              <a 
+                href="https://maps.app.goo.gl/fm7SAxX6SYrVyz8D9?g_st=aw"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="mt-8 block relative rounded-xl overflow-hidden h-64 group"
+              >
+                <iframe
+                  src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3989.7606!2d37.0731!3d-0.0167!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zMMKwMDEnMDAuMSJTIDM3wrAwNCcyMy4yIkU!5e0!3m2!1sen!2ske!4v1700000000000!5m2!1sen!2ske"
+                  width="100%"
+                  height="100%"
+                  style={{ border: 0 }}
+                  allowFullScreen
+                  loading="lazy"
+                  referrerPolicy="no-referrer-when-downgrade"
+                  title="Rafiki House Nanyuki Location"
+                  className="pointer-events-none"
+                />
+                <div className="absolute inset-0 bg-primary/10 group-hover:bg-primary/20 transition-colors flex items-center justify-center">
+                  <div className="bg-background/90 backdrop-blur-sm px-4 py-2 rounded-lg flex items-center gap-2 shadow-lg">
+                    <MapPin className="h-5 w-5 text-primary" />
+                    <span className="font-medium">View on Google Maps</span>
+                  </div>
                 </div>
-              </div>
+              </a>
             </motion.div>
 
             {/* Contact Form */}
