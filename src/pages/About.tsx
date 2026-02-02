@@ -175,17 +175,33 @@ export default function About() {
                 </li>
               </ul>
             </motion.div>
-            <motion.div
+            <motion.a
+              href="https://maps.app.goo.gl/fm7SAxX6SYrVyz8D9?g_st=aw"
+              target="_blank"
+              rel="noopener noreferrer"
               initial={{ opacity: 0, x: 20 }}
               whileInView={{ opacity: 1, x: 0 }}
               viewport={{ once: true }}
-              className="bg-muted rounded-xl h-64 md:h-80 flex items-center justify-center"
+              className="relative rounded-xl h-64 md:h-80 overflow-hidden group block"
             >
-              <div className="text-center text-muted-foreground">
-                <Mountain className="h-10 w-10 md:h-12 md:w-12 mx-auto mb-2" />
-                <p className="text-sm md:text-base">Interactive map coming soon</p>
+              <iframe
+                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3989.7606!2d37.0731!3d-0.0167!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zMMKwMDEnMDAuMSJTIDM3wrAwNCcyMy4yIkU!5e0!3m2!1sen!2ske!4v1700000000000!5m2!1sen!2ske"
+                width="100%"
+                height="100%"
+                style={{ border: 0 }}
+                allowFullScreen
+                loading="lazy"
+                referrerPolicy="no-referrer-when-downgrade"
+                title="Rafiki House Nanyuki Location"
+                className="pointer-events-none"
+              />
+              <div className="absolute inset-0 bg-primary/10 group-hover:bg-primary/20 transition-colors flex items-center justify-center">
+                <div className="bg-background/90 backdrop-blur-sm px-4 py-2 rounded-lg flex items-center gap-2 shadow-lg">
+                  <Mountain className="h-5 w-5 text-primary" />
+                  <span className="font-medium text-sm md:text-base">View on Google Maps</span>
+                </div>
               </div>
-            </motion.div>
+            </motion.a>
           </div>
         </div>
       </section>
