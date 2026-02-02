@@ -48,26 +48,26 @@ export default function Login() {
 
   return (
     <Layout hideFooter>
-      <div className="min-h-[calc(100vh-4rem)] flex items-center justify-center py-12 px-4">
+      <div className="min-h-[calc(100vh-4rem)] flex items-center justify-center py-8 md:py-12 px-4">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           className="w-full max-w-md"
         >
-          <div className="bg-card rounded-2xl shadow-elevated border border-border p-8">
+          <div className="bg-card rounded-2xl shadow-elevated border border-border p-6 md:p-8">
             {/* Logo */}
-            <div className="text-center mb-8">
-              <img src={logo} alt="Rafiki House Nanyuki" className="h-16 mx-auto mb-4" />
-              <h1 className="font-display text-2xl font-bold">Welcome back</h1>
-              <p className="text-muted-foreground mt-1">Sign in to your account</p>
+            <div className="text-center mb-6 md:mb-8">
+              <img src={logo} alt="Rafiki House Nanyuki" className="h-14 md:h-16 mx-auto mb-3 md:mb-4" />
+              <h1 className="font-display text-xl md:text-2xl font-bold">Welcome back</h1>
+              <p className="text-muted-foreground mt-1 text-sm md:text-base">Sign in to your account</p>
             </div>
 
             {/* Form */}
-            <form onSubmit={handleSubmit} className="space-y-4">
+            <form onSubmit={handleSubmit} className="space-y-4 md:space-y-5">
               <div className="space-y-2">
-                <Label htmlFor="email">Email</Label>
+                <Label htmlFor="email" className="text-sm md:text-base">Email</Label>
                 <div className="relative">
-                  <Mail className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+                  <Mail className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground pointer-events-none" />
                   <Input
                     id="email"
                     type="email"
@@ -76,40 +76,43 @@ export default function Login() {
                     onChange={(e) => setEmail(e.target.value)}
                     className="pl-10"
                     required
+                    autoComplete="email"
                   />
                 </div>
               </div>
 
               <div className="space-y-2">
-                <Label htmlFor="password">Password</Label>
+                <Label htmlFor="password" className="text-sm md:text-base">Password</Label>
                 <div className="relative">
-                  <Lock className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+                  <Lock className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground pointer-events-none" />
                   <Input
                     id="password"
                     type={showPassword ? 'text' : 'password'}
                     placeholder="••••••••"
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
-                    className="pl-10 pr-10"
+                    className="pl-10 pr-12"
                     required
+                    autoComplete="current-password"
                   />
                   <button
                     type="button"
                     onClick={() => setShowPassword(!showPassword)}
-                    className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground"
+                    className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground p-1 min-h-touch min-w-touch flex items-center justify-center -mr-1"
+                    aria-label={showPassword ? 'Hide password' : 'Show password'}
                   >
                     {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
                   </button>
                 </div>
               </div>
 
-              <Button type="submit" className="w-full" disabled={isLoading}>
+              <Button type="submit" size="lg" className="w-full" disabled={isLoading}>
                 {isLoading ? 'Signing in...' : 'Sign In'}
               </Button>
             </form>
 
             {/* Sign Up Link */}
-            <p className="text-center text-sm text-muted-foreground mt-6">
+            <p className="text-center text-sm text-muted-foreground mt-5 md:mt-6">
               Don't have an account?{' '}
               <Link to="/signup" className="text-primary font-medium hover:underline">
                 Sign up

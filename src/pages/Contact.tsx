@@ -43,13 +43,13 @@ export default function Contact() {
 
   return (
     <Layout>
-      {/* Header */}
-      <section className="bg-navy text-primary-foreground py-16">
+      {/* Header - Improved responsive padding and typography */}
+      <section className="bg-navy text-primary-foreground py-12 md:py-16 lg:py-20">
         <div className="container mx-auto px-4 text-center">
           <motion.h1
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            className="font-display text-4xl md:text-5xl font-bold mb-4"
+            className="font-display text-3xl sm:text-4xl md:text-5xl font-bold mb-3 md:mb-4"
           >
             Get in Touch
           </motion.h1>
@@ -57,34 +57,35 @@ export default function Contact() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.1 }}
-            className="text-lg text-primary-foreground/80 max-w-xl mx-auto"
+            className="text-base sm:text-lg text-primary-foreground/80 max-w-xl mx-auto"
           >
             Have questions about your stay? We'd love to hear from you.
           </motion.p>
         </div>
       </section>
 
-      {/* Content */}
-      <section className="py-16">
+      {/* Content - Improved spacing and layout */}
+      <section className="py-12 md:py-16 lg:py-20">
         <div className="container mx-auto px-4">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12">
             {/* Contact Info */}
             <motion.div
               initial={{ opacity: 0, x: -20 }}
               animate={{ opacity: 1, x: 0 }}
+              className="order-2 lg:order-1"
             >
-              <h2 className="font-display text-2xl font-bold mb-6">
+              <h2 className="font-display text-xl sm:text-2xl font-bold mb-6">
                 Contact Information
               </h2>
               
-              <div className="space-y-6">
+              <div className="space-y-5 md:space-y-6">
                 <div className="flex items-start gap-4">
-                  <div className="w-12 h-12 rounded-lg bg-primary/10 flex items-center justify-center flex-shrink-0">
-                    <MapPin className="h-6 w-6 text-primary" />
+                  <div className="w-11 h-11 md:w-12 md:h-12 rounded-lg bg-primary/10 flex items-center justify-center flex-shrink-0">
+                    <MapPin className="h-5 w-5 md:h-6 md:w-6 text-primary" />
                   </div>
                   <div>
-                    <h3 className="font-semibold mb-1">Address</h3>
-                    <p className="text-muted-foreground">
+                    <h3 className="font-semibold mb-1 text-sm md:text-base">Address</h3>
+                    <p className="text-muted-foreground text-sm md:text-base">
                       Rafiki House Nanyuki<br />
                       Nanyuki, Laikipia County<br />
                       Kenya
@@ -93,39 +94,39 @@ export default function Contact() {
                 </div>
 
                 <div className="flex items-start gap-4">
-                  <div className="w-12 h-12 rounded-lg bg-primary/10 flex items-center justify-center flex-shrink-0">
-                    <Phone className="h-6 w-6 text-primary" />
+                  <div className="w-11 h-11 md:w-12 md:h-12 rounded-lg bg-primary/10 flex items-center justify-center flex-shrink-0">
+                    <Phone className="h-5 w-5 md:h-6 md:w-6 text-primary" />
                   </div>
                   <div>
-                    <h3 className="font-semibold mb-1">Phone</h3>
-                    <a href="tel:+254705037373" className="text-muted-foreground hover:text-primary transition-colors">
+                    <h3 className="font-semibold mb-1 text-sm md:text-base">Phone</h3>
+                    <a href="tel:+254705037373" className="text-muted-foreground hover:text-primary transition-colors text-sm md:text-base">
                       +254 705 037 373
                     </a>
-                    <p className="text-sm text-muted-foreground mt-1">
+                    <p className="text-xs md:text-sm text-muted-foreground mt-1">
                       Available for WhatsApp
                     </p>
                   </div>
                 </div>
 
                 <div className="flex items-start gap-4">
-                  <div className="w-12 h-12 rounded-lg bg-primary/10 flex items-center justify-center flex-shrink-0">
-                    <Mail className="h-6 w-6 text-primary" />
+                  <div className="w-11 h-11 md:w-12 md:h-12 rounded-lg bg-primary/10 flex items-center justify-center flex-shrink-0">
+                    <Mail className="h-5 w-5 md:h-6 md:w-6 text-primary" />
                   </div>
                   <div>
-                    <h3 className="font-semibold mb-1">Email</h3>
-                    <a href="mailto:rafikihousenanyuki.info@gmail.com" className="text-muted-foreground hover:text-primary transition-colors">
+                    <h3 className="font-semibold mb-1 text-sm md:text-base">Email</h3>
+                    <a href="mailto:rafikihousenanyuki.info@gmail.com" className="text-muted-foreground hover:text-primary transition-colors text-sm md:text-base break-all">
                       rafikihousenanyuki.info@gmail.com
                     </a>
                   </div>
                 </div>
 
                 <div className="flex items-start gap-4">
-                  <div className="w-12 h-12 rounded-lg bg-primary/10 flex items-center justify-center flex-shrink-0">
-                    <Clock className="h-6 w-6 text-primary" />
+                  <div className="w-11 h-11 md:w-12 md:h-12 rounded-lg bg-primary/10 flex items-center justify-center flex-shrink-0">
+                    <Clock className="h-5 w-5 md:h-6 md:w-6 text-primary" />
                   </div>
                   <div>
-                    <h3 className="font-semibold mb-1">Response Time</h3>
-                    <p className="text-muted-foreground">
+                    <h3 className="font-semibold mb-1 text-sm md:text-base">Response Time</h3>
+                    <p className="text-muted-foreground text-sm md:text-base">
                       We typically respond within 24 hours
                     </p>
                   </div>
@@ -133,14 +134,14 @@ export default function Contact() {
               </div>
 
               {/* Social Media Section */}
-              <div className="mt-8 p-6 bg-muted/50 rounded-xl">
-                <h3 className="font-semibold mb-4">Connect With Us</h3>
-                <div className="flex gap-4">
+              <div className="mt-6 md:mt-8 p-4 md:p-6 bg-muted/50 rounded-xl">
+                <h3 className="font-semibold mb-3 md:mb-4 text-sm md:text-base">Connect With Us</h3>
+                <div className="flex flex-wrap gap-3">
                   <a
                     href="https://wa.me/254705037373"
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="flex items-center gap-2 px-4 py-2 bg-[#25D366] text-white rounded-lg hover:bg-[#25D366]/80 transition-all"
+                    className="flex items-center gap-2 px-4 py-2 min-h-touch bg-[#25D366] text-white rounded-lg hover:bg-[#25D366]/80 transition-all"
                   >
                     <WhatsAppIcon className="h-5 w-5" />
                     <span className="text-sm font-medium">WhatsApp</span>
@@ -149,7 +150,7 @@ export default function Contact() {
                     href="https://www.instagram.com/obadiah_the_marketer?igsh=Y2xrNndxMjgzaXBn"
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="w-10 h-10 rounded-lg bg-gradient-to-tr from-[#F58529] via-[#DD2A7B] to-[#8134AF] flex items-center justify-center hover:opacity-80 transition-all"
+                    className="w-11 h-11 min-h-touch min-w-touch rounded-lg bg-gradient-to-tr from-[#F58529] via-[#DD2A7B] to-[#8134AF] flex items-center justify-center hover:opacity-80 transition-all"
                     aria-label="Instagram"
                   >
                     <Instagram className="h-5 w-5 text-white" />
@@ -158,7 +159,7 @@ export default function Contact() {
                     href="https://www.facebook.com/share/187SZsh9BG/"
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="w-10 h-10 rounded-lg bg-[#1877F2] flex items-center justify-center hover:bg-[#1877F2]/80 transition-all"
+                    className="w-11 h-11 min-h-touch min-w-touch rounded-lg bg-[#1877F2] flex items-center justify-center hover:bg-[#1877F2]/80 transition-all"
                     aria-label="Facebook"
                   >
                     <Facebook className="h-5 w-5 text-white" />
@@ -171,7 +172,7 @@ export default function Contact() {
                 href="https://maps.app.goo.gl/fm7SAxX6SYrVyz8D9?g_st=aw"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="mt-8 block relative rounded-xl overflow-hidden h-64 group"
+                className="mt-6 md:mt-8 block relative rounded-xl overflow-hidden h-48 md:h-64 group"
               >
                 <iframe
                   src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3989.7606!2d37.0731!3d-0.0167!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zMMKwMDEnMDAuMSJTIDM3wrAwNCcyMy4yIkU!5e0!3m2!1sen!2ske!4v1700000000000!5m2!1sen!2ske"
@@ -187,7 +188,7 @@ export default function Contact() {
                 <div className="absolute inset-0 bg-primary/10 group-hover:bg-primary/20 transition-colors flex items-center justify-center">
                   <div className="bg-background/90 backdrop-blur-sm px-4 py-2 rounded-lg flex items-center gap-2 shadow-lg">
                     <MapPin className="h-5 w-5 text-primary" />
-                    <span className="font-medium">View on Google Maps</span>
+                    <span className="font-medium text-sm md:text-base">View on Google Maps</span>
                   </div>
                 </div>
               </a>
@@ -197,26 +198,28 @@ export default function Contact() {
             <motion.div
               initial={{ opacity: 0, x: 20 }}
               animate={{ opacity: 1, x: 0 }}
+              className="order-1 lg:order-2"
             >
-              <div className="bg-card rounded-xl border border-border p-6 md:p-8">
-                <h2 className="font-display text-2xl font-bold mb-6">
+              <div className="bg-card rounded-xl border border-border p-5 md:p-8 shadow-sm">
+                <h2 className="font-display text-xl sm:text-2xl font-bold mb-5 md:mb-6">
                   Send us a Message
                 </h2>
                 
-                <form onSubmit={handleSubmit} className="space-y-6">
+                <form onSubmit={handleSubmit} className="space-y-5 md:space-y-6">
                   <div className="space-y-2">
-                    <Label htmlFor="name">Your Name</Label>
+                    <Label htmlFor="name" className="text-sm md:text-base">Your Name</Label>
                     <Input
                       id="name"
                       placeholder="John Doe"
                       value={formData.name}
                       onChange={(e) => setFormData({ ...formData, name: e.target.value })}
                       required
+                      autoComplete="name"
                     />
                   </div>
 
                   <div className="space-y-2">
-                    <Label htmlFor="email">Email Address</Label>
+                    <Label htmlFor="email" className="text-sm md:text-base">Email Address</Label>
                     <Input
                       id="email"
                       type="email"
@@ -224,11 +227,12 @@ export default function Contact() {
                       value={formData.email}
                       onChange={(e) => setFormData({ ...formData, email: e.target.value })}
                       required
+                      autoComplete="email"
                     />
                   </div>
 
                   <div className="space-y-2">
-                    <Label htmlFor="message">Message</Label>
+                    <Label htmlFor="message" className="text-sm md:text-base">Message</Label>
                     <Textarea
                       id="message"
                       placeholder="Tell us how we can help..."
@@ -239,7 +243,7 @@ export default function Contact() {
                     />
                   </div>
 
-                  <Button type="submit" className="w-full gap-2" disabled={isSubmitting}>
+                  <Button type="submit" size="lg" className="w-full gap-2" disabled={isSubmitting}>
                     {isSubmitting ? (
                       'Sending...'
                     ) : (
