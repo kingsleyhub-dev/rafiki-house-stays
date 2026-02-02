@@ -155,7 +155,7 @@ export default function PropertyDetail() {
                   {property.description}
                 </p>
                 <p className="text-muted-foreground leading-relaxed mt-4">
-                  Located in the heart of Rafiki House property, {property.name} offers a unique 
+                  Located in the heart of Rafiki House Nanyuki property, {property.name} offers a unique 
                   blend of comfort and adventure. Wake up to stunning views of Mount Kenya, 
                   explore the beautifully landscaped gardens, or simply relax on your private 
                   terrace. Our dedicated team is always on hand to make your stay unforgettable.

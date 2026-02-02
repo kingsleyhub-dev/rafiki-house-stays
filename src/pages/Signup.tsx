@@ -29,7 +29,7 @@ export default function Signup() {
       if (result.success) {
         toast({
           title: 'Account created!',
-          description: 'Welcome to Rafiki House.',
+          description: 'Welcome to Rafiki House Nanyuki.',
         });
         navigate('/', { replace: true });
       } else {
@@ -55,9 +55,9 @@ export default function Signup() {
           <div className="bg-card rounded-2xl shadow-elevated border border-border p-8">
             {/* Logo */}
             <div className="text-center mb-8">
-              <img src={logo} alt="Rafiki House" className="h-16 mx-auto mb-4" />
+              <img src={logo} alt="Rafiki House Nanyuki" className="h-16 mx-auto mb-4" />
               <h1 className="font-display text-2xl font-bold">Create an account</h1>
-              <p className="text-muted-foreground mt-1">Join the Rafiki House community</p>
+              <p className="text-muted-foreground mt-1">Join the Rafiki House Nanyuki community</p>
             </div>
 
             {/* Form */}

@@ -1,6 +1,6 @@
 import { Link } from 'react-router-dom';
 import { MapPin, Phone, Mail, Instagram, Facebook } from 'lucide-react';
-import logo from '@/assets/rafiki-house-logo.png';
+import logo from '@/assets/rafiki-infinity-logo.png';
 
 // WhatsApp icon component
 function WhatsAppIcon({ className }: { className?: string }) {

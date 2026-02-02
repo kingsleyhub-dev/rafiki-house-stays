@@ -158,7 +158,7 @@ export default function Services() {
         <div className="absolute inset-0 z-0">
           <img
             src={heroServices}
-            alt="Elegant dining at Rafiki House"
+            alt="Elegant dining at Rafiki House Nanyuki"
             className="w-full h-full object-cover"
           />
           <div className="absolute inset-0 bg-gradient-to-r from-navy/80 via-navy/60 to-transparent" />
@@ -225,7 +225,7 @@ export default function Services() {
               <MealTabContent
                 items={breakfastItems}
                 image={getCategoryImage('breakfast')}
-                imageAlt="Breakfast at Rafiki House"
+                imageAlt="Breakfast at Rafiki House Nanyuki"
                 title="Morning Delights"
                 subtitle="Start your day with a view of Mount Kenya"
               />
@@ -235,7 +235,7 @@ export default function Services() {
               <MealTabContent
                 items={lunchItems}
                 image={getCategoryImage('lunch')}
-                imageAlt="Lunch at Rafiki House"
+                imageAlt="Lunch at Rafiki House Nanyuki"
                 title="Midday Feast"
                 subtitle="Fresh local ingredients prepared with care"
               />
@@ -245,7 +245,7 @@ export default function Services() {
               <MealTabContent
                 items={dinnerItems}
                 image={getCategoryImage('dinner')}
-                imageAlt="Dinner at Rafiki House"
+                imageAlt="Dinner at Rafiki House Nanyuki"
                 title="Evening Elegance"
                 subtitle="Fine dining under the African stars"
               />
@@ -284,7 +284,7 @@ export default function Services() {
             >
               <img 
                 src={getCategoryImage('drinks')} 
-                alt="Drinks at Rafiki House" 
+                alt="Drinks at Rafiki House Nanyuki" 
                 className="w-full h-64 lg:h-full object-cover"
               />
               <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
@@ -419,7 +419,7 @@ export default function Services() {
               Ready for an Unforgettable Experience?
             </h2>
             <p className="text-primary-foreground/80 max-w-2xl mx-auto mb-8">
-              Book your stay at Rafiki House and enjoy all our services. Our team is ready to make your visit extraordinary.
+              Book your stay at Rafiki House Nanyuki and enjoy all our services. Our team is ready to make your visit extraordinary.
             </p>
             <a 
               href="/stays"

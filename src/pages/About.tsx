@@ -55,7 +55,7 @@ export default function About() {
               Our Story
             </h1>
             <p className="text-base sm:text-lg md:text-xl text-primary-foreground/80 max-w-lg">
-              Rafiki House is more than a place to stay — it's a celebration of Kenyan 
+              Rafiki House Nanyuki is more than a place to stay — it's a celebration of Kenyan 
               heritage, nature, and the art of hospitality.
             </p>
           </motion.div>
@@ -76,7 +76,7 @@ export default function About() {
                 A Dream Born in the Highlands
               </h2>
               <p className="text-muted-foreground leading-relaxed mb-6 text-sm sm:text-base">
-                Nestled at the foot of Mount Kenya, Rafiki House began as a dream to create 
+                Nestled at the foot of Mount Kenya, Rafiki House Nanyuki began as a dream to create 
                 a sanctuary where travelers could experience the authentic beauty of the 
                 Kenyan highlands. The name "Rafiki" means "friend" in Swahili — and that's 
                 exactly what we aim to be to every guest who walks through our doors.
@@ -99,7 +99,7 @@ export default function About() {
               </p>
               <p className="text-muted-foreground leading-relaxed text-sm sm:text-base">
                 Whether you're here to summit Mount Kenya, spot wildlife on safari, 
-                or simply disconnect from the world, Rafiki House offers a home away 
+                or simply disconnect from the world, Rafiki House Nanyuki offers a home away 
                 from home in one of Africa's most spectacular settings. Your next great adventure starts here.
               </p>
             </motion.div>
