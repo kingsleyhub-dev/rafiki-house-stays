@@ -1,32 +1,96 @@
 import { motion } from 'framer-motion';
 import { Heart, Users, Leaf, Mountain } from 'lucide-react';
 import { Layout } from '@/components/layout/Layout';
+import { useAboutContent } from '@/hooks/useAboutContent';
+import { Skeleton } from '@/components/ui/skeleton';
 import heroAbout from '@/assets/hero-about.jpg';
 
-const values = [
-  {
-    icon: Heart,
-    title: 'Hospitality',
-    description: 'We believe in the power of genuine human connection and warm Kenyan welcome.',
-  },
-  {
-    icon: Leaf,
-    title: 'Sustainability',
-    description: 'Each home is designed with eco-friendly practices and local materials.',
-  },
-  {
-    icon: Users,
-    title: 'Community',
-    description: 'We support local artisans, farmers, and businesses in Nanyuki.',
-  },
-  {
-    icon: Mountain,
-    title: 'Adventure',
-    description: 'From Mount Kenya hikes to wildlife safaris, adventure awaits at every turn.',
-  },
-];
+const valueIcons: Record<string, React.ElementType> = {
+  value_hospitality: Heart,
+  value_sustainability: Leaf,
+  value_community: Users,
+  value_adventure: Mountain,
+};
 
 export default function About() {
+  const { data: contents, isLoading } = useAboutContent();
+
+  // Helper to get content by section key
+  const getContent = (key: string) => contents?.find(c => c.section_key === key);
+
+  // Parse content with paragraph breaks
+  const renderParagraphs = (text: string) => {
+    return text.split('\n\n').map((paragraph, index) => {
+      // Check if it's the quote line
+      if (paragraph.startsWith('"') && paragraph.endsWith('"')) {
+        return (
+          <p key={index} className="text-muted-foreground leading-relaxed mb-6 text-sm sm:text-base">
+            <em className="text-primary font-medium">{paragraph}</em>
+          </p>
+        );
+      }
+      return (
+        <p key={index} className="text-muted-foreground leading-relaxed mb-6 text-sm sm:text-base">
+          {paragraph}
+        </p>
+      );
+    });
+  };
+
+  // Parse location info with bullet points
+  const renderLocationContent = (text: string) => {
+    const lines = text.split('\n');
+    const paragraphs: string[] = [];
+    const bullets: string[] = [];
+
+    lines.forEach(line => {
+      if (line.startsWith('•')) {
+        bullets.push(line.replace('• ', ''));
+      } else if (line.trim()) {
+        paragraphs.push(line);
+      }
+    });
+
+    return (
+      <>
+        {paragraphs.map((p, i) => (
+          <p key={i} className="text-muted-foreground leading-relaxed mb-4 text-sm sm:text-base">
+            {p}
+          </p>
+        ))}
+        {bullets.length > 0 && (
+          <ul className="space-y-3 text-muted-foreground text-sm sm:text-base">
+            {bullets.map((item, i) => (
+              <li key={i} className="flex items-start gap-3">
+                <div className="w-2 h-2 rounded-full bg-primary mt-2 flex-shrink-0" />
+                <span>{item}</span>
+              </li>
+            ))}
+          </ul>
+        )}
+      </>
+    );
+  };
+
+  const originStory = getContent('origin_story');
+  const mainStory = getContent('main_story');
+  const locationInfo = getContent('location_info');
+
+  // Get value cards
+  const valueKeys = ['value_hospitality', 'value_sustainability', 'value_community', 'value_adventure'];
+  const values = valueKeys
+    .map(key => {
+      const content = getContent(key);
+      if (!content) return null;
+      return {
+        key,
+        icon: valueIcons[key] || Heart,
+        title: content.title || '',
+        description: content.content,
+      };
+    })
+    .filter((v): v is NonNullable<typeof v> => v !== null);
+
   return (
     <Layout>
       {/* Hero Section with Background Image */}
@@ -66,30 +130,47 @@ export default function About() {
       <section className="py-12 md:py-20 lg:py-24 bg-muted/30">
         <div className="container mx-auto px-4">
           <div className="max-w-3xl mx-auto">
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              className="text-center"
-            >
-              <span className="inline-block px-4 py-2 bg-accent/20 text-accent-foreground rounded-full text-sm font-medium mb-4">
-                Our Origin
-              </span>
-              <h2 className="font-display text-2xl sm:text-3xl font-bold mb-6">
-                Where We Came From
-              </h2>
-              <div className="prose prose-lg max-w-none">
-                <p className="text-muted-foreground leading-relaxed text-sm sm:text-base mb-6">
-                  In 2018, the foundation of Rafiki House Nanyuki wasn't laid with stone, but with the wheels of a bicycle.
-                  Our proprietor spent his days cycling across Nanyuki, selling snacks and connecting with the community.
-                </p>
-                <p className="text-muted-foreground leading-relaxed text-sm sm:text-base mb-6">
-                  Today, that bicycle stands as a tribute to our humble beginnings. We invite you to book a stay, 
-                  relax by the fire, and hear the rest of the story directly from our proprietor during our 
-                  <span className="text-primary font-medium"> evening bonfire sessions</span>.
-                </p>
+            {isLoading ? (
+              <div className="text-center space-y-4">
+                <Skeleton className="h-8 w-48 mx-auto" />
+                <Skeleton className="h-6 w-64 mx-auto" />
+                <Skeleton className="h-24 w-full" />
               </div>
-            </motion.div>
+            ) : originStory ? (
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                className="text-center"
+              >
+                <span className="inline-block px-4 py-2 bg-accent/20 text-accent-foreground rounded-full text-sm font-medium mb-4">
+                  Our Origin
+                </span>
+                <h2 className="font-display text-2xl sm:text-3xl font-bold mb-6">
+                  {originStory.title}
+                </h2>
+                <div className="prose prose-lg max-w-none">
+                  {originStory.content.split('\n\n').map((paragraph, index) => {
+                    // Check for "evening bonfire sessions" to highlight
+                    if (paragraph.includes('evening bonfire sessions')) {
+                      const parts = paragraph.split('evening bonfire sessions');
+                      return (
+                        <p key={index} className="text-muted-foreground leading-relaxed text-sm sm:text-base mb-6">
+                          {parts[0]}
+                          <span className="text-primary font-medium">evening bonfire sessions</span>
+                          {parts[1]}
+                        </p>
+                      );
+                    }
+                    return (
+                      <p key={index} className="text-muted-foreground leading-relaxed text-sm sm:text-base mb-6">
+                        {paragraph}
+                      </p>
+                    );
+                  })}
+                </div>
+              </motion.div>
+            ) : null}
           </div>
         </div>
       </section>
@@ -98,43 +179,25 @@ export default function About() {
       <section className="py-12 md:py-20 lg:py-24">
         <div className="container mx-auto px-4">
           <div className="max-w-3xl mx-auto">
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              className="prose prose-lg max-w-none"
-            >
-              <h2 className="font-display text-2xl sm:text-3xl font-bold mb-6">
-                A Dream Born in the Highlands
-              </h2>
-              <p className="text-muted-foreground leading-relaxed mb-6 text-sm sm:text-base">
-                Nestled at the foot of Mount Kenya, Rafiki House Nanyuki began as a dream to create 
-                a sanctuary where travelers could experience the authentic beauty of the 
-                Kenyan highlands. The name "Rafiki" means "friend" in Swahili — and that's 
-                exactly what we aim to be to every guest who walks through our doors.
-              </p>
-              <p className="text-muted-foreground leading-relaxed mb-6 text-sm sm:text-base">
-                <em className="text-primary font-medium">"You dream it, we'll drive it. Let's uncover the hidden gems of this beautiful country together."</em>
-              </p>
-              <p className="text-muted-foreground leading-relaxed mb-6 text-sm sm:text-base">
-                Our eight unique homes are each named after aromatic herbs and spices, 
-                reflecting the rich botanical diversity of our property and the 
-                culinary traditions of Kenya. From the vibrant Paprika to the serene 
-                Sage, each space tells its own story.
-              </p>
-              <p className="text-muted-foreground leading-relaxed mb-6 text-sm sm:text-base">
-                We work closely with local craftspeople, farmers, and guides to ensure 
-                that every stay contributes positively to our community. Our gardens 
-                supply fresh produce to local markets, our buildings showcase 
-                traditional building techniques, and our team is drawn entirely from 
-                the surrounding villages.
-              </p>
-              <p className="text-muted-foreground leading-relaxed text-sm sm:text-base">
-                Whether you're here to summit Mount Kenya, spot wildlife on safari, 
-                or simply disconnect from the world, Rafiki House Nanyuki offers a home away 
-                from home in one of Africa's most spectacular settings. Your next great adventure starts here.
-              </p>
-            </motion.div>
+            {isLoading ? (
+              <div className="space-y-4">
+                <Skeleton className="h-8 w-64" />
+                <Skeleton className="h-24 w-full" />
+                <Skeleton className="h-24 w-full" />
+              </div>
+            ) : mainStory ? (
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                className="prose prose-lg max-w-none"
+              >
+                <h2 className="font-display text-2xl sm:text-3xl font-bold mb-6">
+                  {mainStory.title}
+                </h2>
+                {renderParagraphs(mainStory.content)}
+              </motion.div>
+            ) : null}
           </div>
         </div>
       </section>
@@ -151,22 +214,32 @@ export default function About() {
             Our Values
           </motion.h2>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6">
-            {values.map((value, index) => (
-              <motion.div
-                key={value.title}
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ delay: index * 0.1 }}
-                className="bg-card p-5 md:p-6 rounded-xl shadow-card text-center"
-              >
-                <div className="w-12 h-12 md:w-14 md:h-14 rounded-full bg-primary/10 flex items-center justify-center mx-auto mb-3 md:mb-4">
-                  <value.icon className="h-6 w-6 md:h-7 md:w-7 text-primary" />
+            {isLoading ? (
+              [...Array(4)].map((_, i) => (
+                <div key={i} className="bg-card p-5 md:p-6 rounded-xl shadow-card text-center">
+                  <Skeleton className="w-12 h-12 rounded-full mx-auto mb-3" />
+                  <Skeleton className="h-5 w-24 mx-auto mb-2" />
+                  <Skeleton className="h-12 w-full" />
                 </div>
-                <h3 className="font-display text-base md:text-lg font-semibold mb-2">{value.title}</h3>
-                <p className="text-muted-foreground text-xs md:text-sm">{value.description}</p>
-              </motion.div>
-            ))}
+              ))
+            ) : (
+              values.map((value, index) => (
+                <motion.div
+                  key={value.key}
+                  initial={{ opacity: 0, y: 20 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ delay: index * 0.1 }}
+                  className="bg-card p-5 md:p-6 rounded-xl shadow-card text-center"
+                >
+                  <div className="w-12 h-12 md:w-14 md:h-14 rounded-full bg-primary/10 flex items-center justify-center mx-auto mb-3 md:mb-4">
+                    <value.icon className="h-6 w-6 md:h-7 md:w-7 text-primary" />
+                  </div>
+                  <h3 className="font-display text-base md:text-lg font-semibold mb-2">{value.title}</h3>
+                  <p className="text-muted-foreground text-xs md:text-sm">{value.description}</p>
+                </motion.div>
+              ))
+            )}
           </div>
         </div>
       </section>
@@ -175,38 +248,24 @@ export default function About() {
       <section className="py-12 md:py-20 lg:py-24">
         <div className="container mx-auto px-4">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 md:gap-12 items-center">
-            <motion.div
-              initial={{ opacity: 0, x: -20 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              viewport={{ once: true }}
-            >
-              <h2 className="font-display text-2xl sm:text-3xl font-bold mb-4">
-                Discover Nanyuki
-              </h2>
-              <p className="text-muted-foreground leading-relaxed mb-4 text-sm sm:text-base">
-                Nanyuki is a charming town in Laikipia County, known as the gateway 
-                to Mount Kenya. With its year-round temperate climate and stunning 
-                landscapes, it's the perfect base for adventure.
-              </p>
-              <ul className="space-y-3 text-muted-foreground text-sm sm:text-base">
-                <li className="flex items-start gap-3">
-                  <div className="w-2 h-2 rounded-full bg-primary mt-2 flex-shrink-0" />
-                  <span>Just 200km north of Nairobi (2-3 hours drive)</span>
-                </li>
-                <li className="flex items-start gap-3">
-                  <div className="w-2 h-2 rounded-full bg-primary mt-2 flex-shrink-0" />
-                  <span>Home to world-class wildlife conservancies</span>
-                </li>
-                <li className="flex items-start gap-3">
-                  <div className="w-2 h-2 rounded-full bg-primary mt-2 flex-shrink-0" />
-                  <span>Gateway to Mount Kenya National Park</span>
-                </li>
-                <li className="flex items-start gap-3">
-                  <div className="w-2 h-2 rounded-full bg-primary mt-2 flex-shrink-0" />
-                  <span>Rich equestrian and farming heritage</span>
-                </li>
-              </ul>
-            </motion.div>
+            {isLoading ? (
+              <div className="space-y-4">
+                <Skeleton className="h-8 w-48" />
+                <Skeleton className="h-24 w-full" />
+                <Skeleton className="h-32 w-full" />
+              </div>
+            ) : locationInfo ? (
+              <motion.div
+                initial={{ opacity: 0, x: -20 }}
+                whileInView={{ opacity: 1, x: 0 }}
+                viewport={{ once: true }}
+              >
+                <h2 className="font-display text-2xl sm:text-3xl font-bold mb-4">
+                  {locationInfo.title}
+                </h2>
+                {renderLocationContent(locationInfo.content)}
+              </motion.div>
+            ) : null}
             <motion.a
               href="https://maps.app.goo.gl/fm7SAxX6SYrVyz8D9?g_st=aw"
               target="_blank"
