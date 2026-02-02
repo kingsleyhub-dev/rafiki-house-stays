@@ -132,16 +132,34 @@ export default function Index() {
         <div className="container mx-auto px-4 relative z-10 py-8">
           <div className="max-w-2xl">
             <motion.div
-              initial={{ opacity: 0, y: 30 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6 }}
-              className="mb-4 md:mb-6"
+              initial={{ opacity: 0, scale: 0.8 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ duration: 0.8, ease: "easeOut" }}
+              className="mb-6 md:mb-8 flex justify-center md:justify-start"
             >
-              <img
-                src={logo}
-                alt="Rafiki House Nanyuki"
-                className="h-20 sm:h-24 md:h-32 lg:h-36 w-auto drop-shadow-2xl"
-              />
+              <div className="relative">
+                {/* Animated rotating ring */}
+                <motion.div
+                  className="absolute inset-0 rounded-full border-2 border-accent/40"
+                  animate={{ rotate: 360 }}
+                  transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
+                  style={{ 
+                    width: '100%', 
+                    height: '100%',
+                    borderStyle: 'dashed'
+                  }}
+                />
+                <motion.div
+                  className="absolute inset-[-8px] md:inset-[-12px] rounded-full border border-primary-foreground/20"
+                  animate={{ rotate: -360 }}
+                  transition={{ duration: 30, repeat: Infinity, ease: "linear" }}
+                />
+                <img
+                  src={logo}
+                  alt="Rafiki House Nanyuki"
+                  className="h-28 sm:h-36 md:h-44 lg:h-52 w-auto drop-shadow-2xl relative z-10"
+                />
+              </div>
             </motion.div>
 
             <motion.div
