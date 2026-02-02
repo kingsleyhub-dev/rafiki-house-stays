@@ -183,8 +183,8 @@ export default function Index() {
               transition={{ duration: 0.6, delay: 0.2 }}
               className="text-sm sm:text-base md:text-lg lg:text-xl text-primary-foreground/80 mb-6 md:mb-8 max-w-lg leading-relaxed text-center mx-auto"
             >
-              A collection of eight unique boutique homes nestled in the Kenyan highlands, 
-              each named after aromatic herbs and spices. Your next great adventure starts here.
+              Find your sanctuary at the foot of the mountain. We've created a collection of intimate hideaways, 
+              each inspired by the vibrant spirit of aromatic spices. It's a place to slow down, disconnect, and simply be.
             </motion.p>
 
             <motion.div
