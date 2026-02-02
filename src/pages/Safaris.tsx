@@ -97,12 +97,17 @@ export default function Safaris() {
               </div>
               
               {distanceToRafiki && (
-                <div className="flex items-center gap-2 bg-accent/20 backdrop-blur-sm px-4 py-2 rounded-full">
+                <a 
+                  href="https://maps.app.goo.gl/fm7SAxX6SYrVyz8D9?g_st=aw"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex items-center gap-2 bg-accent/20 backdrop-blur-sm px-4 py-2 rounded-full hover:bg-accent/30 transition-colors"
+                >
                   <MapPin className="w-4 h-4 text-accent" />
                   <span className="text-sm font-medium text-accent">
                     {Math.round(distanceToRafiki)} km to Rafiki House Nanyuki
                   </span>
-                </div>
+                </a>
               )}
             </motion.div>
           </motion.div>
