@@ -129,21 +129,23 @@ export default function Index() {
         </div>
 
         {/* Content */}
-        <div className="container mx-auto px-4 relative z-10 py-8">
-          <div className="max-w-2xl mx-auto text-center">
-            <motion.div
-              initial={{ opacity: 0, y: 30 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6 }}
-              className="mb-4 md:mb-6"
-            >
-              <img
-                src={logo}
-                alt="Rafiki House Nanyuki"
-                className="h-24 sm:h-32 md:h-40 lg:h-48 w-auto drop-shadow-2xl"
-              />
-            </motion.div>
+        <div className="container mx-auto px-4 relative z-10 py-8 flex flex-col h-full">
+          {/* Logo - Top Left */}
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6 }}
+            className="mb-8 md:mb-12"
+          >
+            <img
+              src={logo}
+              alt="Rafiki House Nanyuki"
+              className="h-28 sm:h-36 md:h-44 lg:h-52 w-auto drop-shadow-2xl"
+            />
+          </motion.div>
 
+          {/* Centered Content */}
+          <div className="max-w-2xl mx-auto text-center flex-1 flex flex-col justify-center">
             <motion.div
               initial={{ opacity: 0, y: 30 }}
               animate={{ opacity: 1, y: 0 }}
