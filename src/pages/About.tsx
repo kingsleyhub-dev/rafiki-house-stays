@@ -62,6 +62,38 @@ export default function About() {
         </div>
       </section>
 
+      {/* Origin Story Section */}
+      <section className="py-12 md:py-20 lg:py-24 bg-muted/30">
+        <div className="container mx-auto px-4">
+          <div className="max-w-3xl mx-auto">
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              className="text-center"
+            >
+              <span className="inline-block px-4 py-2 bg-accent/20 text-accent-foreground rounded-full text-sm font-medium mb-4">
+                Our Origin
+              </span>
+              <h2 className="font-display text-2xl sm:text-3xl font-bold mb-6">
+                Where We Came From
+              </h2>
+              <div className="prose prose-lg max-w-none">
+                <p className="text-muted-foreground leading-relaxed text-sm sm:text-base mb-6">
+                  In 2018, the foundation of Rafiki House wasn't laid with stone, but with the wheels of a bicycle. 
+                  Our proprietor spent his days cycling across Nanyuki, selling snacks and connecting with the community.
+                </p>
+                <p className="text-muted-foreground leading-relaxed text-sm sm:text-base mb-6">
+                  Today, that bicycle stands as a tribute to our humble beginnings. We invite you to book a stay, 
+                  relax by the fire, and hear the rest of the story directly from our proprietor during our 
+                  <span className="text-primary font-medium"> evening bonfire sessions</span>.
+                </p>
+              </div>
+            </motion.div>
+          </div>
+        </div>
+      </section>
+
       {/* Story Section */}
       <section className="py-12 md:py-20 lg:py-24">
         <div className="container mx-auto px-4">
