@@ -130,12 +130,12 @@ export default function Index() {
 
         {/* Content */}
         <div className="container mx-auto px-4 relative z-10 py-8 flex flex-col h-full">
-          {/* Logo - Top Left */}
+          {/* Logo - Centered at Top */}
           <motion.div
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6 }}
-            className="mb-8 md:mb-12"
+            className="mb-8 md:mb-12 flex justify-center"
           >
             <img
               src={logo}
