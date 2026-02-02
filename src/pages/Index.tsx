@@ -130,18 +130,28 @@ export default function Index() {
 
         {/* Content */}
         <div className="container mx-auto px-4 relative z-10 py-8 flex flex-col h-full">
-          {/* Logo - Centered at Top */}
+          {/* Logo - Centered at Top with Animated Ring */}
           <motion.div
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6 }}
             className="mb-8 md:mb-12 flex justify-center"
           >
-            <img
-              src={logo}
-              alt="Rafiki House Nanyuki"
-              className="h-36 sm:h-44 md:h-56 lg:h-64 w-auto drop-shadow-[0_4px_20px_rgba(0,0,0,0.4)]"
-            />
+            <div className="relative">
+              {/* Animated rotating ring */}
+              <div className="absolute inset-0 rounded-full border-2 border-transparent animate-spin-slow"
+                style={{
+                  borderTopColor: 'hsl(var(--accent))',
+                  borderRightColor: 'hsl(var(--accent) / 0.3)',
+                  animationDuration: '4s',
+                }}
+              />
+              <img
+                src={logo}
+                alt="Rafiki House Nanyuki"
+                className="h-36 sm:h-44 md:h-56 lg:h-64 w-auto drop-shadow-[0_4px_20px_rgba(0,0,0,0.4)] relative z-10"
+              />
+            </div>
           </motion.div>
 
           {/* Centered Content */}
