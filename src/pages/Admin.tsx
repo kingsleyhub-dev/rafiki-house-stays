@@ -3,7 +3,7 @@ import { Navigate, Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { 
   Home, Calendar, Users, Check, X, Clock,
-  Edit, Trash2, Eye, EyeOff, Shield, Loader2, Utensils, Plus, Image, Compass
+  Edit, Trash2, Eye, EyeOff, Shield, Loader2, Utensils, Plus, Image, Compass, FileText
 } from 'lucide-react';
 import { format, parseISO } from 'date-fns';
 import { Layout } from '@/components/layout/Layout';
@@ -63,6 +63,7 @@ import { PropertyEditDialog } from '@/components/admin/PropertyEditDialog';
 import { ServiceEditDialog } from '@/components/admin/ServiceEditDialog';
 import { ServiceCategoryImages } from '@/components/admin/ServiceCategoryImages';
 import { SafariExperienceImages } from '@/components/admin/SafariExperienceImages';
+import { AboutContentEditor } from '@/components/admin/AboutContentEditor';
 import { toast } from '@/hooks/use-toast';
 import { Property } from '@/types';
 
@@ -409,6 +410,10 @@ export default function Admin() {
                 <Users className="h-4 w-4" />
                 Users
               </TabsTrigger>
+              <TabsTrigger value="about" className="gap-2">
+                <FileText className="h-4 w-4" />
+                About
+              </TabsTrigger>
             </TabsList>
 
             {/* Bookings Tab */}
@@ -751,6 +756,11 @@ export default function Admin() {
                   Total unique guests: {new Set(bookings.map(b => b.user_id)).size}
                 </div>
               </div>
+            </TabsContent>
+
+            {/* About Tab */}
+            <TabsContent value="about" className="space-y-4">
+              <AboutContentEditor />
             </TabsContent>
           </Tabs>
         </motion.div>
