@@ -362,10 +362,7 @@ export default function Services() {
                 <motion.div key={drive.id} variants={itemVariants}>
                   <Card className="hover:shadow-card-hover transition-shadow">
                     <CardHeader>
-                      <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-2">
-                        <CardTitle className="text-xl">{drive.name}</CardTitle>
-                        <span className="text-primary font-bold text-lg">{drive.price}</span>
-                      </div>
+                      <CardTitle className="text-xl">{drive.name}</CardTitle>
                     </CardHeader>
                     <CardContent>
                       <p className="text-muted-foreground mb-4">{drive.description}</p>
