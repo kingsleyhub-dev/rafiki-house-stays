@@ -80,7 +80,7 @@ export default function About() {
               </h2>
               <div className="prose prose-lg max-w-none">
                 <p className="text-muted-foreground leading-relaxed text-sm sm:text-base mb-6">
-                  In 2018, the foundation of Rafiki House wasn't laid with stone, but with the wheels of a bicycle. 
+                  In 2018, the foundation of Rafiki House Nanyuki wasn't laid with stone, but with the wheels of a bicycle.
                   Our proprietor spent his days cycling across Nanyuki, selling snacks and connecting with the community.
                 </p>
                 <p className="text-muted-foreground leading-relaxed text-sm sm:text-base mb-6">
