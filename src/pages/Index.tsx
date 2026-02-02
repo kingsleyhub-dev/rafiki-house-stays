@@ -130,7 +130,7 @@ export default function Index() {
 
         {/* Content */}
         <div className="container mx-auto px-4 relative z-10 py-8">
-          <div className="max-w-2xl">
+          <div className="max-w-2xl mx-auto text-center">
             <motion.div
               initial={{ opacity: 0, y: 30 }}
               animate={{ opacity: 1, y: 0 }}
@@ -169,7 +169,7 @@ export default function Index() {
               initial={{ opacity: 0, y: 30 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, delay: 0.2 }}
-              className="text-sm sm:text-base md:text-lg lg:text-xl text-primary-foreground/80 mb-6 md:mb-8 max-w-lg leading-relaxed"
+              className="text-sm sm:text-base md:text-lg lg:text-xl text-primary-foreground/80 mb-6 md:mb-8 max-w-lg leading-relaxed text-center mx-auto"
             >
               A collection of eight unique boutique homes nestled in the Kenyan highlands, 
               each named after aromatic herbs and spices. Your next great adventure starts here.
@@ -275,7 +275,7 @@ export default function Index() {
             <h2 className="font-display text-2xl sm:text-3xl md:text-4xl font-bold mb-3 md:mb-4">
               Why Choose Rafiki House?
             </h2>
-            <p className="text-muted-foreground max-w-2xl mx-auto text-sm sm:text-base">
+            <p className="text-muted-foreground max-w-2xl mx-auto text-sm sm:text-base text-center">
               More than just a place to stay — it's an experience that connects you with nature, 
               community, and the spirit of Kenya.
             </p>
@@ -316,7 +316,7 @@ export default function Index() {
             <h2 className="font-display text-2xl sm:text-3xl md:text-4xl font-bold mb-3 md:mb-4">
               Ready for Your Nanyuki Adventure?
             </h2>
-            <p className="text-primary-foreground/70 max-w-xl mx-auto mb-6 md:mb-8 text-sm sm:text-base">
+            <p className="text-primary-foreground/70 max-w-xl mx-auto mb-6 md:mb-8 text-sm sm:text-base text-center">
               Let's uncover the hidden gems of this beautiful country together. 
               Book your stay at Rafiki House and discover the magic of the Kenyan highlands.
             </p>
