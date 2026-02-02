@@ -135,24 +135,20 @@ export default function Index() {
               initial={{ opacity: 0, scale: 0.8 }}
               animate={{ opacity: 1, scale: 1 }}
               transition={{ duration: 0.8, ease: "easeOut" }}
-              className="mb-6 md:mb-8 flex justify-center md:justify-start"
+              className="mb-6 md:mb-8 flex justify-center"
             >
               <div className="relative">
-                {/* Animated rotating ring */}
+                {/* Outer rotating ring */}
                 <motion.div
-                  className="absolute inset-0 rounded-full border-2 border-accent/40"
+                  className="absolute inset-[-12px] md:inset-[-16px] rounded-full border-2 border-accent/30"
                   animate={{ rotate: 360 }}
-                  transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
-                  style={{ 
-                    width: '100%', 
-                    height: '100%',
-                    borderStyle: 'dashed'
-                  }}
+                  transition={{ duration: 25, repeat: Infinity, ease: "linear" }}
                 />
+                {/* Inner rotating ring */}
                 <motion.div
-                  className="absolute inset-[-8px] md:inset-[-12px] rounded-full border border-primary-foreground/20"
+                  className="absolute inset-[-4px] md:inset-[-6px] rounded-full border border-primary-foreground/25"
                   animate={{ rotate: -360 }}
-                  transition={{ duration: 30, repeat: Infinity, ease: "linear" }}
+                  transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
                 />
                 <img
                   src={logo}
