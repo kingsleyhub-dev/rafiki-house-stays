@@ -100,7 +100,7 @@ export default function Safaris() {
                 <div className="flex items-center gap-2 bg-accent/20 backdrop-blur-sm px-4 py-2 rounded-full">
                   <MapPin className="w-4 h-4 text-accent" />
                   <span className="text-sm font-medium text-accent">
-                    {Math.round(distanceToRafiki)} km to Rafiki House
+                    {Math.round(distanceToRafiki)} km to Rafiki House Nanyuki
                   </span>
                 </div>
               )}

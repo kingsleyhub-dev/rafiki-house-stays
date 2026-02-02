@@ -18,7 +18,7 @@ import {
   SheetTrigger,
 } from '@/components/ui/sheet';
 import { useAuth } from '@/contexts/AuthContext';
-import logo from '@/assets/rafiki-house-logo.png';
+import logo from '@/assets/rafiki-infinity-logo.png';
 
 const navLinks = [
   { href: '/', label: 'Home' },
@@ -54,7 +54,7 @@ export function Navbar() {
             whileHover={{ scale: 1.05 }}
             transition={{ type: 'spring', stiffness: 400 }}
           />
-          <span className="font-display text-xl font-semibold text-navy hidden sm:block">
+          <span className="font-display text-base sm:text-xl font-semibold text-navy">
             Rafiki House Nanyuki
           </span>
         </Link>

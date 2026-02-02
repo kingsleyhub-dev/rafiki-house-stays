@@ -85,7 +85,7 @@ export default function Contact() {
                   <div>
                     <h3 className="font-semibold mb-1">Address</h3>
                     <p className="text-muted-foreground">
-                      Rafiki House<br />
+                      Rafiki House Nanyuki<br />
                       Nanyuki, Laikipia County<br />
                       Kenya
                     </p>
