@@ -1,8 +1,7 @@
 import { motion } from 'framer-motion';
-import { MapPin, Compass, Mountain, Trees, Camera, Navigation } from 'lucide-react';
+import { Compass, Mountain, Trees, Camera } from 'lucide-react';
 import { Layout } from '@/components/layout/Layout';
 import { useSafariDestinations, useSafariExperienceImages } from '@/hooks/useSafaris';
-import { useGeolocation, calculateDistance, RAFIKI_HOUSE_COORDS } from '@/hooks/useGeolocation';
 import { Skeleton } from '@/components/ui/skeleton';
 import { Card, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
@@ -35,11 +34,6 @@ const iconMap: Record<string, React.ElementType> = {
 export default function Safaris() {
   const { data: destinations, isLoading: loadingDestinations } = useSafariDestinations();
   const { data: experienceImages, isLoading: loadingImages } = useSafariExperienceImages();
-  const { latitude, longitude, city, country, loading: loadingLocation } = useGeolocation();
-
-  const distanceToRafiki = latitude && longitude
-    ? calculateDistance(latitude, longitude, RAFIKI_HOUSE_COORDS.lat, RAFIKI_HOUSE_COORDS.lng)
-    : null;
 
   return (
     <Layout>
@@ -75,41 +69,6 @@ export default function Safaris() {
               Explore the heart of Kenya through our curated selection of wildlife conservancies, 
               historical landmarks, and breathtaking landscapes.
             </p>
-
-            {/* Location Badge */}
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.3 }}
-              className="flex flex-wrap items-center gap-3"
-            >
-              <div className="flex items-center gap-2 bg-card/90 backdrop-blur-sm px-4 py-2 rounded-full">
-                <Navigation className="w-4 h-4 text-primary" />
-                {loadingLocation ? (
-                  <span className="text-sm text-muted-foreground">Detecting location...</span>
-                ) : city && country ? (
-                  <span className="text-sm font-medium">
-                    Your location: {city}, {country}
-                  </span>
-                ) : (
-                  <span className="text-sm text-muted-foreground">Location unavailable</span>
-                )}
-              </div>
-              
-              {distanceToRafiki && (
-                <a 
-                  href="https://maps.app.goo.gl/fm7SAxX6SYrVyz8D9?g_st=aw"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="flex items-center gap-2 bg-accent/20 backdrop-blur-sm px-4 py-2 rounded-full hover:bg-accent/30 transition-colors"
-                >
-                  <MapPin className="w-4 h-4 text-accent" />
-                  <span className="text-sm font-medium text-accent">
-                    {Math.round(distanceToRafiki)} km to Rafiki House Nanyuki
-                  </span>
-                </a>
-              )}
-            </motion.div>
           </motion.div>
         </div>
       </section>
