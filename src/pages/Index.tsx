@@ -132,15 +132,15 @@ export default function Index() {
         <div className="container mx-auto px-4 relative z-10 py-8">
           <div className="max-w-2xl">
             <motion.div
-              initial={{ opacity: 0, scale: 0.9 }}
-              animate={{ opacity: 1, scale: 1 }}
-              transition={{ duration: 0.8, ease: "easeOut" }}
-              className="mb-6 md:mb-8 flex justify-center"
+              initial={{ opacity: 0, y: 30 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6 }}
+              className="mb-4 md:mb-6"
             >
               <img
                 src={logo}
                 alt="Rafiki House Nanyuki"
-                className="h-32 sm:h-40 md:h-48 lg:h-56 w-auto drop-shadow-[0_8px_32px_rgba(0,0,0,0.4)]"
+                className="h-20 sm:h-24 md:h-32 lg:h-36 w-auto drop-shadow-2xl"
               />
             </motion.div>
 
