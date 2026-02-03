@@ -148,7 +148,7 @@ export default function Stays() {
               All Stays
             </h1>
             <p className="text-sm sm:text-base md:text-lg text-primary-foreground/80 mb-4 max-w-lg">
-              {isLoading ? 'Loading...' : `${filteredProperties.length} cottage${filteredProperties.length !== 1 ? 's' : ''} in Nanyuki, Kenya`}
+              Cottages in Nanyuki, Kenya
             </p>
             
             {/* Check-in/Check-out Times */}
