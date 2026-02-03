@@ -1,6 +1,6 @@
 import { useState, useMemo } from 'react';
 import { motion } from 'framer-motion';
-import { Filter, X, Loader2 } from 'lucide-react';
+import { Filter, X, Loader2, Clock } from 'lucide-react';
 import { Layout } from '@/components/layout/Layout';
 import { SearchBar } from '@/components/search/SearchBar';
 import { PropertyCard } from '@/components/properties/PropertyCard';
@@ -23,11 +23,14 @@ import {
 } from '@/components/ui/select';
 import { useProperties } from '@/hooks/useProperties';
 import { useAmenities } from '@/hooks/useAmenities';
+import { useAboutContentByKey } from '@/hooks/useAboutContent';
 import heroStays from '@/assets/hero-stays.jpg';
 
 export default function Stays() {
   const { data: properties = [], isLoading, error } = useProperties();
   const { data: amenities = [] } = useAmenities();
+  const { data: checkInContent } = useAboutContentByKey('check_in_time');
+  const { data: checkOutContent } = useAboutContentByKey('check_out_time');
   const [selectedAmenities, setSelectedAmenities] = useState<string[]>([]);
   const [sortBy, setSortBy] = useState<string>('recommended');
   const [isFilterOpen, setIsFilterOpen] = useState(false);
@@ -144,9 +147,28 @@ export default function Stays() {
             <h1 className="font-display text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold text-primary-foreground mb-3 leading-tight">
               All Stays
             </h1>
-            <p className="text-sm sm:text-base md:text-lg text-primary-foreground/80 mb-6 max-w-lg">
-              {isLoading ? 'Loading...' : `${filteredProperties.length} home${filteredProperties.length !== 1 ? 's' : ''} in Nanyuki, Kenya`}
+            <p className="text-sm sm:text-base md:text-lg text-primary-foreground/80 mb-4 max-w-lg">
+              {isLoading ? 'Loading...' : `${filteredProperties.length} cottage${filteredProperties.length !== 1 ? 's' : ''} in Nanyuki, Kenya`}
             </p>
+            
+            {/* Check-in/Check-out Times */}
+            <div className="flex flex-wrap gap-4 mb-6">
+              <div className="flex items-center gap-2 bg-background/10 backdrop-blur-sm rounded-lg px-4 py-2">
+                <Clock className="h-4 w-4 text-accent" />
+                <div className="text-sm">
+                  <span className="text-primary-foreground/70">Check-in: </span>
+                  <span className="text-primary-foreground font-medium">{checkInContent?.content || '2:00 PM'}</span>
+                </div>
+              </div>
+              <div className="flex items-center gap-2 bg-background/10 backdrop-blur-sm rounded-lg px-4 py-2">
+                <Clock className="h-4 w-4 text-accent" />
+                <div className="text-sm">
+                  <span className="text-primary-foreground/70">Check-out: </span>
+                  <span className="text-primary-foreground font-medium">{checkOutContent?.content || '10:00 AM'}</span>
+                </div>
+              </div>
+            </div>
+
             <div className="max-w-xl">
               <SearchBar variant="compact" />
             </div>

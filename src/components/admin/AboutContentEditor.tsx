@@ -5,7 +5,7 @@ import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Label } from '@/components/ui/label';
-import { Loader2, Save, FileText, Heart, Leaf, Users, Mountain, MapPin } from 'lucide-react';
+import { Loader2, Save, FileText, Heart, Leaf, Users, Mountain, MapPin, Clock } from 'lucide-react';
 import { Skeleton } from '@/components/ui/skeleton';
 
 const sectionConfig: Record<string, { label: string; description: string; icon: React.ElementType }> = {
@@ -43,6 +43,16 @@ const sectionConfig: Record<string, { label: string; description: string; icon: 
     label: 'Location Info', 
     description: 'The "Discover Nanyuki" section details',
     icon: MapPin 
+  },
+  check_in_time: { 
+    label: 'Check-in Time', 
+    description: 'Guest check-in time displayed on the Stays page',
+    icon: Clock 
+  },
+  check_out_time: { 
+    label: 'Check-out Time', 
+    description: 'Guest check-out time displayed on the Stays page',
+    icon: Clock 
   },
 };
 
@@ -193,6 +203,8 @@ export function AboutContentEditor() {
 
   // Order sections logically
   const orderedKeys = [
+    'check_in_time',
+    'check_out_time',
     'origin_story',
     'main_story',
     'value_hospitality',
