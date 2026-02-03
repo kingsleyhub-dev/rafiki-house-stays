@@ -141,9 +141,6 @@ export default function Stays() {
             animate={{ opacity: 1, y: 0 }}
             className="max-w-2xl"
           >
-            <span className="inline-block px-3 py-1.5 bg-accent/20 text-accent rounded-full text-xs sm:text-sm font-medium mb-3">
-              8 Unique Homes
-            </span>
             <h1 className="font-display text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold text-primary-foreground mb-3 leading-tight">
               All Stays
             </h1>
