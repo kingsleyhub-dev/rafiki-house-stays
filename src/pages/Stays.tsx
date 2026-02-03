@@ -5,7 +5,6 @@ import { Layout } from '@/components/layout/Layout';
 import { SearchBar } from '@/components/search/SearchBar';
 import { PropertyCard } from '@/components/properties/PropertyCard';
 import { Button } from '@/components/ui/button';
-import { Slider } from '@/components/ui/slider';
 import { Checkbox } from '@/components/ui/checkbox';
 import { Badge } from '@/components/ui/badge';
 import {
@@ -23,48 +22,18 @@ import {
   SelectValue,
 } from '@/components/ui/select';
 import { useProperties } from '@/hooks/useProperties';
+import { useAmenities } from '@/hooks/useAmenities';
 import heroStays from '@/assets/hero-stays.jpg';
-
-const allAmenities = [
-  'Wi-Fi',
-  'Kitchen',
-  'Parking',
-  'Fireplace',
-  'Pool Access',
-  'Garden View',
-  'Mountain View',
-  'Air Conditioning',
-  'Heating',
-];
 
 export default function Stays() {
   const { data: properties = [], isLoading, error } = useProperties();
-  const [priceRange, setPriceRange] = useState<[number, number]>([0, 50000]);
-  const [maxGuests, setMaxGuests] = useState<number | null>(null);
+  const { data: amenities = [] } = useAmenities();
   const [selectedAmenities, setSelectedAmenities] = useState<string[]>([]);
   const [sortBy, setSortBy] = useState<string>('recommended');
   const [isFilterOpen, setIsFilterOpen] = useState(false);
 
-  const formatPrice = (price: number) => {
-    return new Intl.NumberFormat('en-KE', {
-      style: 'currency',
-      currency: 'KES',
-      minimumFractionDigits: 0,
-    }).format(price);
-  };
-
   const filteredProperties = useMemo(() => {
     let result = properties.filter(property => {
-      // Price filter
-      if (property.nightlyPrice < priceRange[0] || property.nightlyPrice > priceRange[1]) {
-        return false;
-      }
-
-      // Guests filter
-      if (maxGuests && property.maxGuests < maxGuests) {
-        return false;
-      }
-
       // Amenities filter
       if (selectedAmenities.length > 0) {
         const hasAllAmenities = selectedAmenities.every(amenity =>
@@ -96,78 +65,37 @@ export default function Stays() {
     }
 
     return result;
-  }, [properties, priceRange, maxGuests, selectedAmenities, sortBy]);
+  }, [properties, selectedAmenities, sortBy]);
 
   const clearFilters = () => {
-    setPriceRange([0, 50000]);
-    setMaxGuests(null);
     setSelectedAmenities([]);
     setSortBy('recommended');
   };
 
-  const hasActiveFilters = 
-    priceRange[0] !== 0 || 
-    priceRange[1] !== 50000 || 
-    maxGuests !== null || 
-    selectedAmenities.length > 0;
+  const hasActiveFilters = selectedAmenities.length > 0;
 
   const filterContent = (
     <div className="space-y-6">
-      {/* Price Range */}
-      <div>
-        <h4 className="font-semibold mb-4 text-sm sm:text-base">Price Range</h4>
-        <Slider
-          value={priceRange}
-          onValueChange={(value) => setPriceRange(value as [number, number])}
-          min={0}
-          max={50000}
-          step={1000}
-          className="mb-2"
-        />
-        <div className="flex justify-between text-xs sm:text-sm text-muted-foreground">
-          <span>{formatPrice(priceRange[0])}</span>
-          <span>{formatPrice(priceRange[1])}</span>
-        </div>
-      </div>
-
-      {/* Max Guests */}
-      <div>
-        <h4 className="font-semibold mb-4 text-sm sm:text-base">Minimum Guests</h4>
-        <div className="flex flex-wrap gap-2">
-          {[null, 2, 4, 6, 8].map((num) => (
-            <Button
-              key={num ?? 'any'}
-              variant={maxGuests === num ? 'default' : 'outline'}
-              size="sm"
-              onClick={() => setMaxGuests(num)}
-              className="min-h-[44px] min-w-[44px]"
-            >
-              {num ?? 'Any'}
-            </Button>
-          ))}
-        </div>
-      </div>
-
       {/* Amenities */}
       <div>
-        <h4 className="font-semibold mb-4 text-sm sm:text-base">Amenities</h4>
+        <h4 className="font-semibold mb-4 text-sm sm:text-base">Available Amenities</h4>
         <div className="space-y-3">
-          {allAmenities.map((amenity) => (
-            <div key={amenity} className="flex items-center space-x-3 min-h-[44px]">
+          {amenities.map((amenity) => (
+            <div key={amenity.id} className="flex items-center space-x-3 min-h-[44px]">
               <Checkbox
-                id={amenity}
-                checked={selectedAmenities.includes(amenity)}
+                id={amenity.id}
+                checked={selectedAmenities.includes(amenity.name)}
                 onCheckedChange={(checked) => {
                   if (checked) {
-                    setSelectedAmenities([...selectedAmenities, amenity]);
+                    setSelectedAmenities([...selectedAmenities, amenity.name]);
                   } else {
-                    setSelectedAmenities(selectedAmenities.filter(a => a !== amenity));
+                    setSelectedAmenities(selectedAmenities.filter(a => a !== amenity.name));
                   }
                 }}
                 className="h-5 w-5"
               />
-              <label htmlFor={amenity} className="text-sm cursor-pointer">
-                {amenity}
+              <label htmlFor={amenity.id} className="text-sm cursor-pointer">
+                {amenity.name}
               </label>
             </div>
           ))}
@@ -240,17 +168,17 @@ export default function Stays() {
                 <SheetTrigger asChild>
                   <Button variant="outline" className="lg:hidden gap-2 min-h-[44px]">
                     <Filter className="h-4 w-4" />
-                    <span className="hidden xs:inline">Filters</span>
+                    <span className="hidden xs:inline">Amenities</span>
                     {hasActiveFilters && (
                       <Badge variant="secondary" className="ml-1">
-                        {selectedAmenities.length + (maxGuests ? 1 : 0) + (priceRange[0] !== 0 || priceRange[1] !== 50000 ? 1 : 0)}
+                        {selectedAmenities.length}
                       </Badge>
                     )}
                   </Button>
                 </SheetTrigger>
                 <SheetContent side="left" className="w-[280px] sm:w-[320px]">
                   <SheetHeader>
-                    <SheetTitle>Filters</SheetTitle>
+                    <SheetTitle>Filter by Amenities</SheetTitle>
                   </SheetHeader>
                   <div className="mt-6">
                     {filterContent}
@@ -294,7 +222,7 @@ export default function Stays() {
             {/* Desktop Filters */}
             <aside className="hidden lg:block w-64 flex-shrink-0">
               <div className="sticky top-24 bg-card rounded-xl border border-border p-6">
-                <h3 className="font-display text-lg font-semibold mb-6">Filters</h3>
+                <h3 className="font-display text-lg font-semibold mb-6">Amenities</h3>
                 {filterContent}
               </div>
             </aside>

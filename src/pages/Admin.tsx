@@ -3,7 +3,7 @@ import { Navigate, Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { 
   Home, Calendar, Users, Check, X, Clock,
-  Edit, Trash2, Eye, EyeOff, Shield, Loader2, Utensils, Plus, Image, Compass, FileText
+  Edit, Trash2, Eye, EyeOff, Shield, Loader2, Utensils, Plus, Image, Compass, FileText, Sparkles
 } from 'lucide-react';
 import { format, parseISO } from 'date-fns';
 import { Layout } from '@/components/layout/Layout';
@@ -64,6 +64,7 @@ import { ServiceEditDialog } from '@/components/admin/ServiceEditDialog';
 import { ServiceCategoryImages } from '@/components/admin/ServiceCategoryImages';
 import { SafariExperienceImages } from '@/components/admin/SafariExperienceImages';
 import { AboutContentEditor } from '@/components/admin/AboutContentEditor';
+import { AmenitiesManager } from '@/components/admin/AmenitiesManager';
 import { toast } from '@/hooks/use-toast';
 import { Property } from '@/types';
 
@@ -398,6 +399,10 @@ export default function Admin() {
                 <Home className="h-4 w-4" />
                 Properties
               </TabsTrigger>
+              <TabsTrigger value="amenities" className="gap-2">
+                <Sparkles className="h-4 w-4" />
+                Amenities
+              </TabsTrigger>
               <TabsTrigger value="services" className="gap-2">
                 <Utensils className="h-4 w-4" />
                 Services
@@ -611,6 +616,11 @@ export default function Admin() {
                   </Table>
                 )}
               </div>
+            </TabsContent>
+
+            {/* Amenities Tab */}
+            <TabsContent value="amenities">
+              <AmenitiesManager />
             </TabsContent>
 
             {/* Services Tab */}
