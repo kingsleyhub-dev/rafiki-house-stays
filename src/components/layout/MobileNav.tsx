@@ -1,5 +1,5 @@
 import { Link, useLocation } from 'react-router-dom';
-import { Home, Building2, Utensils, Info, Compass } from 'lucide-react';
+import { Home, Building2, Utensils, Info, Compass, Star } from 'lucide-react';
 import { motion } from 'framer-motion';
 
 const navItems = [
@@ -7,7 +7,7 @@ const navItems = [
   { href: '/stays', label: 'Stays', icon: Building2 },
   { href: '/services', label: 'Services', icon: Utensils },
   { href: '/safaris', label: 'Safaris', icon: Compass },
-  { href: '/about', label: 'About', icon: Info },
+  { href: '/reviews', label: 'Reviews', icon: Star },
 ];
 
 export function MobileNav() {
