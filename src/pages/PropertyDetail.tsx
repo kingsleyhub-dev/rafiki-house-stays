@@ -10,6 +10,7 @@ import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { useProperty } from '@/hooks/useProperties';
 import { ImageGallery } from '@/components/properties/ImageGallery';
+import { ReviewsSection } from '@/components/reviews/ReviewsSection';
 
 const amenityIcons: Record<string, React.ElementType> = {
   'Wi-Fi': Wifi,
@@ -213,6 +214,9 @@ export default function PropertyDetail() {
                   experience authentic Kenyan highland culture.
                 </p>
               </div>
+
+              {/* Reviews */}
+              <ReviewsSection />
             </motion.div>
 
             {/* Booking Widget */}
