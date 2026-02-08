@@ -4,6 +4,7 @@ import { Layout } from '@/components/layout/Layout';
 import { useReviews } from '@/hooks/useReviews';
 import { Skeleton } from '@/components/ui/skeleton';
 import { Button } from '@/components/ui/button';
+import { getCountryFlag } from '@/lib/countryFlags';
 import heroImage from '@/assets/hero-stays.jpg';
 
 function ReviewHero({ reviewCount, averageScore }: { reviewCount: number; averageScore: number }) {
@@ -30,7 +31,7 @@ function ReviewHero({ reviewCount, averageScore }: { reviewCount: number; averag
           </p>
           <div className="flex items-center justify-center gap-4 pt-2">
             {averageScore > 0 && (
-              <div className="flex items-center gap-2 bg-white/15 backdrop-blur-sm px-4 py-2 rounded-full">
+            <div className="flex items-center gap-2 bg-white/15 backdrop-blur-sm px-4 py-2 rounded-full">
                 <Star className="h-5 w-5 text-accent fill-accent" />
                 <span className="text-white font-bold text-lg">{averageScore.toFixed(1)}</span>
                 <span className="text-white/70 text-sm">/ 10</span>
@@ -49,6 +50,8 @@ function ReviewHero({ reviewCount, averageScore }: { reviewCount: number; averag
 }
 
 function ReviewCard({ review, index }: { review: any; index: number }) {
+  const flag = getCountryFlag(review.reviewer_country);
+
   return (
     <motion.article
       initial={{ opacity: 0, y: 24 }}
@@ -56,11 +59,15 @@ function ReviewCard({ review, index }: { review: any; index: number }) {
       transition={{ delay: index * 0.06, duration: 0.4 }}
       className="bg-card border border-border rounded-2xl p-5 sm:p-6 flex flex-col gap-4 card-hover"
     >
-      {/* Header: avatar + name + score */}
+      {/* Header: flag avatar + name + score */}
       <div className="flex items-start justify-between gap-3">
         <div className="flex items-center gap-3">
-          <div className="w-11 h-11 rounded-full bg-primary/10 flex items-center justify-center flex-shrink-0">
-            <User className="h-5 w-5 text-primary" />
+          <div className="w-11 h-11 rounded-full bg-navy/10 flex items-center justify-center flex-shrink-0 overflow-hidden">
+            {flag ? (
+              <span className="text-2xl leading-none">{flag}</span>
+            ) : (
+              <User className="h-5 w-5 text-navy" />
+            )}
           </div>
           <div className="min-w-0">
             <p className="font-semibold text-sm text-foreground truncate">{review.reviewer_name}</p>
@@ -73,7 +80,7 @@ function ReviewCard({ review, index }: { review: any; index: number }) {
           </div>
         </div>
         {review.score && (
-          <div className="bg-primary text-primary-foreground px-2.5 py-1 rounded-lg text-sm font-bold flex-shrink-0">
+          <div className="bg-navy text-white px-2.5 py-1 rounded-lg text-sm font-bold flex-shrink-0">
             {review.score}
           </div>
         )}
@@ -89,7 +96,7 @@ function ReviewCard({ review, index }: { review: any; index: number }) {
       {/* Positive text */}
       {review.positive_text && (
         <div className="flex gap-2.5">
-          <Quote className="h-4 w-4 text-primary flex-shrink-0 mt-1" />
+          <Quote className="h-4 w-4 text-navy flex-shrink-0 mt-1" />
           <p className="text-sm text-muted-foreground leading-relaxed">
             {review.positive_text}
           </p>
