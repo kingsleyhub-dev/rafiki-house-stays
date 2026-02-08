@@ -25,6 +25,7 @@ const navLinks = [
   { href: '/stays', label: 'Stays' },
   { href: '/services', label: 'Services' },
   { href: '/safaris', label: 'Safaris & Game Drives' },
+  { href: '/reviews', label: 'Reviews' },
   { href: '/about', label: 'About' },
   { href: '/contact', label: 'Contact' },
 ];
