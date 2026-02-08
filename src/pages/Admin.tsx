@@ -3,7 +3,7 @@ import { Navigate, Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { 
   Home, Calendar, Users, Check, X, Clock,
-  Edit, Trash2, Eye, EyeOff, Shield, Loader2, Utensils, Plus, Image, Compass, FileText, Sparkles
+  Edit, Trash2, Eye, EyeOff, Shield, Loader2, Utensils, Plus, Image, Compass, FileText, Sparkles, MessageSquare
 } from 'lucide-react';
 import { format, parseISO } from 'date-fns';
 import { Layout } from '@/components/layout/Layout';
@@ -65,6 +65,7 @@ import { ServiceCategoryImages } from '@/components/admin/ServiceCategoryImages'
 import { SafariExperienceImages } from '@/components/admin/SafariExperienceImages';
 import { AboutContentEditor } from '@/components/admin/AboutContentEditor';
 import { AmenitiesManager } from '@/components/admin/AmenitiesManager';
+import { ReviewsManager } from '@/components/admin/ReviewsManager';
 import { toast } from '@/hooks/use-toast';
 import { Property } from '@/types';
 
@@ -414,6 +415,10 @@ export default function Admin() {
               <TabsTrigger value="users" className="gap-2">
                 <Users className="h-4 w-4" />
                 Users
+              </TabsTrigger>
+              <TabsTrigger value="reviews" className="gap-2">
+                <MessageSquare className="h-4 w-4" />
+                Reviews
               </TabsTrigger>
               <TabsTrigger value="about" className="gap-2">
                 <FileText className="h-4 w-4" />
@@ -766,6 +771,11 @@ export default function Admin() {
                   Total unique guests: {new Set(bookings.map(b => b.user_id)).size}
                 </div>
               </div>
+            </TabsContent>
+
+            {/* Reviews Tab */}
+            <TabsContent value="reviews" className="space-y-4">
+              <ReviewsManager />
             </TabsContent>
 
             {/* About Tab */}

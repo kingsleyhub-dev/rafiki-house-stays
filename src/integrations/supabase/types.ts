@@ -187,6 +187,51 @@ export type Database = {
         }
         Relationships: []
       }
+      reviews: {
+        Row: {
+          created_at: string
+          id: string
+          negative_text: string | null
+          positive_text: string | null
+          review_title: string | null
+          reviewer_country: string | null
+          reviewer_name: string
+          room_type: string | null
+          score: number | null
+          stay_date: string | null
+          traveler_type: string | null
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          negative_text?: string | null
+          positive_text?: string | null
+          review_title?: string | null
+          reviewer_country?: string | null
+          reviewer_name: string
+          room_type?: string | null
+          score?: number | null
+          stay_date?: string | null
+          traveler_type?: string | null
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          negative_text?: string | null
+          positive_text?: string | null
+          review_title?: string | null
+          reviewer_country?: string | null
+          reviewer_name?: string
+          room_type?: string | null
+          score?: number | null
+          stay_date?: string | null
+          traveler_type?: string | null
+          updated_at?: string
+        }
+        Relationships: []
+      }
       safari_destinations: {
         Row: {
           created_at: string
