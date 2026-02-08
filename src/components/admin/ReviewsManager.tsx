@@ -62,7 +62,7 @@ export function ReviewsManager() {
       const result = await scrapeReviews.mutateAsync();
       toast({
         title: 'Reviews scraped',
-        description: `${result.reviewsAdded} new reviews were added from Booking.com.`,
+        description: `${result.reviewsAdded} new reviews added, ${result.reviewsUpdated || 0} updated. (${result.totalExtracted || 0} total found)`,
       });
     } catch (error: any) {
       toast({

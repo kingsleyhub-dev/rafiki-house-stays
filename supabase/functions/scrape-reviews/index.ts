@@ -59,129 +59,139 @@ Deno.serve(async (req) => {
       );
     }
 
-    const bookingUrl = "https://www.booking.com/hotel/ke/rafiki-house.html";
-    console.log("Scraping reviews from:", bookingUrl);
+    // Scrape multiple pages of reviews from the dedicated reviews URL
+    const reviewsBaseUrl = "https://www.booking.com/reviews/ke/hotel/rafiki-house.html";
+    const hotelPageUrl = "https://www.booking.com/hotel/ke/rafiki-house.html";
 
-    // Try scraping with Firecrawl
-    const scrapeResponse = await fetch("https://api.firecrawl.dev/v1/scrape", {
-      method: "POST",
-      headers: {
-        Authorization: `Bearer ${firecrawlKey}`,
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        url: bookingUrl,
-        formats: ["markdown"],
-        onlyMainContent: false,
-        waitFor: 5000,
-      }),
-    });
+    console.log("Scraping reviews from multiple sources...");
 
-    const scrapeData = await scrapeResponse.json();
+    let allContent = "";
+    let scrapeSuccess = false;
 
-    if (!scrapeResponse.ok || !scrapeData.success) {
-      console.error("Firecrawl scrape failed:", JSON.stringify(scrapeData));
+    // Strategy 1: Scrape the dedicated reviews page (has more reviews)
+    const reviewsUrls = [
+      reviewsBaseUrl,
+      `${reviewsBaseUrl}?page=2`,
+      `${reviewsBaseUrl}?page=3`,
+      hotelPageUrl,
+    ];
 
-      // If direct scrape fails, try search for reviews
-      console.log("Trying search approach...");
-      const searchResponse = await fetch("https://api.firecrawl.dev/v1/search", {
-        method: "POST",
-        headers: {
-          Authorization: `Bearer ${firecrawlKey}`,
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          query: "Rafiki House Nanyuki Kenya guest reviews booking.com",
-          limit: 5,
-          scrapeOptions: { formats: ["markdown"] },
-        }),
-      });
-
-      const searchData = await searchResponse.json();
-
-      if (!searchResponse.ok) {
-        console.error("Search also failed:", JSON.stringify(searchData));
-        return new Response(
-          JSON.stringify({
-            success: false,
-            error: "Could not scrape Booking.com reviews. The site blocks automated access. You can add reviews manually in the admin panel.",
+    for (const url of reviewsUrls) {
+      try {
+        console.log(`Scraping: ${url}`);
+        const scrapeResponse = await fetch("https://api.firecrawl.dev/v1/scrape", {
+          method: "POST",
+          headers: {
+            Authorization: `Bearer ${firecrawlKey}`,
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            url,
+            formats: ["markdown"],
+            onlyMainContent: false,
+            waitFor: 5000,
           }),
-          { status: 422, headers: { ...corsHeaders, "Content-Type": "application/json" } }
-        );
+        });
+
+        const scrapeData = await scrapeResponse.json();
+
+        if (scrapeResponse.ok && scrapeData.success) {
+          const markdown = scrapeData.data?.markdown || scrapeData.markdown || "";
+          if (markdown.length > 100) {
+            console.log(`Got ${markdown.length} chars from ${url}`);
+            allContent += `\n\n--- Reviews from ${url} ---\n\n${markdown}`;
+            scrapeSuccess = true;
+          }
+        } else {
+          console.log(`Scrape failed for ${url}:`, scrapeData.error || "unknown");
+        }
+      } catch (err) {
+        console.log(`Error scraping ${url}:`, err);
       }
-
-      // Try to extract reviews from search results
-      const allContent = (searchData.data || [])
-        .map((r: any) => r.markdown || r.description || "")
-        .join("\n\n");
-
-      if (allContent.length < 50) {
-        return new Response(
-          JSON.stringify({
-            success: false,
-            error: "Could not find sufficient review content. You can add reviews manually.",
-          }),
-          { status: 422, headers: { ...corsHeaders, "Content-Type": "application/json" } }
-        );
-      }
-
-      // Use AI to extract structured reviews from the content
-      const reviews = await extractReviewsWithAI(allContent);
-
-      if (reviews.length === 0) {
-        return new Response(
-          JSON.stringify({
-            success: false,
-            error: "No reviews could be extracted from search results. You can add reviews manually.",
-          }),
-          { status: 422, headers: { ...corsHeaders, "Content-Type": "application/json" } }
-        );
-      }
-
-      // Save reviews to database
-      const adminClient = createClient(supabaseUrl, supabaseServiceKey);
-      const saved = await saveReviews(adminClient, reviews);
-
-      return new Response(
-        JSON.stringify({ success: true, reviewsAdded: saved, source: "search" }),
-        { headers: { ...corsHeaders, "Content-Type": "application/json" } }
-      );
     }
 
-    // Direct scrape succeeded
-    const markdown = scrapeData.data?.markdown || scrapeData.markdown || "";
-    console.log("Scraped content length:", markdown.length);
+    // Strategy 2: If direct scrape failed, try web search
+    if (!scrapeSuccess) {
+      console.log("Direct scrape failed, trying search approach...");
 
-    if (markdown.length < 100) {
+      const searchQueries = [
+        "Rafiki House Nanyuki Kenya reviews booking.com",
+        "Rafiki House Nanyuki guest reviews ratings",
+        "site:booking.com Rafiki House Nanyuki reviews",
+      ];
+
+      for (const query of searchQueries) {
+        try {
+          const searchResponse = await fetch("https://api.firecrawl.dev/v1/search", {
+            method: "POST",
+            headers: {
+              Authorization: `Bearer ${firecrawlKey}`,
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+              query,
+              limit: 10,
+              scrapeOptions: { formats: ["markdown"] },
+            }),
+          });
+
+          const searchData = await searchResponse.json();
+
+          if (searchResponse.ok && searchData.data) {
+            for (const result of searchData.data) {
+              const content = result.markdown || result.description || "";
+              if (content.length > 50) {
+                allContent += `\n\n--- Search result ---\n\n${content}`;
+                scrapeSuccess = true;
+              }
+            }
+          }
+        } catch (err) {
+          console.log(`Search error for "${query}":`, err);
+        }
+      }
+    }
+
+    if (!scrapeSuccess || allContent.length < 100) {
       return new Response(
         JSON.stringify({
           success: false,
-          error: "Scraped content too short. Booking.com may have blocked the request.",
+          error: "Could not scrape Booking.com reviews. The site may be blocking automated access. You can add reviews manually in the admin panel.",
         }),
         { status: 422, headers: { ...corsHeaders, "Content-Type": "application/json" } }
       );
     }
 
-    // Extract reviews from scraped content using AI
-    const reviews = await extractReviewsWithAI(markdown);
+    console.log(`Total scraped content: ${allContent.length} chars`);
+
+    // Extract reviews using AI - send more content to capture all reviews
+    const reviews = await extractReviewsWithAI(allContent);
 
     if (reviews.length === 0) {
       return new Response(
         JSON.stringify({
           success: false,
           error: "Could not parse reviews from scraped content. Try adding them manually.",
-          contentPreview: markdown.substring(0, 500),
+          contentPreview: allContent.substring(0, 500),
         }),
         { status: 422, headers: { ...corsHeaders, "Content-Type": "application/json" } }
       );
     }
+
+    console.log(`Extracted ${reviews.length} reviews total`);
 
     // Save to database
     const adminClient = createClient(supabaseUrl, supabaseServiceKey);
     const saved = await saveReviews(adminClient, reviews);
 
     return new Response(
-      JSON.stringify({ success: true, reviewsAdded: saved, source: "direct_scrape" }),
+      JSON.stringify({
+        success: true,
+        reviewsAdded: saved.added,
+        reviewsUpdated: saved.updated,
+        totalExtracted: reviews.length,
+        source: "multi_page_scrape",
+      }),
       { headers: { ...corsHeaders, "Content-Type": "application/json" } }
     );
   } catch (error) {
@@ -211,91 +221,115 @@ interface Review {
 async function extractReviewsWithAI(content: string): Promise<Review[]> {
   const lovableApiKey = Deno.env.get("LOVABLE_API_KEY");
   if (!lovableApiKey) {
-    console.error("LOVABLE_API_KEY not available, falling back to regex parsing");
-    return parseReviewsManually(content);
+    console.error("LOVABLE_API_KEY not available");
+    return [];
   }
 
   try {
-    const response = await fetch("https://ai.gateway.lovable.dev/v1/chat/completions", {
-      method: "POST",
-      headers: {
-        Authorization: `Bearer ${lovableApiKey}`,
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        model: "google/gemini-2.5-flash",
-        messages: [
-          {
-            role: "system",
-            content: `You are a data extraction assistant. Extract guest reviews from the provided content about Rafiki House Nanyuki hotel. Return ONLY a valid JSON array of review objects. Each review object should have these fields:
-- reviewer_name (string, required)
-- reviewer_country (string, optional)
-- review_title (string, optional) 
-- positive_text (string, optional - positive comments)
-- negative_text (string, optional - negative comments)
-- score (number 1-10, optional)
-- stay_date (string, optional)
-- room_type (string, optional)
-- traveler_type (string, optional - e.g. "Couple", "Family", "Solo")
+    // Use a larger content window to capture more reviews
+    // Split into chunks if content is very large to avoid token limits
+    const maxChunkSize = 40000;
+    const chunks: string[] = [];
 
-If you cannot find any reviews, return an empty array [].
-Return ONLY the JSON array, no other text.`,
-          },
-          {
-            role: "user",
-            content: `Extract all guest reviews from this content:\n\n${content.substring(0, 15000)}`,
-          },
-        ],
-      }),
+    if (content.length <= maxChunkSize) {
+      chunks.push(content);
+    } else {
+      // Split content into manageable chunks
+      for (let i = 0; i < content.length; i += maxChunkSize) {
+        chunks.push(content.substring(i, i + maxChunkSize));
+      }
+    }
+
+    const allReviews: Review[] = [];
+
+    for (let i = 0; i < chunks.length; i++) {
+      console.log(`Processing chunk ${i + 1}/${chunks.length} (${chunks[i].length} chars)`);
+
+      const response = await fetch("https://ai.gateway.lovable.dev/v1/chat/completions", {
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${lovableApiKey}`,
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          model: "google/gemini-2.5-flash",
+          messages: [
+            {
+              role: "system",
+              content: `You are a data extraction assistant. Extract ALL guest reviews from the provided content about Rafiki House Nanyuki hotel on Booking.com. Do not skip ANY review. Return ONLY a valid JSON array of review objects. Each review object should have these fields:
+- reviewer_name (string, required)
+- reviewer_country (string, optional - full country name e.g. "Kenya", "United States", "Portugal")
+- review_title (string, optional) 
+- positive_text (string, optional - the full positive/liked comments, do NOT truncate)
+- negative_text (string, optional - the full negative/disliked comments, do NOT truncate)
+- score (number 1-10, optional - the review score)
+- stay_date (string, optional - e.g. "January 2025")
+- room_type (string, optional)
+- traveler_type (string, optional - e.g. "Couple", "Family", "Solo traveler", "Group")
+
+IMPORTANT: Extract EVERY single review you can find. Include the FULL text of positive and negative comments without truncating. If you cannot find any reviews, return an empty array [].
+Return ONLY the JSON array, no other text or markdown formatting.`,
+            },
+            {
+              role: "user",
+              content: `Extract ALL guest reviews from this Booking.com content about Rafiki House Nanyuki. Do not miss any review:\n\n${chunks[i]}`,
+            },
+          ],
+        }),
+      });
+
+      if (!response.ok) {
+        console.error(`AI extraction failed for chunk ${i + 1}:`, response.status);
+        continue;
+      }
+
+      const data = await response.json();
+      const text = data.choices?.[0]?.message?.content || "";
+
+      // Extract JSON array from the response
+      const jsonMatch = text.match(/\[[\s\S]*\]/);
+      if (!jsonMatch) {
+        console.error(`No JSON array found in AI response for chunk ${i + 1}`);
+        continue;
+      }
+
+      try {
+        const reviews = JSON.parse(jsonMatch[0]);
+        console.log(`Chunk ${i + 1}: extracted ${reviews.length} reviews`);
+        allReviews.push(...reviews);
+      } catch (parseErr) {
+        console.error(`JSON parse error for chunk ${i + 1}:`, parseErr);
+      }
+    }
+
+    // Deduplicate by reviewer name
+    const seen = new Set<string>();
+    const deduplicated = allReviews.filter((r) => {
+      const key = r.reviewer_name?.toLowerCase().trim();
+      if (!key || seen.has(key)) return false;
+      seen.add(key);
+      return true;
     });
 
-    if (!response.ok) {
-      console.error("AI extraction failed:", response.status);
-      return parseReviewsManually(content);
-    }
-
-    const data = await response.json();
-    const text = data.choices?.[0]?.message?.content || "";
-
-    // Extract JSON array from the response
-    const jsonMatch = text.match(/\[[\s\S]*\]/);
-    if (!jsonMatch) {
-      console.error("No JSON array found in AI response");
-      return parseReviewsManually(content);
-    }
-
-    const reviews = JSON.parse(jsonMatch[0]);
-    console.log(`AI extracted ${reviews.length} reviews`);
-    return reviews;
+    console.log(`Total unique reviews after dedup: ${deduplicated.length}`);
+    return deduplicated;
   } catch (error) {
     console.error("AI extraction error:", error);
-    return parseReviewsManually(content);
+    return [];
   }
-}
-
-function parseReviewsManually(content: string): Review[] {
-  // Simple regex-based fallback to extract any review-like content
-  const reviews: Review[] = [];
-
-  // Look for patterns like "Score: X.X" or "Rated X.X"
-  const scorePattern = /(?:score|rated|rating)[:\s]*(\d+(?:\.\d+)?)/gi;
-  const namePattern = /(?:reviewed by|from)\s+([A-Za-z\s]+?)(?:\s*,|\s*\n)/gi;
-
-  // This is a best-effort fallback
-  console.log("Using manual parsing fallback - results may be limited");
-  return reviews;
 }
 
 async function saveReviews(
   client: any,
   reviews: Review[]
-): Promise<number> {
-  let saved = 0;
+): Promise<{ added: number; updated: number }> {
+  let added = 0;
+  let updated = 0;
 
   for (const review of reviews) {
     if (!review.reviewer_name) continue;
 
-    // Check if review already exists (by reviewer name + positive text)
+    // Check if review already exists (by reviewer name)
     const { data: existing } = await client
       .from("reviews")
       .select("id")
@@ -303,38 +337,44 @@ async function saveReviews(
       .maybeSingle();
 
     if (existing) {
-      // Update existing
-      await client
-        .from("reviews")
-        .update({
-          reviewer_country: review.reviewer_country,
-          review_title: review.review_title,
-          positive_text: review.positive_text,
-          negative_text: review.negative_text,
-          score: review.score,
-          stay_date: review.stay_date,
-          room_type: review.room_type,
-          traveler_type: review.traveler_type,
-        })
-        .eq("id", existing.id);
+      // Update existing with any new data
+      const updateData: any = {};
+      if (review.reviewer_country) updateData.reviewer_country = review.reviewer_country;
+      if (review.review_title) updateData.review_title = review.review_title;
+      if (review.positive_text) updateData.positive_text = review.positive_text;
+      if (review.negative_text) updateData.negative_text = review.negative_text;
+      if (review.score) updateData.score = review.score;
+      if (review.stay_date) updateData.stay_date = review.stay_date;
+      if (review.room_type) updateData.room_type = review.room_type;
+      if (review.traveler_type) updateData.traveler_type = review.traveler_type;
+
+      if (Object.keys(updateData).length > 0) {
+        const { error } = await client
+          .from("reviews")
+          .update(updateData)
+          .eq("id", existing.id);
+
+        if (!error) updated++;
+        else console.error("Error updating review:", error);
+      }
     } else {
       // Insert new
       const { error } = await client.from("reviews").insert({
         reviewer_name: review.reviewer_name,
-        reviewer_country: review.reviewer_country,
-        review_title: review.review_title,
-        positive_text: review.positive_text,
-        negative_text: review.negative_text,
-        score: review.score,
-        stay_date: review.stay_date,
-        room_type: review.room_type,
-        traveler_type: review.traveler_type,
+        reviewer_country: review.reviewer_country || null,
+        review_title: review.review_title || null,
+        positive_text: review.positive_text || null,
+        negative_text: review.negative_text || null,
+        score: review.score || null,
+        stay_date: review.stay_date || null,
+        room_type: review.room_type || null,
+        traveler_type: review.traveler_type || null,
       });
 
-      if (!error) saved++;
+      if (!error) added++;
       else console.error("Error inserting review:", error);
     }
   }
 
-  return saved;
+  return { added, updated };
 }
