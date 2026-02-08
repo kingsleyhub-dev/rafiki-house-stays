@@ -132,24 +132,63 @@ export default function Index() {
         <div className="container mx-auto px-4 relative z-10 py-8 flex flex-col h-full">
           {/* Logo - Centered at Top with Animated Ring */}
           <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6 }}
+            initial={{ opacity: 0, scale: 0.85 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
             className="mb-8 md:mb-12 flex justify-center"
           >
-            <div className="relative">
-              {/* Animated rotating ring */}
-              <div className="absolute inset-0 rounded-full border-2 border-transparent animate-spin-slow"
+            <div className="relative flex items-center justify-center">
+              {/* Outer elegant ring - slow rotation */}
+              <motion.div
+                className="absolute rounded-full"
                 style={{
-                  borderTopColor: 'hsl(var(--accent))',
-                  borderRightColor: 'hsl(var(--accent) / 0.3)',
-                  animationDuration: '4s',
+                  width: 'calc(100% + 20px)',
+                  height: 'calc(100% + 20px)',
+                  border: '1.5px solid hsl(var(--accent) / 0.25)',
                 }}
+                animate={{ rotate: 360 }}
+                transition={{ duration: 20, repeat: Infinity, ease: 'linear' }}
               />
+
+              {/* Inner accent ring - counter rotation */}
+              <motion.div
+                className="absolute rounded-full"
+                style={{
+                  width: 'calc(100% + 10px)',
+                  height: 'calc(100% + 10px)',
+                  border: '1px solid hsl(var(--accent) / 0.15)',
+                }}
+                animate={{ rotate: -360 }}
+                transition={{ duration: 30, repeat: Infinity, ease: 'linear' }}
+              />
+
+              {/* Orbiting accent dot */}
+              <motion.div
+                className="absolute rounded-full"
+                style={{
+                  width: 'calc(100% + 20px)',
+                  height: 'calc(100% + 20px)',
+                }}
+                animate={{ rotate: 360 }}
+                transition={{ duration: 8, repeat: Infinity, ease: 'linear' }}
+              >
+                <div
+                  className="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-1/2 w-2 h-2 md:w-2.5 md:h-2.5 rounded-full bg-accent shadow-[0_0_8px_hsl(var(--accent)/0.6)]"
+                />
+              </motion.div>
+
+              {/* Soft glow behind logo */}
+              <motion.div
+                className="absolute inset-0 rounded-full bg-accent/5 blur-xl"
+                animate={{ opacity: [0.3, 0.6, 0.3] }}
+                transition={{ duration: 4, repeat: Infinity, ease: 'easeInOut' }}
+              />
+
+              {/* Logo */}
               <img
                 src={logo}
                 alt="Rafiki House Nanyuki"
-                className="h-36 sm:h-44 md:h-56 lg:h-64 w-auto drop-shadow-[0_4px_20px_rgba(0,0,0,0.4)] relative z-10"
+                className="h-36 sm:h-44 md:h-56 lg:h-64 w-auto drop-shadow-[0_4px_24px_rgba(0,0,0,0.35)] relative z-10"
               />
             </div>
           </motion.div>
