@@ -163,7 +163,7 @@ export default function Index() {
               className="mb-3 md:mb-4"
             >
               <span className="inline-block px-3 py-1.5 md:px-4 md:py-2 bg-accent/20 text-accent rounded-full text-xs sm:text-sm font-medium">
-                Karibu Nyumbani — Welcome Home
+                A Place For Friends And Family
               </span>
             </motion.div>
 
