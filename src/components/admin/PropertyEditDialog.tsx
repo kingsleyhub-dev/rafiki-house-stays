@@ -194,6 +194,9 @@ export function PropertyEditDialog({
           {/* Image Management Section */}
           <div className="space-y-3">
             <Label>Property Images</Label>
+            <p className="text-xs text-muted-foreground">
+              The first image is used as the main/cover image. Upload images to replace the default.
+            </p>
             
             {/* Current Images */}
             <div className="grid grid-cols-3 gap-3">
@@ -204,6 +207,11 @@ export function PropertyEditDialog({
                     alt={`Property ${index + 1}`}
                     className="w-full h-24 object-cover rounded-lg border border-border"
                   />
+                  {index === 0 && (
+                    <span className="absolute top-1 left-1 bg-accent text-accent-foreground text-[10px] font-semibold px-1.5 py-0.5 rounded">
+                      Main
+                    </span>
+                  )}
                   <button
                     type="button"
                     onClick={() => handleRemoveImage(url)}
