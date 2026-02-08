@@ -19,7 +19,7 @@ export function Footer() {
           {/* Brand */}
           <div className="space-y-4">
             <div className="flex items-center gap-3">
-              <img src={logo} alt="Rafiki House Nanyuki" className="h-12 w-auto brightness-0 invert" />
+              <img src={logo} alt="Rafiki House Nanyuki" className="h-12 w-auto" />
               <span className="font-display text-xl font-semibold">Rafiki House Nanyuki</span>
             </div>
             <p className="text-primary-foreground/70 text-sm leading-relaxed">

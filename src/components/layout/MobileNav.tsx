@@ -8,6 +8,7 @@ const navItems = [
   { href: '/services', label: 'Services', icon: Utensils },
   { href: '/safaris', label: 'Safaris', icon: Compass },
   { href: '/reviews', label: 'Reviews', icon: Star },
+  { href: '/about', label: 'About', icon: Info },
 ];
 
 export function MobileNav() {
