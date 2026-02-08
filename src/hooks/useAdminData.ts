@@ -60,12 +60,11 @@ interface DbBooking {
 }
 
 function mapDbToProperty(db: DbProperty): Property {
-  // Use database images if they exist, otherwise fall back to local images
-  const hasDbImages = db.image_urls && db.image_urls.length > 0 && db.image_urls.some(url => url.startsWith('http'));
+  // If admin has uploaded images to the DB, use those exclusively (first = main image).
+  // Only fall back to local assets when no DB images exist.
   const localImage = propertyImages[db.slug];
-  const imageUrls = hasDbImages 
-    ? db.image_urls.filter(url => url.startsWith('http'))
-    : (localImage ? [localImage] : db.image_urls || []);
+  const dbImages = (db.image_urls ?? []).filter(Boolean);
+  const imageUrls = dbImages.length > 0 ? dbImages : (localImage ? [localImage] : []);
 
   return {
     id: db.id,

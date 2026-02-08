@@ -44,16 +44,12 @@ interface DbProperty {
 }
 
 function mapDbToProperty(db: DbProperty): Property {
-  // Prefer backend-provided gallery images; fall back to local image only when none exist.
-  // If a local image exists, prepend it as the primary image (without duplicating).
+  // If admin has uploaded images to the DB, use those exclusively (first = main image).
+  // Only fall back to local assets when no DB images exist.
   const localImage = propertyImages[db.slug];
   const dbImages = (db.image_urls ?? []).filter(Boolean);
 
-  const imageUrls = (() => {
-    if (dbImages.length === 0) return localImage ? [localImage] : [];
-    if (!localImage) return dbImages;
-    return [localImage, ...dbImages.filter((u) => u !== localImage)];
-  })();
+  const imageUrls = dbImages.length > 0 ? dbImages : (localImage ? [localImage] : []);
 
   return {
     id: db.id,
