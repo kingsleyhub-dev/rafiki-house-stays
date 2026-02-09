@@ -69,6 +69,10 @@ import { ReviewsManager } from '@/components/admin/ReviewsManager';
 import { toast } from '@/hooks/use-toast';
 import { Property } from '@/types';
 
+const ALLOWED_ADMIN_DOMAINS = [
+  'rafiki-house-stays-five.vercel.app',
+];
+
 export default function Admin() {
   const { user, isLoading: authLoading } = useAuth();
   const { data: isAdmin, isLoading: adminLoading } = useIsAdmin();
@@ -95,6 +99,29 @@ export default function Admin() {
   const updateService = useUpdateService();
   const deleteService = useDeleteService();
   const toggleServiceStatus = useToggleServiceStatus();
+
+  // Block access if not on allowed domain
+  const currentDomain = window.location.hostname;
+  const isDomainAllowed = ALLOWED_ADMIN_DOMAINS.includes(currentDomain);
+
+  if (!isDomainAllowed) {
+    return (
+      <Layout>
+        <div className="min-h-[60vh] flex items-center justify-center">
+          <div className="text-center">
+            <Shield className="h-16 w-16 text-destructive mx-auto mb-4" />
+            <h1 className="font-display text-2xl font-bold mb-2">Access Restricted</h1>
+            <p className="text-muted-foreground mb-4">
+              The admin portal is only accessible from the authorized domain.
+            </p>
+            <Button asChild>
+              <Link to="/">Go Home</Link>
+            </Button>
+          </div>
+        </div>
+      </Layout>
+    );
+  }
 
   // Show loading state while checking auth
   if (authLoading || adminLoading) {
