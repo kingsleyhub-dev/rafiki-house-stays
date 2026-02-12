@@ -1,1 +1,4 @@
 project_id = "dqpvnfzjvdesikpuibab"
+
+[functions.mpesa-pay]
+verify_jwt = false
