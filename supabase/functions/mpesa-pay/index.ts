@@ -55,7 +55,9 @@ serve(async (req) => {
     const accessToken = tokenData.access_token;
 
     // Step 2: Perform STK Push
-    const shortcode = "174379";
+    const shortcode = "174379"; // Sandbox shortcode (change to your own for production)
+    const paybill = "400200"; // Co-op Bank Paybill
+    const accountRef = "40075137"; // Your bank account number
     const timestamp = new Date()
       .toISOString()
       .replace(/[-T:.Z]/g, "")
@@ -69,11 +71,11 @@ serve(async (req) => {
       TransactionType: "CustomerPayBillOnline",
       Amount: Math.ceil(amount),
       PartyA: phoneNumber,
-      PartyB: shortcode,
+      PartyB: paybill,
       PhoneNumber: phoneNumber,
       CallBackURL: "https://dqpvnfzjvdesikpuibab.supabase.co/functions/v1/mpesa-pay",
-      AccountReference: "RafikiHouse",
-      TransactionDesc: "Booking Payment",
+      AccountReference: accountRef,
+      TransactionDesc: "Booking Payment - Rafiki House",
     };
 
     const stkRes = await fetch(
