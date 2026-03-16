@@ -7,6 +7,7 @@ import { PropertyCard } from '@/components/properties/PropertyCard';
 import { Button } from '@/components/ui/button';
 import { useProperties } from '@/hooks/useProperties';
 import { Property } from '@/types';
+import { SEOHead, organizationJsonLd } from '@/components/seo/SEOHead';
 import heroImage from '@/assets/hero-image.jpg';
 import logo from '@/assets/rafiki-house-logo.png';
 
