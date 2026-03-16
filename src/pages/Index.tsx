@@ -117,6 +117,10 @@ export default function Index() {
 
   return (
     <Layout>
+      <SEOHead
+        canonicalPath="/"
+        jsonLd={organizationJsonLd}
+      />
       {/* Hero Section */}
       <section className="relative min-h-[85vh] md:min-h-[90vh] flex items-center">
         {/* Background Image */}
