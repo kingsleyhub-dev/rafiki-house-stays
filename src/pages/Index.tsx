@@ -7,6 +7,7 @@ import { PropertyCard } from '@/components/properties/PropertyCard';
 import { Button } from '@/components/ui/button';
 import { useProperties } from '@/hooks/useProperties';
 import { Property } from '@/types';
+import { SEOHead, organizationJsonLd } from '@/components/seo/SEOHead';
 import heroImage from '@/assets/hero-image.jpg';
 import logo from '@/assets/rafiki-house-logo.png';
 
@@ -116,6 +117,10 @@ export default function Index() {
 
   return (
     <Layout>
+      <SEOHead
+        canonicalPath="/"
+        jsonLd={organizationJsonLd}
+      />
       {/* Hero Section */}
       <section className="relative min-h-[85vh] md:min-h-[90vh] flex items-center">
         {/* Background Image */}
