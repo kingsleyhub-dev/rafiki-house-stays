@@ -24,6 +24,7 @@ import {
 import { useProperties } from '@/hooks/useProperties';
 import { useAmenities } from '@/hooks/useAmenities';
 import { useAboutContentByKey } from '@/hooks/useAboutContent';
+import { SEOHead } from '@/components/seo/SEOHead'; // 🚀 Added SEO import
 import heroStays from '@/assets/hero-stays.jpg';
 
 export default function Stays() {
@@ -125,6 +126,13 @@ export default function Stays() {
 
   return (
     <Layout>
+      {/* 🚀 Added SEO Tags specifically for the Stays listing page */}
+      <SEOHead 
+        title="Explore Our Stays | Rafiki House Nanyuki"
+        description="Browse our collection of beautiful, unique cottages nestled at the foot of Mount Kenya. Find your perfect getaway in Nanyuki."
+        canonicalPath="/stays"
+      />
+
       {/* Hero Section with Background Image */}
       <section className="relative min-h-[40vh] md:min-h-[50vh] flex items-center">
         {/* Background Image */}
@@ -133,6 +141,8 @@ export default function Stays() {
             src={heroStays}
             alt="Kenyan highlands with boutique cottages"
             className="w-full h-full object-cover"
+            fetchPriority="high" // 🚀 Added speed optimization
+            decoding="async"     // 🚀 Added speed optimization
           />
           <div className="absolute inset-0 bg-gradient-to-r from-navy/80 via-navy/60 to-transparent" />
         </div>

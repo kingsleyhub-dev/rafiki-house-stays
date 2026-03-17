@@ -131,6 +131,8 @@ export default function Index() {
             src={heroImage}
             alt="Rafiki House Nanyuki"
             className="w-full h-full object-cover"
+            fetchPriority="high"
+            decoding="async"
           />
           <div className="absolute inset-0 bg-gradient-to-r from-navy/85 via-navy/60 to-navy/30 md:to-transparent" />
         </div>
@@ -196,6 +198,8 @@ export default function Index() {
                 src={logo}
                 alt="Rafiki House Nanyuki"
                 className="h-36 sm:h-44 md:h-56 lg:h-64 w-auto drop-shadow-[0_4px_24px_rgba(0,0,0,0.35)] relative z-10"
+                fetchPriority="high"
+                decoding="async"
               />
             </div>
           </motion.div>
@@ -238,7 +242,6 @@ export default function Index() {
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, delay: 0.3 }}
             >
-              {/* FIX: Removed nested <a> inside <button> from Button's asChild */}
               <Button size="lg" className="bg-accent hover:bg-accent/90 text-accent-foreground min-h-[48px]" asChild>
                 <Link to="/stays" className="flex items-center gap-2">
                   Explore Our Stays <ArrowRight className="h-4 w-4" />
@@ -281,7 +284,6 @@ export default function Index() {
                 Explore our collection of unique stays
               </p>
             </div>
-            {/* FIX: Removed nested <a> inside <button> from Button's asChild */}
             <Button variant="outline" className="hidden sm:flex min-h-[44px]" asChild>
               <Link to="/stays" className="flex items-center gap-2">
                 View All <ArrowRight className="h-4 w-4" />
@@ -314,7 +316,6 @@ export default function Index() {
           </div>
 
           <div className="mt-6 text-center sm:hidden">
-             {/* FIX: Removed nested <a> inside <button> from Button's asChild */}
             <Button className="min-h-[48px] w-full max-w-xs" asChild>
               <Link to="/stays" className="flex items-center justify-center gap-2">
                 View All Homes <ArrowRight className="h-4 w-4" />
@@ -381,7 +382,6 @@ export default function Index() {
               Let's uncover the hidden gems of this beautiful country together. 
               Book your stay at Rafiki House and discover the magic of the Kenyan highlands.
             </p>
-            {/* FIX: Removed nested <a> inside <button> from Button's asChild */}
             <Button size="lg" className="bg-accent hover:bg-accent/90 text-accent-foreground min-h-[48px]" asChild>
               <Link to="/stays" className="flex items-center gap-2">
                 Explore All Stays <ArrowRight className="h-4 w-4" />

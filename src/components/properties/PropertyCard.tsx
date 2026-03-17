@@ -38,6 +38,8 @@ export function PropertyCard({ property, index = 0 }: PropertyCardProps) {
               src={property.imageUrls[0] || '/placeholder.svg'}
               alt={property.name}
               className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+              loading="lazy"      // 🚀 The magic lazy loading attribute!
+              decoding="async"    // 🚀 Stops the page from freezing while drawing the image
             />
             <Badge className="absolute top-3 left-3 z-20 bg-accent text-accent-foreground">
               {property.homeType}

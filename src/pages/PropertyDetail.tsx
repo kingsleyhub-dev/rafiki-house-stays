@@ -11,6 +11,7 @@ import { Badge } from '@/components/ui/badge';
 import { useProperty } from '@/hooks/useProperties';
 import { ImageGallery } from '@/components/properties/ImageGallery';
 import { ReviewsSection } from '@/components/reviews/ReviewsSection';
+import { SEOHead } from '@/components/seo/SEOHead';
 
 const amenityIcons: Record<string, React.ElementType> = {
   'Wi-Fi': Wifi,
@@ -59,6 +60,14 @@ export default function PropertyDetail() {
 
   return (
     <Layout>
+      {/* 🚀 Dynamic SEO Tags - Fixed 'ogImage' TypeScript Error */}
+      <SEOHead 
+        title={`${property.name || property.title} | Rafiki House Nanyuki`}
+        description={property.description}
+        ogImage={property.imageUrls[0]}
+        canonicalPath={`/stays/${slug}`}
+      />
+
       {/* Back Navigation */}
       <div className="bg-muted/50 border-b border-border">
         <div className="container mx-auto px-4 py-4">
