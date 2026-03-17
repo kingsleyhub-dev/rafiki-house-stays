@@ -42,7 +42,7 @@ function AnimatedPropertyCarousel({ properties }: { properties: Property[] }) {
   
   // Auto-advance carousel
   useEffect(() => {
-    if (!isInView) return;
+    if (!isInView || properties.length === 0) return;
     
     const interval = setInterval(() => {
       setCurrentIndex((prev) => (prev + 1) % properties.length);
@@ -58,6 +58,8 @@ function AnimatedPropertyCarousel({ properties }: { properties: Property[] }) {
   const goToPrev = () => {
     setCurrentIndex((prev) => (prev - 1 + properties.length) % properties.length);
   };
+
+  if (properties.length === 0) return null;
 
   return (
     <div ref={containerRef} className="relative md:hidden">
@@ -199,7 +201,7 @@ export default function Index() {
           </motion.div>
 
           {/* Centered Content */}
-          <div className="max-w-2xl mx-auto text-center flex-1 flex flex-col justify-center">
+          <div className="max-w-2xl mx-auto text-center flex-1 flex flex-col justify-center items-center">
             <motion.div
               initial={{ opacity: 0, y: 30 }}
               animate={{ opacity: 1, y: 0 }}
@@ -236,8 +238,9 @@ export default function Index() {
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, delay: 0.3 }}
             >
-              <Button size="lg" className="bg-accent hover:bg-accent/90 text-accent-foreground gap-2 min-h-[48px]" asChild>
-                <Link to="/stays">
+              {/* FIX: Removed nested <a> inside <button> from Button's asChild */}
+              <Button size="lg" className="bg-accent hover:bg-accent/90 text-accent-foreground min-h-[48px]" asChild>
+                <Link to="/stays" className="flex items-center gap-2">
                   Explore Our Stays <ArrowRight className="h-4 w-4" />
                 </Link>
               </Button>
@@ -278,8 +281,9 @@ export default function Index() {
                 Explore our collection of unique stays
               </p>
             </div>
-            <Button variant="outline" asChild className="hidden sm:flex gap-2 min-h-[44px]">
-              <Link to="/stays">
+            {/* FIX: Removed nested <a> inside <button> from Button's asChild */}
+            <Button variant="outline" className="hidden sm:flex min-h-[44px]" asChild>
+              <Link to="/stays" className="flex items-center gap-2">
                 View All <ArrowRight className="h-4 w-4" />
               </Link>
             </Button>
@@ -310,8 +314,9 @@ export default function Index() {
           </div>
 
           <div className="mt-6 text-center sm:hidden">
-            <Button asChild className="gap-2 min-h-[48px] w-full max-w-xs">
-              <Link to="/stays">
+             {/* FIX: Removed nested <a> inside <button> from Button's asChild */}
+            <Button className="min-h-[48px] w-full max-w-xs" asChild>
+              <Link to="/stays" className="flex items-center justify-center gap-2">
                 View All Homes <ArrowRight className="h-4 w-4" />
               </Link>
             </Button>
@@ -376,7 +381,8 @@ export default function Index() {
               Let's uncover the hidden gems of this beautiful country together. 
               Book your stay at Rafiki House and discover the magic of the Kenyan highlands.
             </p>
-            <Button size="lg" className="bg-accent hover:bg-accent/90 text-accent-foreground gap-2 min-h-[48px]">
+            {/* FIX: Removed nested <a> inside <button> from Button's asChild */}
+            <Button size="lg" className="bg-accent hover:bg-accent/90 text-accent-foreground min-h-[48px]" asChild>
               <Link to="/stays" className="flex items-center gap-2">
                 Explore All Stays <ArrowRight className="h-4 w-4" />
               </Link>
