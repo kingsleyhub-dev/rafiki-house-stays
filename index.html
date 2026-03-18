@@ -2,38 +2,48 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0" />
     
-    <!-- Preload critical Ubuntu font files -->
+    <meta name="theme-color" content="#001F3F" />
+
     <link rel="preload" href="/fonts/ubuntu/Ubuntu-Regular.ttf" as="font" type="font/ttf" crossorigin />
     <link rel="preload" href="/fonts/ubuntu/Ubuntu-Medium.ttf" as="font" type="font/ttf" crossorigin />
     <link rel="preload" href="/fonts/ubuntu/Ubuntu-Bold.ttf" as="font" type="font/ttf" crossorigin />
     
-    <!-- Favicon -->
     <link rel="icon" type="image/png" href="/favicon.png" />
     <link rel="apple-touch-icon" href="/favicon.png" />
     
-    <title>Rafiki House Nanyuki - Luxury Safari Stays in Kenya</title>
-    <meta name="description" content="Luxury safari lodges and holiday homes in Nanyuki, Kenya. Book unique cottage stays at the foot of Mount Kenya with game drives, safaris, and authentic Kenyan hospitality." />
+    <title>Rafiki House Nanyuki | Luxury Safari Stays & Cottages</title>
+    <meta name="description" content="Discover luxury safari lodges and unique holiday homes in Nanyuki, Kenya. Experience authentic hospitality at the foot of Mount Kenya." />
     <meta name="author" content="Rafiki House Nanyuki" />
-    <meta name="keywords" content="Nanyuki accommodation, Kenya safari lodge, holiday homes Nanyuki, Mount Kenya stays, game drives Kenya, Rafiki House, luxury cottages Kenya" />
+    <meta name="keywords" content="Nanyuki accommodation, Kenya safari lodge, holiday homes Nanyuki, Mount Kenya stays, Rafiki House" />
     <link rel="canonical" href="https://rafikihousenanyuki.com/" />
 
-    <meta property="og:title" content="Rafiki House Nanyuki - Luxury Safari Stays in Kenya" />
-    <meta property="og:description" content="Luxury safari lodges and holiday homes in Nanyuki, Kenya. Book unique cottage stays at the foot of Mount Kenya." />
     <meta property="og:type" content="website" />
     <meta property="og:url" content="https://rafikihousenanyuki.com/" />
+    <meta property="og:title" content="Rafiki House Nanyuki - Luxury Safari Stays in Kenya" />
+    <meta property="og:description" content="Book your sanctuary at the foot of Mount Kenya. Unique cottage stays and safari experiences." />
+    <meta property="og:image" content="https://rafikihousenanyuki.com/hero-image.jpg" />
     <meta property="og:site_name" content="Rafiki House Nanyuki" />
-    <meta property="og:image" content="https://rafikihousenanyuki.com/favicon.png" />
     <meta property="og:locale" content="en_US" />
 
     <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:url" content="https://rafikihousenanyuki.com/" />
     <meta name="twitter:title" content="Rafiki House Nanyuki - Luxury Safari Stays" />
     <meta name="twitter:description" content="Luxury safari lodges and holiday homes in Nanyuki, Kenya." />
-    <meta name="twitter:image" content="https://rafikihousenanyuki.com/favicon.png" />
+    <meta name="twitter:image" content="https://rafikihousenanyuki.com/hero-image.jpg" />
+
+    <script>document.documentElement.classList.add('js-enabled');</script>
+    <link rel="manifest" href="/manifest.json" />  
   </head>
 
   <body>
+    <noscript>
+      <div style="padding: 20px; text-align: center;">
+        Please enable JavaScript to view the Rafiki House experience.
+      </div>
+    </noscript>
+
     <div id="root"></div>
     <script type="module" src="/src/main.tsx"></script>
   </body>
