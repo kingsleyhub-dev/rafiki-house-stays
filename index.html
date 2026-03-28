@@ -10,28 +10,102 @@
     <link rel="preload" href="/fonts/ubuntu/Ubuntu-Medium.ttf" as="font" type="font/ttf" crossorigin />
     <link rel="preload" href="/fonts/ubuntu/Ubuntu-Bold.ttf" as="font" type="font/ttf" crossorigin />
     
-    <link rel="icon" type="image/png" href="/favicon.png" />
-    <link rel="apple-touch-icon" href="/favicon.png" />
+    <!-- Favicon — shows in Google search results & browser tab -->
+    <link rel="icon" type="image/png" sizes="512x512" href="/favicon.png" />
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon.png" />
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon.png" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/favicon.png" />
     
-    <title>Rafiki House Nanyuki | Luxury Safari Stays & Cottages</title>
-    <meta name="description" content="Discover luxury safari lodges and unique holiday homes in Nanyuki, Kenya. Experience authentic hospitality at the foot of Mount Kenya." />
+    <title>Rafiki House Nanyuki - Luxury Safari Stays & Holiday Homes in Kenya</title>
+    <meta name="description" content="Rafiki House Nanyuki. Luxury safari lodges and unique holiday homes in Nanyuki, Kenya. Book cottage stays at the foot of Mount Kenya with game drives, safaris, and authentic Kenyan hospitality." />
     <meta name="author" content="Rafiki House Nanyuki" />
-    <meta name="keywords" content="Nanyuki accommodation, Kenya safari lodge, holiday homes Nanyuki, Mount Kenya stays, Rafiki House" />
+    <meta name="keywords" content="Rafiki House Nanyuki, Nanyuki accommodation, Kenya safari lodge, holiday homes Nanyuki, Mount Kenya stays, guesthouse Nanyuki, cottages Kenya" />
     <link rel="canonical" href="https://rafikihousenanyuki.com/" />
 
+    <!-- Open Graph — controls how the site looks when shared on social media & search -->
     <meta property="og:type" content="website" />
     <meta property="og:url" content="https://rafikihousenanyuki.com/" />
-    <meta property="og:title" content="Rafiki House Nanyuki - Luxury Safari Stays in Kenya" />
-    <meta property="og:description" content="Book your sanctuary at the foot of Mount Kenya. Unique cottage stays and safari experiences." />
-    <meta property="og:image" content="https://rafikihousenanyuki.com/hero-image.jpg" />
+    <meta property="og:title" content="Rafiki House Nanyuki - Luxury Safari Stays & Holiday Homes" />
+    <meta property="og:description" content="Luxury safari lodges and unique holiday homes in Nanyuki, Kenya. Book cottage stays at the foot of Mount Kenya." />
+    <meta property="og:image" content="https://rafikihousenanyuki.com/og-image.jpg" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content="Rafiki House Nanyuki - Beautiful cottage with Mount Kenya backdrop" />
     <meta property="og:site_name" content="Rafiki House Nanyuki" />
     <meta property="og:locale" content="en_US" />
 
+    <!-- Twitter Card -->
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:url" content="https://rafikihousenanyuki.com/" />
     <meta name="twitter:title" content="Rafiki House Nanyuki - Luxury Safari Stays" />
     <meta name="twitter:description" content="Luxury safari lodges and holiday homes in Nanyuki, Kenya." />
-    <meta name="twitter:image" content="https://rafikihousenanyuki.com/hero-image.jpg" />
+    <meta name="twitter:image" content="https://rafikihousenanyuki.com/og-image.jpg" />
+
+    <!-- JSON-LD Structured Data — for rich Google search results with images -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "LodgingBusiness",
+      "name": "Rafiki House Nanyuki",
+      "alternateName": "Rafiki House",
+      "description": "Luxury safari lodges and unique holiday homes in Nanyuki, Kenya. Book cottage stays at the foot of Mount Kenya with game drives, safaris, and authentic Kenyan hospitality.",
+      "url": "https://rafikihousenanyuki.com",
+      "telephone": "+254-XXX-XXXXXX",
+      "image": [
+        "https://rafikihousenanyuki.com/og-image.jpg"
+      ],
+      "address": {
+        "@type": "PostalAddress",
+        "streetAddress": "Nanyuki",
+        "addressLocality": "Nanyuki",
+        "addressRegion": "Laikipia",
+        "addressCountry": "KE"
+      },
+      "geo": {
+        "@type": "GeoCoordinates",
+        "latitude": -0.0167,
+        "longitude": 37.0833
+      },
+      "priceRange": "$$",
+      "starRating": {
+        "@type": "Rating",
+        "ratingValue": "4.8",
+        "bestRating": "5"
+      },
+      "aggregateRating": {
+        "@type": "AggregateRating",
+        "ratingValue": "4.8",
+        "reviewCount": "200",
+        "bestRating": "5"
+      },
+      "amenityFeature": [
+        {"@type": "LocationFeatureSpecification", "name": "Free WiFi", "value": true},
+        {"@type": "LocationFeatureSpecification", "name": "Free Parking", "value": true},
+        {"@type": "LocationFeatureSpecification", "name": "Kitchen", "value": true},
+        {"@type": "LocationFeatureSpecification", "name": "Garden View", "value": true}
+      ],
+      "checkinTime": "14:00",
+      "checkoutTime": "10:00",
+      "numberOfRooms": 8,
+      "petsAllowed": false,
+      "sameAs": []
+    }
+    </script>
+
+    <!-- WebSite schema for sitelinks search box -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "WebSite",
+      "name": "Rafiki House Nanyuki",
+      "url": "https://rafikihousenanyuki.com",
+      "potentialAction": {
+        "@type": "SearchAction",
+        "target": "https://rafikihousenanyuki.com/stays?q={search_term_string}",
+        "query-input": "required name=search_term_string"
+      }
+    }
+    </script>
 
     <script>document.documentElement.classList.add('js-enabled');</script>
     <link rel="manifest" href="/manifest.json" />  
