@@ -13,6 +13,7 @@ const SITE_NAME = 'Rafiki House Nanyuki';
 const BASE_URL = 'https://rafikihousenanyuki.com';
 const DEFAULT_DESCRIPTION = 'Luxury safari lodges and holiday homes in Nanyuki, Kenya. Book unique cottage stays at the foot of Mount Kenya with game drives, safaris, and authentic Kenyan hospitality.';
 const DEFAULT_OG_IMAGE = `${BASE_URL}/og-image.jpg`;
+const DEFAULT_FAVICON = `${BASE_URL}/favicon.png`;
 
 export function SEOHead({
   title,
