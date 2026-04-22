@@ -68,9 +68,6 @@
   font-display: swap;
 }
 
-/* Playfair Display - Keep for display headings */
-@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&display=swap');
-
 @layer base {
   :root {
     /* Brand Colors - Rafiki House Nanyuki */
